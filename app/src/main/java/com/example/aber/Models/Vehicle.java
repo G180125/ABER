@@ -10,6 +10,8 @@ public class Vehicle {
     private String numberPlate;
     private List<String> images;
 
+    public Vehicle(){};
+
     public Vehicle(String brand, String name, String color, String seatCapacity, String numberPlate, List<String> images) {
         this.brand = brand;
         this.name = name;

@@ -4,6 +4,8 @@ public class Home {
     private String address;
     private String image;
 
+    public Home(){};
+
     public Home(String address, String image) {
         this.address = address;
         this.image = image;
