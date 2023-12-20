@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "513621792867",
+    "project_id": "aber-dc537",
+    "storage_bucket": "aber-dc537.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:513621792867:android:75c542bdd0bd2a303a0056",
+        "android_client_info": {
+          "package_name": "com.example.aber"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4oKuOqjMn83EzEAg1EZ4yoPEV-59JgXU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
