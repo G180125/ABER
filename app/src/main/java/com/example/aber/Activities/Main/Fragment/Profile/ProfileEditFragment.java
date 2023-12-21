@@ -1,5 +1,6 @@
-package com.example.aber.Activities.Main.Fragment;
+package com.example.aber.Activities.Main.Fragment.Profile;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -11,6 +12,8 @@ import android.os.Bundle;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -38,20 +42,18 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainProfileFragment extends Fragment {
-    private static final String BUNDLE_USERID = "userID";
+public class ProfileEditFragment extends Fragment {
     private static final String STORAGE_PATH = "avatar/";
     private String userID;
     private User currentUser, originalUser;
     private FirebaseManager firebaseManager;
     private ProgressDialog progressDialog;
     private EditText nameEditText, emailEditText, phoneEditText, addressEditText, plateEditText, sosEditText;
-    private ImageButton homeImageButton, vehicleImageButton, sosImageButton;
+    private ImageView backImageView, homeImageView, vehicleImageView, sosImageView;
     private RadioButton maleRadioButton, femaleRadiusButton;
     private CircleImageView avatar;
     private Button uploadButton, editButton;
     private Bitmap cropped;
-    private boolean isAvatarChanged = false;
     private final ActivityResultLauncher<Intent> getImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
@@ -66,16 +68,16 @@ public class MainProfileFragment extends Fragment {
         if (result.isSuccessful()) {
             cropped = BitmapFactory.decodeFile(result.getUriFilePath(requireContext(), true));
             updateAvatar(cropped);
-            isAvatarChanged = true;
         }
     });
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         showLoadingDialog();
         // Inflate the layout for this fragment
-        View root =  inflater.inflate(R.layout.fragment_main_profile, container, false);
+        View root =  inflater.inflate(R.layout.fragment_profile_edit, container, false);
         firebaseManager = new FirebaseManager();
 
         userID = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
@@ -94,6 +96,7 @@ public class MainProfileFragment extends Fragment {
             }
         });
 
+        backImageView = root.findViewById(R.id.back);
         avatar = root.findViewById(R.id.avatar);
         uploadButton = root.findViewById(R.id.upload_button);
         nameEditText = root.findViewById(R.id.name);
@@ -105,6 +108,19 @@ public class MainProfileFragment extends Fragment {
         plateEditText = root.findViewById(R.id.plate);
         sosEditText = root.findViewById(R.id.sos_name);
         editButton = root.findViewById(R.id.edit_button);
+
+        backImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                fragmentTransaction.replace(R.id.fragment_main_container, new MainProfileFragment());
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
