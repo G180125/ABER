@@ -18,9 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aber.Activities.LoginActivity;
-import com.example.aber.Activities.Main.Fragment.MainHomeFragment;
 import com.example.aber.FirebaseManager;
-import com.example.aber.Models.User;
+import com.example.aber.Models.User.User;
 import com.example.aber.R;
 
 import java.util.Objects;
@@ -34,7 +33,7 @@ public class MainProfileFragment extends Fragment {
     private ProgressDialog progressDialog;
     private CircleImageView avatar;
     private TextView nameTextView, emailTextView;
-    private CardView profileCardView, walletCardView, historyCardView, aboutUsCardView, logoutCardView;
+    private CardView profileCardView, walletCardView, historyCardView, aboutUsCardView, helpCardView, logoutCardView;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -67,6 +66,7 @@ public class MainProfileFragment extends Fragment {
         walletCardView = root.findViewById(R.id.wallet);
         historyCardView = root.findViewById(R.id.history);
         aboutUsCardView = root.findViewById(R.id.about_us);
+        helpCardView = root.findViewById(R.id.help);
         logoutCardView = root.findViewById(R.id.logout);
 
         profileCardView.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +96,15 @@ public class MainProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showToast("about us card is clicked");
+            }
+        });
+
+        helpCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                replaceFragment(new ProfileChatFragment(), fragmentManager, fragmentTransaction);
             }
         });
 

@@ -1,4 +1,4 @@
-package com.example.aber.Models;
+package com.example.aber.Models.User;
 
 import java.util.List;
 

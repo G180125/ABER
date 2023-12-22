@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -29,11 +28,12 @@ import com.canhub.cropper.CropImageContract;
 import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
 import com.example.aber.FirebaseManager;
-import com.example.aber.Models.Gender;
-import com.example.aber.Models.Home;
-import com.example.aber.Models.SOS;
-import com.example.aber.Models.User;
-import com.example.aber.Models.Vehicle;
+
+import com.example.aber.Models.User.Gender;
+import com.example.aber.Models.User.Home;
+import com.example.aber.Models.User.SOS;
+import com.example.aber.Models.User.User;
+import com.example.aber.Models.User.Vehicle;
 import com.example.aber.R;
 
 import java.util.ArrayList;

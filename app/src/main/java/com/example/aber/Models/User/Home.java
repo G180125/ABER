@@ -1,4 +1,4 @@
-package com.example.aber.Models;
+package com.example.aber.Models.User;
 
 public class Home {
     private String address;
