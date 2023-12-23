@@ -32,13 +32,6 @@
                 android:layout_weight="1"
                 android:backgroundTint="@color/white" />
 
-            <ImageButton
-                android:id="@+id/current_location_button"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/ic_current_location"
-                android:backgroundTint="@color/white" />
-
         </LinearLayout>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
