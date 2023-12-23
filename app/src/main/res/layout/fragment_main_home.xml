@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:backgroundTint="@color/white"
     tools:context=".Activities.Main.Fragment.MainHomeFragment">
 
@@ -23,17 +24,44 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                />
 
-            <ImageButton
-                android:id="@+id/current_location_button"
-                android:layout_width="60dp"
-                android:layout_height="60sp"
-                android:src="@drawable/ic_current_location"
-                android:translationY="-6dp"
-                android:backgroundTint="@color/white"/>
+
+
+
 
         </LinearLayout>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/current_location_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="470dp"
+            android:src="@drawable/ic_current_location"
+            android:backgroundTint="@color/white"
+            android:layout_gravity="center|right"
+            app:fabCustomSize="45dp"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/map_type_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="350dp"
+            android:src="@drawable/ic_map_type"
+            android:backgroundTint="@color/white"
+            android:layout_gravity="center|right"
+            app:fabCustomSize="45dp"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
 </FrameLayout>
