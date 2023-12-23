@@ -10,8 +10,8 @@ import android.os.Bundle;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.aber.Activities.Main.Fragment.MainBookingFragment;
 import com.example.aber.Activities.Main.Fragment.MainHomeFragment;
-import com.example.aber.Activities.Main.Fragment.MainWalletFragment;
-import com.example.aber.Activities.Main.Fragment.MainProfileFragment;
+import com.example.aber.Activities.Main.Fragment.MainChatFragment;
+import com.example.aber.Activities.Main.Fragment.Profile.MainProfileFragment;
 import com.example.aber.R;
 
 import kotlin.Unit;
@@ -20,7 +20,7 @@ import kotlin.jvm.functions.Function1;
 public class MainActivity extends AppCompatActivity {
     private final int ID_HOME = 1;
     private final int ID_BOOKING = 2;
-    private final int ID_WALLET = 3;
+    private final int ID_CHAT = 3;
     private final int ID_PROFILE = 4;
     private MeowBottomNavigation bottomNavigation;
 
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigation.add(new MeowBottomNavigation.Model(ID_HOME, R.drawable.ic_home));
         bottomNavigation.add(new MeowBottomNavigation.Model(ID_BOOKING, R.drawable.ic_booking));
-        bottomNavigation.add(new MeowBottomNavigation.Model(ID_WALLET, R.drawable.ic_wallet));
+        bottomNavigation.add(new MeowBottomNavigation.Model(ID_CHAT, R.drawable.ic_chat));
         bottomNavigation.add(new MeowBottomNavigation.Model(ID_PROFILE, R.drawable.ic_profile));
 
         bottomNavigation.show(ID_HOME, true);
@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
                     case ID_BOOKING:
                         replaceFragment(new MainBookingFragment(), fragmentManager, fragmentTransaction);
                         break;
-                    case ID_WALLET:
-                        replaceFragment(new MainWalletFragment(), fragmentManager, fragmentTransaction);
+                    case ID_CHAT:
+                        replaceFragment(new MainChatFragment(), fragmentManager, fragmentTransaction);
                         break;
                     case ID_PROFILE:
                         replaceFragment(new MainProfileFragment(), fragmentManager, fragmentTransaction);
