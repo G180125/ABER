@@ -17,7 +17,10 @@ import androidx.appcompat.widget.SearchView;
 
 import com.example.aber.FirebaseManager;
 import android.Manifest;
+
 import android.widget.Toast;
+import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import com.example.aber.R;
 import com.example.aber.RequestManager;
@@ -34,6 +37,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -41,6 +45,8 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
 import java.util.Arrays;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 
 public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     private static final String API_KEY = "AIzaSyCYwy04EO7319zgEWLcfu7mxItQdPZM8Dw";
@@ -50,10 +56,11 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     private FirebaseManager firebaseManager;
     private ProgressDialog progressDialog;
     private SearchView searchView;
-    private ImageButton currentLocationButton;
     private LatLng currentLocation;
     private RequestManager requestManager;
     private Marker searchedLocation;
+
+    private FloatingActionButton mapTypeButton,currentLocationButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,6 +83,35 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View v) {
                 focusOnLocation(currentLocation);
             }
+        });
+
+        mapTypeButton = root.findViewById(R.id.map_type_button);
+        mapTypeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(requireContext(), v);
+                popupMenu.getMenuInflater().inflate(R.menu.map_type_menu,popupMenu.getMenu());
+
+                popupMenu.setOnMenuItemClickListener(item -> {
+                    if (item.getItemId() == R.id.buttonNormal){
+                        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                        Log.d("TAG", "Map Type : " + mMap.getMapType());
+                        mMap.setIndoorEnabled(true);
+                    } else if (item.getItemId() == R.id.buttonSatellite) {
+                        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                        Log.d("TAG", "Map Type : " + mMap.getMapType());
+                        
+                    } else if (item.getItemId() == R.id.buttonHybrid) {
+                        mMap.setIndoorEnabled(false);
+                        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                        Log.d("TAG", "Map Type : " + mMap.getMapType());
+                    }
+
+                    return false;
+                });
+                popupMenu.show();
+            }
+
         });
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
