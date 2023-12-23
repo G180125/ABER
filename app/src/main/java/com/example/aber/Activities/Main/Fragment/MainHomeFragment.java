@@ -1,6 +1,5 @@
 package com.example.aber.Activities.Main.Fragment;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -9,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +17,11 @@ import androidx.appcompat.widget.SearchView;
 
 import com.example.aber.FirebaseManager;
 import android.Manifest;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.aber.R;
+import com.example.aber.RequestManager;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -31,8 +33,15 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+
+import java.util.Arrays;
 
 public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
+    private static final String API_KEY = "AIzaSyCYwy04EO7319zgEWLcfu7mxItQdPZM8Dw";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
@@ -41,6 +50,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     private SearchView searchView;
     private ImageButton currentLocationButton;
     private LatLng currentLocation;
+    private RequestManager requestManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,8 +59,13 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_main_home, container, false);
         firebaseManager = new FirebaseManager();
+        requestManager = new RequestManager(requireContext());
 
-        searchView = root.findViewById(R.id.searchView);
+        // Initialize the SDK
+        if(!Places.isInitialized()) {
+            Places.initializeWithNewPlacesApiEnabled(requireContext(), API_KEY);
+        }
+
         currentLocationButton = root.findViewById(R.id.current_location_button);
 
         currentLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +79,46 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
+
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.autocompleteSupportFragment);
+
+        if (autocompleteFragment != null) {
+            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+
+            autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onPlaceSelected(@NonNull Place place) {
+                    showLoadingDialog();
+                    String id = place.getId();
+                    Log.d("onPlaceSelected", id);
+                    Log.d("onPlaceSelected", place.toString());
+//                    LatLng location = place.getLatLng();
+//                    Log.d("onPlaceSelected", location.toString());
+
+                    requestManager.getPlaceDetails(id, API_KEY, new RequestManager.OnFetchDataListener() {
+                        @Override
+                        public void onFetchData(String response) {
+                            hideLoadingDialog();
+                        }
+
+                        @Override
+                        public void onError(String message) {
+                            hideLoadingDialog();
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(@NonNull Status status) {
+                    showToast("Error: " + status);
+                    Log.d("error", "Error: " + status);
+                }
+            });
+        } else {
+            showToast("AutocompleteFragment is null");
+        }
+
 
         return root;
     }
@@ -126,5 +181,9 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                 progressDialog.dismiss();
             }
         });
+    }
+
+    private void showToast(String message){
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
