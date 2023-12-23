@@ -27,6 +27,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -35,6 +36,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
@@ -51,6 +53,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     private ImageButton currentLocationButton;
     private LatLng currentLocation;
     private RequestManager requestManager;
+    private Marker searchedLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,17 +87,26 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                 getChildFragmentManager().findFragmentById(R.id.autocompleteSupportFragment);
 
         if (autocompleteFragment != null) {
-            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS));
 
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(@NonNull Place place) {
                     showLoadingDialog();
                     String id = place.getId();
-                    Log.d("onPlaceSelected", id);
-                    Log.d("onPlaceSelected", place.toString());
-//                    LatLng location = place.getLatLng();
-//                    Log.d("onPlaceSelected", location.toString());
+
+                    //Remove the previous searched location
+                    if (searchedLocation != null) {
+                        searchedLocation.remove();
+                    }
+
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.position(place.getLatLng()).title(place.getAddress());
+                    searchedLocation = mMap.addMarker(markerOptions);
+
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
+                    searchedLocation.showInfoWindow();
 
                     requestManager.getPlaceDetails(id, API_KEY, new RequestManager.OnFetchDataListener() {
                         @Override
