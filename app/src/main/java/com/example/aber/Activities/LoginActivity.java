@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showLoadingDialog();
+                //test
                 firebaseManager.login(emailEditText.getText().toString(), passwordEditText.getText().toString(), new FirebaseManager.OnTaskCompleteListener() {
                     @Override
                     public void onTaskSuccess(String message) {
