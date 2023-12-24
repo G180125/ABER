@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Main.Fragment.MainWalletFragment">
+    tools:context=".Activities.Main.Fragment.MainChatFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Wallet"
+            android:text="Chat"
             android:gravity="center_horizontal|center_vertical"/>
     </LinearLayout>
 

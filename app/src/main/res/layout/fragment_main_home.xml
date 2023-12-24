@@ -3,37 +3,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:backgroundTint="@color/white"
     tools:context=".Activities.Main.Fragment.MainHomeFragment">
 
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="16dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/searchView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:layout_weight="1"/>
-
-            <ImageButton
-                android:id="@+id/current_location_button"
-                android:layout_width="60dp"
-                android:layout_height="60sp"
-                android:src="@drawable/ic_current_location"
-                android:translationY="-6dp"
-                android:backgroundTint="@color/white"/>
+            <fragment
+                android:id="@+id/autocompleteSupportFragment"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                android:layout_weight="1"
+                android:backgroundTint="@color/white" />
 
         </LinearLayout>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/current_location_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="470dp"
+            android:src="@drawable/ic_current_location"
+            android:backgroundTint="@color/white"
+            android:layout_gravity="center|right"
+            app:fabCustomSize="45dp"/>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/map_type_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="350dp"
+            android:src="@drawable/ic_map_type"
+            android:backgroundTint="@color/white"
+            android:layout_gravity="center|right"
+            app:fabCustomSize="45dp"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </LinearLayout>
 
 </FrameLayout>

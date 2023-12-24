@@ -47,23 +47,29 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showLoadingDialog();
-                //test
-                firebaseManager.login(emailEditText.getText().toString(), passwordEditText.getText().toString(), new FirebaseManager.OnTaskCompleteListener() {
-                    @Override
-                    public void onTaskSuccess(String message) {
-                        hideLoadingDialog();
-                        showToast("Login Successfully");
-                        Log.d("UserID", message);
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class).putExtra("userID",message));
-                        finish();
-                    }
 
-                    @Override
-                    public void onTaskFailure(String message) {
-                        hideLoadingDialog();
-                        showToast(message);
-                    }
-                });
+                String email = emailEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
+                if (!email.isEmpty() && !password.isEmpty()){
+                    firebaseManager.login(email, password, new FirebaseManager.OnTaskCompleteListener() {
+                        @Override
+                        public void onTaskSuccess(String message) {
+                            hideLoadingDialog();
+                            showToast(message);
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            finish();
+                        }
+
+                        @Override
+                        public void onTaskFailure(String message) {
+                            hideLoadingDialog();
+                            showToast(message);
+                        }
+                    });
+                } else {
+                    hideLoadingDialog();
+                    showToast("Email or Password is empty");
+                }
             }
         });
 
