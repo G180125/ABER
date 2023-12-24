@@ -56,11 +56,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Email"
+
                     android:drawableLeft="@drawable/baseline_email_24"
                     android:background="@drawable/custom_edit_text"
                     android:padding="10dp"
                     android:drawablePadding="5dp"
                     android:textSize="18sp"/>
+
             </androidx.cardview.widget.CardView>
 
             <TextView
@@ -86,6 +88,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Password"
+
                     android:background="@drawable/custom_edit_text"
                     android:padding="10dp"
                     android:drawableLeft="@drawable/baseline_lock_24"

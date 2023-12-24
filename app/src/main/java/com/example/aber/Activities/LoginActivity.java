@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
                 showLoadingDialog();
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
+
                 if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()){
                     if(!password.isEmpty()) {
                         firebaseManager.login(email, password, new FirebaseManager.OnTaskCompleteListener() {
