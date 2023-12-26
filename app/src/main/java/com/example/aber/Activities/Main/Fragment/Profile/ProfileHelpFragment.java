@@ -1,8 +1,6 @@
 package com.example.aber.Activities.Main.Fragment.Profile;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
@@ -12,7 +10,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,9 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
-public class ProfileChatFragment extends Fragment {
+public class ProfileHelpFragment extends Fragment {
     private final String ADMIN_ID ="u0SkgoA4j5YboEVkP4qXQWIXFrY2";
     private FirebaseManager firebaseManager;
     private ProgressDialog progressDialog;
@@ -50,7 +45,7 @@ public class ProfileChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         showLoadingDialog();
         // Inflate the layout for this fragment
-        View root =  inflater.inflate(R.layout.fragment_profile_chat, container, false);
+        View root =  inflater.inflate(R.layout.fragment_profile_help, container, false);
         firebaseManager = new FirebaseManager();
         recyclerView = root.findViewById(R.id.recycler_message);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));

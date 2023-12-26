@@ -81,16 +81,16 @@ public class ProfileEditFragment extends Fragment {
         firebaseManager = new FirebaseManager();
 
         userID = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
-        firebaseManager.getUserByID(userID, new FirebaseManager.OnFetchUserListener() {
+        firebaseManager.getUserByID(userID, new FirebaseManager.OnFetchListener<User>() {
             @Override
-            public void onFetchUserSuccess(User user) {
+            public void onFetchSuccess(User user) {
                 originalUser = user;
                 currentUser = user;
                 updateUI(currentUser);
             }
 
             @Override
-            public void onFetchUserFailure(String message) {
+            public void onFetchFailure(String message) {
                 hideLoadingDialog();
                 showToast(message);
             }

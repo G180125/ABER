@@ -45,15 +45,15 @@ public class MainProfileFragment extends Fragment {
         firebaseManager = new FirebaseManager();
 
         userID = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
-        firebaseManager.getUserByID(userID, new FirebaseManager.OnFetchUserListener() {
+        firebaseManager.getUserByID(userID, new FirebaseManager.OnFetchListener<User>() {
             @Override
-            public void onFetchUserSuccess(User user) {
+            public void onFetchSuccess(User user) {
                 currentUser = user;
                 updateUI(currentUser);
             }
 
             @Override
-            public void onFetchUserFailure(String message) {
+            public void onFetchFailure(String message) {
                 hideLoadingDialog();
                 showToast(message);
             }
@@ -104,7 +104,7 @@ public class MainProfileFragment extends Fragment {
             public void onClick(View v) {
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                replaceFragment(new ProfileChatFragment(), fragmentManager, fragmentTransaction);
+                replaceFragment(new ProfileHelpFragment(), fragmentManager, fragmentTransaction);
             }
         });
 
@@ -114,7 +114,6 @@ public class MainProfileFragment extends Fragment {
                 firebaseManager.mAuth.signOut();
                 requireActivity().finish();
                 startActivity(new Intent(requireContext(), LoginActivity.class));
-
             }
         });
 

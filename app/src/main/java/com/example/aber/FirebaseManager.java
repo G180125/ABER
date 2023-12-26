@@ -36,6 +36,7 @@ import java.util.Objects;
 
 public class FirebaseManager {
     public final String COLLECTION_USERS = "users";
+    public final String COLLECTION_DRIVERS = "drivers";
     public final String COLLECTION_CHATS = "Chats";
     public final String COLLECTION_ADMINS = "admins";
     public final String COLLECTION_DRIVER = "drivers";
@@ -99,7 +100,7 @@ public class FirebaseManager {
         }).start();
     }
 
-    public void getUserByID(String userID, OnFetchUserListener listener) {
+    public void getUserByID(String userID, OnFetchListener<User> listener) {
         new Thread(() -> {
             this.firestore.collection(this.COLLECTION_USERS)
                     .document(userID)  // Use document() instead of whereEqualTo
@@ -109,12 +110,12 @@ public class FirebaseManager {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 User user = document.toObject(User.class);
-                                listener.onFetchUserSuccess(user);
+                                listener.onFetchSuccess(user);
                             } else {
-                                listener.onFetchUserFailure("User Data not found");
+                                listener.onFetchFailure("User Data not found");
                             }
                         } else {
-                            listener.onFetchUserFailure("Error: " + Objects.requireNonNull(task.getException()).getMessage());
+                            listener.onFetchFailure("Error: " + Objects.requireNonNull(task.getException()).getMessage());
                         }
                     });
         }).start();
@@ -203,14 +204,59 @@ public class FirebaseManager {
         });
     }
 
+    public void getDriverByID(String driverID, OnFetchListener<Driver> listener) {
+        new Thread(() -> {
+            this.firestore.collection(this.COLLECTION_DRIVERS)
+                    .document(driverID)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Driver driver = document.toObject(Driver.class);
+                                listener.onFetchSuccess(driver);
+                            } else {
+                                listener.onFetchFailure("User Data not found");
+                            }
+                        } else {
+                            listener.onFetchFailure("Error: " + Objects.requireNonNull(task.getException()).getMessage());
+                        }
+                    });
+        }).start();
+    }
+
+    public void getAllDrivers(OnFetchDriverListListener listener){
+        List<Driver> list = new ArrayList<>();
+        new Thread(() -> {
+            this.firestore.collection(this.COLLECTION_DRIVERS)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                Driver driver = document.toObject(Driver.class);
+                                list.add(driver);
+                            }
+                            listener.onFetchDriverListSuccess(list);
+                        } else {
+                            listener.onFetchDriverListFailure("Error fetching users: " + Objects.requireNonNull(task.getException()).getMessage());
+                        }
+                    });
+        }).start();
+    }
+
     public interface OnTaskCompleteListener {
         void onTaskSuccess(String message);
         void onTaskFailure(String message);
     }
 
-    public interface OnFetchUserListener {
-        void onFetchUserSuccess(User user);
-        void onFetchUserFailure(String message);
+    public interface OnFetchListener<T> {
+        void onFetchSuccess(T object);
+        void onFetchFailure(String message);
+    }
+
+    public interface OnFetchDriverListListener{
+        void onFetchDriverListSuccess(List<Driver> list);
+        void onFetchDriverListFailure(String message);
     }
 
     public interface OnRetrieveImageListener {
