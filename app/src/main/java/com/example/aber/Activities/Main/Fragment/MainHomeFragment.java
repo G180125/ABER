@@ -119,7 +119,10 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
 
         if (autocompleteFragment != null) {
             autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS));
-
+            View autocompleteView = autocompleteFragment.getView();
+            if (autocompleteView != null) {
+                autocompleteView.setBackgroundColor(getResources().getColor(android.R.color.white));
+            }
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(@NonNull Place place) {

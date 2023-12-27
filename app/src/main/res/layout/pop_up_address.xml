@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/white"
-    android:id="@+id/recipe_list_container"
+    android:id="@+id/address_list_container"
     app:cardElevation="8dp"
     android:layout_margin="8dp">
 
@@ -26,12 +26,13 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="213dp"
+            android:layout_width="200dp"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
                 android:id="@+id/addressTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,10 +41,11 @@
                 android:padding="8dp"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
-                android:text="Address"
+
 
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/isDefaultTextView"
                 android:layout_width="match_parent"
@@ -66,6 +68,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="5dp"
                 android:text="Set as default"
                 >
 
