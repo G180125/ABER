@@ -73,5 +73,6 @@ public class ConfirmBookingFragment extends Fragment {
         } else {
             bookingTimeCardView.setVisibility(View.VISIBLE);
         }
+        AndroidUtil.hideLoadingDialog(progressDialog);
     }
 }

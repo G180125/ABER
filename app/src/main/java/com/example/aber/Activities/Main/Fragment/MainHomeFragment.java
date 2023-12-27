@@ -2,6 +2,7 @@ package com.example.aber.Activities.Main.Fragment;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -17,8 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.aber.Adapters.InfoWindowViewHolder;
+import com.example.aber.ConfirmBookingFragment;
 import com.example.aber.FirebaseManager;
 import android.Manifest;
 
@@ -28,6 +32,7 @@ import android.widget.Toast;
 import android.widget.PopupMenu;
 
 import com.example.aber.R;
+import com.example.aber.Utils.AndroidUtil;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -56,8 +61,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
 
 
-public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
-    private static final String API_KEY = "AIzaSyCYwy04EO7319zgEWLcfu7mxItQdPZM8Dw";
+public class MainHomeFragment extends Fragment implements OnMapReadyCallback{
+    private static final String API_KEY = "AIzaSyAk79eOlfksqlm74wCmRbY_yddK75iZ4dM";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
@@ -176,7 +181,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoContents(Marker marker) {
                 return null; // Use default info window
@@ -187,8 +192,8 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
             public View getInfoWindow(Marker marker) {
                 // Create a custom info window layout
                 View infoView = getLayoutInflater().inflate(R.layout.custom_info_window, null);
-                InfoWindowViewHolder viewHolder = new InfoWindowViewHolder(infoView, searchedPlace);
-
+                InfoWindowViewHolder viewHolder = new InfoWindowViewHolder(infoView);
+                infoView.setClickable(true);
                 Double lat = marker.getPosition().latitude;
                 Double lng = marker.getPosition().longitude;
                 Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
@@ -212,13 +217,40 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                     }
                 }
 
-
                 return infoView;
             }
         });
 
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(@NonNull Marker marker) {
+                ConfirmBookingFragment fragment = new ConfirmBookingFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("name", marker.getTitle());
+                bundle.putString("address", "Testing address");
+                fragment.setArguments(bundle);
+
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                AndroidUtil.replaceFragment(fragment, fragmentManager, fragmentTransaction, R.id.fragment_main_container);            }
+        });
+
         getCurrentLocation();
         hideLoadingDialog();
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(@NonNull LatLng latLng) {
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng).title("Test");
+                searchedLocation = mMap.addMarker(markerOptions);
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+                searchedLocation.showInfoWindow();
+            }
+        });
     }
 
     private void getCurrentLocation() {

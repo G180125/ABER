@@ -19,13 +19,11 @@ import com.google.android.material.imageview.ShapeableImageView;
 
 
 public class InfoWindowViewHolder {
-    private Place place;
     private ShapeableImageView image;
     private TextView nameTextView, addressTextView;
     private Button bookNowButton;
 
-    public InfoWindowViewHolder(View itemView, Place place) {
-        this.place = place;
+    public InfoWindowViewHolder(View itemView) {
         nameTextView = itemView.findViewById(R.id.textViewName);
         addressTextView = itemView.findViewById(R.id.textViewAddress);
         bookNowButton = itemView.findViewById(R.id.book_button);
@@ -38,15 +36,15 @@ public class InfoWindowViewHolder {
         bookNowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConfirmBookingFragment fragment = new ConfirmBookingFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("name", place.getName());
-                bundle.putString("address", place.getAddress());
-                fragment.setArguments(bundle);
-
-                FragmentManager fragmentManager = fragment.getChildFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                AndroidUtil.replaceFragment(fragment, fragmentManager, fragmentTransaction, R.id.fragment_main_container);
+//                ConfirmBookingFragment fragment = new ConfirmBookingFragment();
+//                Bundle bundle = new Bundle();
+//                bundle.putString("name", place.getName());
+//                bundle.putString("address", place.getAddress());
+//                fragment.setArguments(bundle);
+//
+//                FragmentManager fragmentManager = fragment.getChildFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                AndroidUtil.replaceFragment(fragment, fragmentManager, fragmentTransaction, R.id.fragment_main_container);
             }
         });
     }

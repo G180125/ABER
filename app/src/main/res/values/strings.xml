@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">ABER</string>
-    <string name="GOOGLE_MAP_API">AIzaSyCYwy04EO7319zgEWLcfu7mxItQdPZM8Dw</string>
+<!--    <string name="GOOGLE_MAP_API">AIzaSyCYwy04EO7319zgEWLcfu7mxItQdPZM8Dw</string>-->
+    <string name="GOOGLE_MAP_API">AIzaSyAk79eOlfksqlm74wCmRbY_yddK75iZ4dM</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
