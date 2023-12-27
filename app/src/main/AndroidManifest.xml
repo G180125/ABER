@@ -39,9 +39,6 @@
         <activity
             android:name=".Activities.Register.RegisterActivity"
             android:exported="false" />
-        <activity
-            android:name=".Activities.LandingPageActivity"
-            android:exported="true"/>
     </application>
 
 </manifest>
