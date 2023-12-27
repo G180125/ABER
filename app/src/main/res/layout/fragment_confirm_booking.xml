@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ConfirmBookingFragment">
+    tools:context=".Activities.Main.Fragment.Home.ConfirmBookingFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -130,8 +130,10 @@
                     android:elevation="4dp"
                     android:layout_marginHorizontal="8dp">
                     <TimePicker
+                        android:id="@+id/time_picker"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"></TimePicker>
+                        android:layout_height="wrap_content">
+                    </TimePicker>
                 </androidx.cardview.widget.CardView>
 
                 <TextView
@@ -144,6 +146,7 @@
                     android:textStyle="bold" />
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/home_card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardElevation="4dp"
@@ -159,19 +162,21 @@
                             android:orientation="horizontal">
                             <TextView
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:text="Adrress: "
                                 android:textSize="16sp"
-                                android:textStyle="bold"/>
-                            <EditText
+                                android:textStyle="bold"
+                                android:gravity="center_vertical"/>
+                            <TextView
                                 android:id="@+id/address"
                                 android:layout_width="0dp"
-                                android:layout_height="48dp"
+                                android:layout_height="match_parent"
                                 android:text="Address"
                                 android:padding="8dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:gravity="center_vertical">
 
-                            </EditText>
+                            </TextView>
                             <ImageView
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
@@ -193,6 +198,7 @@
                     android:textStyle="bold" />
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/vehicle_card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardElevation="4dp"
@@ -208,19 +214,21 @@
                             android:orientation="horizontal">
                             <TextView
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:text="Plate: "
                                 android:textSize="16sp"
-                                android:textStyle="bold"/>
-                            <EditText
+                                android:textStyle="bold"
+                                android:gravity="center_vertical"/>
+                            <TextView
                                 android:id="@+id/plate"
                                 android:layout_width="0dp"
-                                android:layout_height="48dp"
+                                android:layout_height="match_parent"
                                 android:text="Plate"
                                 android:padding="8dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:gravity="center_vertical">
 
-                            </EditText>
+                            </TextView>
                             <ImageView
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
@@ -241,6 +249,7 @@
                     android:textStyle="bold" />
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/sos_card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardElevation="4dp"
@@ -258,19 +267,21 @@
 
                             <TextView
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:text="Name: "
                                 android:textSize="16sp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:gravity="center_vertical"/>
 
-                            <EditText
+                            <TextView
                                 android:id="@+id/sos_name"
                                 android:layout_width="match_parent"
-                                android:layout_height="48dp"
+                                android:layout_height="match_parent"
                                 android:text="Name"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:gravity="center_vertical">
 
-                            </EditText>
+                            </TextView>
 
                             <ImageView
                                 android:layout_width="50dp"
@@ -292,6 +303,7 @@
                     android:textStyle="bold" />
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/card_card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardElevation="4dp"
@@ -310,19 +322,21 @@
 
                             <TextView
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:text="Card: "
                                 android:textSize="16sp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:gravity="center_vertical"/>
 
-                            <EditText
+                            <TextView
                                 android:id="@+id/card"
                                 android:layout_width="match_parent"
-                                android:layout_height="48dp"
+                                android:layout_height="match_parent"
                                 android:text="Card"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:gravity="center_vertical">
 
-                            </EditText>
+                            </TextView>
 
                             <ImageView
                                 android:layout_width="50dp"
@@ -335,10 +349,10 @@
                 </androidx.cardview.widget.CardView>
 
                 <Button
-                    android:id="@+id/edit_button"
+                    android:id="@+id/next_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Edit"
+                    android:text="next"
                     android:layout_marginHorizontal="8dp"
                     android:layout_marginBottom="20dp"/>
             </LinearLayout>

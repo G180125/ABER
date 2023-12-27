@@ -1,8 +1,7 @@
-package com.example.aber.Activities.Main.Fragment;
+package com.example.aber.Activities.Main.Fragment.Home;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -22,12 +21,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.aber.Adapters.InfoWindowViewHolder;
-import com.example.aber.ConfirmBookingFragment;
 import com.example.aber.FirebaseManager;
 import android.Manifest;
 
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.PopupMenu;
 
@@ -58,7 +54,6 @@ import java.util.List;
 import java.util.Locale;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.imageview.ShapeableImageView;
 
 
 public class MainHomeFragment extends Fragment implements OnMapReadyCallback{
