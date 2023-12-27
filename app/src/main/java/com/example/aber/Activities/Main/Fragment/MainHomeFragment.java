@@ -66,6 +66,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     private SearchView searchView;
     private LatLng currentLocation;
     private Marker searchedLocation;
+    private Place searchedPlace;
 
     private FloatingActionButton mapTypeButton,currentLocationButton;
 
@@ -134,6 +135,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(@NonNull Place place) {
+                    searchedPlace = place;
                     showLoadingDialog();
                     String id = place.getId();
 
@@ -185,7 +187,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
             public View getInfoWindow(Marker marker) {
                 // Create a custom info window layout
                 View infoView = getLayoutInflater().inflate(R.layout.custom_info_window, null);
-                InfoWindowViewHolder viewHolder = new InfoWindowViewHolder(infoView);
+                InfoWindowViewHolder viewHolder = new InfoWindowViewHolder(infoView, searchedPlace);
 
                 Double lat = marker.getPosition().latitude;
                 Double lng = marker.getPosition().longitude;
@@ -194,8 +196,17 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                 if (lat != 0) {
                     try {
                         List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
-                        assert addresses != null;
-                        viewHolder.bind(marker.getTitle(), addresses.toString());
+                        String address = addresses.get(0).getAddressLine(0);
+                        String city = addresses.get(0).getLocality();
+                        String state = addresses.get(0).getAdminArea();
+                        String country = addresses.get(0).getCountryName();
+                        String postalCode = addresses.get(0).getPostalCode();
+                        String knownName = addresses.get(0).getFeatureName();
+                        String dis = addresses.get(0).getSubAdminArea();
+
+                        String searchedAddress = address;
+                        assert searchedAddress != null;
+                        viewHolder.bind(marker.getTitle(), searchedAddress);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

@@ -1,5 +1,7 @@
 package com.example.aber.Models.Booking;
 
+import com.example.aber.Models.User.SOS;
+
 public class Booking {
     private String pickUp;
     private String destination;
@@ -8,10 +10,11 @@ public class Booking {
     private String realPickUpTime;
     private String pickUpImage;
     private Payment payment;
+    private SOS emergencyContact;
 
     public Booking(){}
 
-    public Booking(String pickUp, String destination, String ETA, String bookingTime, String realPickUpTime, String pickUpImage, Payment payment) {
+    public Booking(String pickUp, String destination, String ETA, String bookingTime, String realPickUpTime, String pickUpImage, Payment payment, SOS emergencyContact) {
         this.pickUp = pickUp;
         this.destination = destination;
         this.ETA = ETA;
@@ -19,6 +22,7 @@ public class Booking {
         this.realPickUpTime = realPickUpTime;
         this.pickUpImage = pickUpImage;
         this.payment = payment;
+        this.emergencyContact = emergencyContact;
     }
 
     public String getPickUp() {
