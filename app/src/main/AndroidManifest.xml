@@ -29,6 +29,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/GOOGLE_MAP_API" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <activity
             android:name=".Activities.Main.MainActivity"
@@ -39,9 +42,7 @@
         <activity
             android:name=".Activities.Register.RegisterActivity"
             android:exported="false" />
-        <activity
-            android:name=".Activities.LandingPageActivity"
-            android:exported="true"/>
+
     </application>
 
 </manifest>
