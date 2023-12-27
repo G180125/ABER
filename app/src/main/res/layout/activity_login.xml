@@ -10,42 +10,59 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardCornerRadius="30dp"
+        android:layout_marginHorizontal="15dp"
         app:cardElevation="4dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Login"
-                android:textSize="56sp"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:layout_marginVertical="16dp"/>
 
             <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:fontFamily="@font/lobster"
+                android:text="Login"
+                android:textAlignment="center"
+                android:textSize="56sp"
+                android:textStyle="bold" />
+
+            <TextView
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Email"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="8dp"/>
+                android:padding="5dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="5dp"
+                />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardElevation="4dp"
+                app:cardCornerRadius="30dp"
+                android:background="@drawable/custom_edit_text"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="8dp">
                 <EditText
                     android:id="@+id/email_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Email"
-                    android:textSize="18sp"
-                    android:maxLines="1"/>
+
+                    android:drawableLeft="@drawable/baseline_email_24"
+                    android:background="@drawable/custom_edit_text"
+                    android:padding="10dp"
+                    android:drawablePadding="5dp"
+                    android:textSize="18sp"/>
+
             </androidx.cardview.widget.CardView>
 
             <TextView
@@ -54,13 +71,16 @@
                 android:text="Password"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="8dp"/>
+                android:padding="5dp"
+                android:layout_marginHorizontal="19dp"
+                android:layout_marginBottom="5dp"
+                />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardElevation="4dp"
+                app:cardCornerRadius="30dp"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="16dp">
                 <EditText
@@ -68,17 +88,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Password"
+
+                    android:background="@drawable/custom_edit_text"
+                    android:padding="10dp"
+                    android:drawableLeft="@drawable/baseline_lock_24"
+                    android:drawablePadding="5dp"
                     android:textSize="18sp"
-                    android:maxLines="1"/>
+                    android:inputType="textPassword"/>
 
             </androidx.cardview.widget.CardView>
 
             <Button
                 android:id="@+id/login_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="32dp"
+                android:layout_height="60dp"
+                android:layout_marginHorizontal="50dp"
+                android:layout_marginVertical="28dp"
                 android:text="Login" />
 
             <LinearLayout
@@ -86,19 +111,24 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="40dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Register now"
+                    android:text="Don't have an account?"
                     android:textStyle="italic"
                     android:textSize="22sp"/>
-                <Button
-                    android:id="@+id/register_button"
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:text="Register" />
+                    android:layout_marginHorizontal="10dp"
+                    android:text="Register"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:onClick="onClickRegister">
+
+                </TextView>
             </LinearLayout>
 
         </LinearLayout>

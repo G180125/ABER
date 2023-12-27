@@ -68,19 +68,29 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardElevation="4dp">
+            app:cardElevation="4dp"
+            app:cardCornerRadius="30dp">
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    android:fontFamily="@font/lobster"
+
                     android:text="Create New Account"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
                     android:textAlignment="center"
-                    android:layout_marginVertical="16dp"/>
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -92,71 +102,91 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Email"
+                    android:text="Email (*)"
                     android:textSize="16sp"
                     android:textStyle="bold"
+                    android:padding="5dp"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginVertical="8dp"/>
+                    android:layout_marginTop="20dp"/>
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardElevation="4dp"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginBottom="5dp"
+                    app:cardCornerRadius="30dp">
                     <EditText
                         android:id="@+id/email_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Email"
+                        android:background="@drawable/custom_edit_text"
+                        android:padding="10dp"
+                        android:drawablePadding="5dp"
+                        android:drawableLeft="@drawable/baseline_email_24"
                         android:textSize="18sp"/>
                 </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Password"
+                    android:text="Password (*)"
+                    android:padding="5dp"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginVertical="8dp"/>
+                    />
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardElevation="4dp"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginBottom="5dp"
+                    app:cardCornerRadius="30dp">
                     <EditText
                         android:id="@+id/password_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Password"
-                        android:textSize="18sp"/>
+                        android:background="@drawable/custom_edit_text"
+                        android:padding="10dp"
+                        android:drawablePadding="5dp"
+                        android:drawableLeft="@drawable/baseline_lock_24"
+                        android:textSize="18sp"
+                        android:inputType="textPassword"/>
 
                 </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Confirm Password"
+                    android:text="Confirm Password (*)"
+                    android:padding="5dp"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginVertical="8dp"/>
+                    />
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardElevation="4dp"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginBottom="130dp">
+                    android:layout_marginBottom="130dp"
+                    app:cardCornerRadius="30dp">
                     <EditText
                         android:id="@+id/confirm_password_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Confirm Password"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp"
+                        android:background="@drawable/custom_edit_text"
+                        android:padding="10dp"
+                        android:drawablePadding="5dp"
+                        android:drawableLeft="@drawable/baseline_lock_24"
+                        android:inputType="textPassword"/>
                 </androidx.cardview.widget.CardView>
 
                 <Button
@@ -164,9 +194,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
-                    android:text="Done"/>
+                    android:text="Done"
+                    android:layout_marginBottom="50dp"/>
 
             </LinearLayout>
+            </ScrollView>
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 

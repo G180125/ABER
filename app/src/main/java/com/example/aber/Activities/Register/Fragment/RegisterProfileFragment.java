@@ -66,6 +66,10 @@ public class RegisterProfileFragment extends Fragment {
     }
 
     private boolean validateInputs(String name, String phoneNumber, String gender){
+//        if (name.isEmpty() && !validatePhoneNumber(phoneNumber) && gender == null){
+//            showToast("Send nude");
+//            return false;
+//        }
         if(name.isEmpty()){
             showToast("Name can not be empty");
             return false;
@@ -78,6 +82,7 @@ public class RegisterProfileFragment extends Fragment {
             showToast("Please select your gender");
             return false;
         }
+
         showToast("Finish Step 2/5");
         return true;
     }

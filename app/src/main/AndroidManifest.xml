@@ -2,17 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -24,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ABER"
         tools:targetApi="31">
+        <activity
+            android:name=".Activities.Main.EditActivity.EditVehicleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.Main.EditActivity.EditAddressActivity"
+            android:exported="false" />
         <activity
             android:name=".Activities.SplashActivity"
             android:exported="true">
@@ -37,6 +35,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/GOOGLE_MAP_API" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <activity
             android:name=".Activities.Main.MainActivity"
@@ -47,13 +48,6 @@
         <activity
             android:name=".Activities.Register.RegisterActivity"
             android:exported="false" />
-        <activity
-            android:name="com.canhub.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"
-            />
-        <activity
-            android:name=".Activities.LandingPageActivity"
-            android:exported="true"/>
     </application>
 
 </manifest>

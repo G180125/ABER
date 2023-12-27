@@ -19,233 +19,273 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <LinearLayout
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/avatar"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/ic_profile" />
+
+            <Button
+                android:id="@+id/upload_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Upload Avatar" />
+
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/avatar"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:src="@drawable/ic_profile" />
-                <Button
-                    android:id="@+id/upload_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Upload Avatar"/>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="8dp"
+                android:text="General"
+                android:textSize="26sp"
+                android:textStyle="bold" />
 
-                <TextView
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:elevation="4dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
-                    android:layout_marginVertical="8dp"
-                    android:text="General"
-                    android:textSize="26sp"
-                    android:textStyle="bold" />
+                    android:orientation="vertical"
+                    android:padding="8dp">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:elevation="4dp"
-                    android:layout_marginHorizontal="8dp">
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="8dp">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Name: "
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                />
-                            <EditText
-                                android:id="@+id/name"
-                                android:layout_width="0dp"
-                                android:layout_height="48dp"
-                                android:text="Name"
-                                android:layout_weight="1"/>
+                        android:layout_height="wrap_content">
 
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Email: "
-                                android:textSize="16sp"
-                                android:textStyle="bold"/>
-                            <EditText
-                                android:id="@+id/email"
-                                android:layout_width="0dp"
-                                android:layout_height="48dp"
-                                android:text="Email"
-                                android:layout_weight="1">
-
-                            </EditText>
-                        </LinearLayout>
-
-                        <LinearLayout
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Gender:"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
-                            <RadioGroup
-                                android:id="@+id/radioGroupGender"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginHorizontal="16dp">
+                            android:text="Name: "
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                                <RadioButton
-                                    android:id="@+id/radioButtonMale"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Male"
-                                    android:textSize="16sp" />
+                        <EditText
+                            android:id="@+id/name"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/custom_edit_text"
+                            android:padding="10dp"
+                            android:text="Name" />
 
-                                <RadioButton
-                                    android:id="@+id/radioButtonFemale"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Female"
-                                    android:textSize="16sp"
-                                    android:layout_marginStart="16dp" />
-                            </RadioGroup>
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Phone: "
-                                android:textSize="16sp"
-                                android:textStyle="bold"/>
-                            <EditText
-                                android:id="@+id/phone"
-                                android:layout_width="0dp"
-                                android:layout_height="48dp"
-                                android:text="Phone"
-                                android:padding="8dp"
-                                android:layout_weight="1">
-
-                            </EditText>
-                        </LinearLayout>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
-                    android:layout_marginTop="24dp"
-                    android:text="Home"
-                    android:textSize="26sp"
-                    android:textStyle="bold" />
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardElevation="4dp"
-                    android:layout_marginHorizontal="8dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="8dp">
-                        <LinearLayout
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Email: "
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/email"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/custom_edit_text"
+                            android:padding="10dp"
+                            android:text="Email">
+
+                        </EditText>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Gender:"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <RadioGroup
+                            android:id="@+id/radioGroupGender"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="16dp"
                             android:orientation="horizontal">
-                            <TextView
+
+                            <RadioButton
+                                android:id="@+id/radioButtonMale"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Adrress: "
-                                android:textSize="16sp"
-                                android:textStyle="bold"/>
-                            <EditText
-                                android:id="@+id/address"
-                                android:layout_width="0dp"
-                                android:layout_height="48dp"
-                                android:text="Address"
-                                android:padding="8dp"
-                                android:layout_weight="1">
+                                android:text="Male"
+                                android:textSize="16sp" />
 
-                            </EditText>
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@drawable/ic_chevron_right"
-                                android:background="@android:color/transparent"
-                                android:padding="8dp"/>
-                        </LinearLayout>
-
+                            <RadioButton
+                                android:id="@+id/radioButtonFemale"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:text="Female"
+                                android:textSize="16sp" />
+                        </RadioGroup>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
 
-                <TextView
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Phone: "
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/phone"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/custom_edit_text"
+                            android:padding="10dp"
+                            android:text="Phone">
+
+                        </EditText>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="24dp"
+                android:text="Home"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/defaultAddressCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                app:cardElevation="4dp"
+                >
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
-                    android:layout_marginTop="24dp"
-                    android:text="Vehicle"
-                    android:textSize="26sp"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardElevation="4dp"
-                    android:layout_marginHorizontal="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Address: "
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/defaultAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:textSize="15sp"
+                        android:padding="10dp"
+                        android:text="Default Address">
+
+                    </TextView>
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@android:color/transparent"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_chevron_right" />
+                </LinearLayout>
+            </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="24dp"
+                android:text="Vehicle"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/defaultVehicleCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                app:cardElevation="4dp"
+                >
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="8dp">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Plate: "
-                                android:textSize="16sp"
-                                android:textStyle="bold"/>
-                            <EditText
-                                android:id="@+id/plate"
-                                android:layout_width="0dp"
-                                android:layout_height="48dp"
-                                android:text="Plate"
-                                android:padding="8dp"
-                                android:layout_weight="1">
+                        android:orientation="horizontal">
 
-                            </EditText>
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@drawable/ic_chevron_right"
-                                android:background="@android:color/transparent"
-                                android:padding="8dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Name: "
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                <TextView
+                    <TextView
+                        android:id="@+id/defaultVehicle"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:textSize="15sp"
+                        android:padding="10dp"
+                        android:text="Default Vehicle">
+
+                    </TextView>
+
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@android:color/transparent"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_chevron_right" />
+            </LinearLayout>
+        </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="8dp"
@@ -283,8 +323,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="48dp"
                                 android:text="Name"
+                                android:padding="10dp"
+                                android:layout_marginLeft="5dp"
+                                android:background="@drawable/custom_edit_text"
                                 android:layout_weight="1">
-
                             </EditText>
 
                             <ImageView
@@ -303,7 +345,7 @@
                     android:layout_height="wrap_content"
                     android:text="Edit"
                     android:layout_marginHorizontal="8dp"
-                    android:layout_marginBottom="20dp"/>
+                    android:layout_marginBottom="40dp"/>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

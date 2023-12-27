@@ -1,5 +1,7 @@
 package com.example.aber.Models.User;
 
+import androidx.annotation.NonNull;
+
 import com.example.aber.Models.Booking.Booking;
 
 import java.util.ArrayList;
@@ -30,6 +32,21 @@ public class User {
         this.vehicles = vehicles;
         this.emergencyContacts = emergencyContacts;
         this.bookings = new ArrayList<>();
+    }
+
+    @NonNull
+    public User clone() {
+
+        User newUser = new User();
+        newUser.setName(this.getName());
+        newUser.setEmail(this.getEmail());
+        newUser.setPhoneNumber(this.phoneNumber);
+        newUser.setGender(this.gender);
+        newUser.setAvatar(this.avatar);
+        newUser.setHomes(this.homes);
+        newUser.setVehicles(this.vehicles);
+        newUser.setEmergencyContacts(this.emergencyContacts);
+        return newUser;
     }
 
     public String getEmail() {
@@ -109,7 +126,14 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return email.equals(user.email) && name.equals(user.name) && gender == user.gender && phoneNumber.equals(user.phoneNumber) && avatar.equals(user.avatar) && homes.equals(user.homes) && vehicles.equals(user.vehicles) && emergencyContacts.equals(user.emergencyContacts);
+        return Objects.equals(email, user.email) &&
+                Objects.equals(name, user.name) &&
+                gender == user.gender &&
+                Objects.equals(phoneNumber, user.phoneNumber) &&
+                Objects.equals(avatar, user.avatar) &&
+                Objects.equals(homes, user.homes) &&
+                Objects.equals(vehicles, user.vehicles) &&
+                Objects.equals(emergencyContacts, user.emergencyContacts);
     }
 
     @Override
