@@ -1,8 +1,10 @@
-package com.example.aber.Models;
+package com.example.aber.Models.User;
 
 public class SOS {
     private String name;
     private String phoneNumber;
+
+    public SOS(){};
 
     public SOS(String name, String phoneNumber) {
         this.name = name;

@@ -1,4 +1,4 @@
-package com.example.aber.Models;
+package com.example.aber.Models.User;
 
 import java.util.List;
 
@@ -9,6 +9,8 @@ public class Vehicle {
     private String seatCapacity;
     private String numberPlate;
     private List<String> images;
+
+    public Vehicle(){};
 
     public Vehicle(String brand, String name, String color, String seatCapacity, String numberPlate, List<String> images) {
         this.brand = brand;
