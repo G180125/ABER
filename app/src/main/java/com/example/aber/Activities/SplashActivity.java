@@ -7,10 +7,15 @@ import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.aber.Activities.Main.MainActivity;
 import com.example.aber.R;
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SplashActivity extends AppCompatActivity {
     private ProgressBar progressBar;
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +25,8 @@ public class SplashActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.splashScreen_ProgressBar);
 
         final int durationMillis = 3500;
+
+        mAuth = FirebaseAuth.getInstance();
 
 
         ValueAnimator animator = ValueAnimator.ofInt(0, 100);
@@ -41,8 +48,14 @@ public class SplashActivity extends AppCompatActivity {
         progressBar.postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this, LandingPageActivity.class));
-                finish();
+                if (mAuth.getCurrentUser() != null){
+                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                    finish();
+                } else {
+                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                    finish();
+                }
+
             }
         }, durationMillis);
     }

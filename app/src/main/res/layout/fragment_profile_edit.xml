@@ -157,45 +157,14 @@
                     android:textSize="26sp"
                     android:textStyle="bold" />
 
-                <androidx.cardview.widget.CardView
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/userHomeRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardElevation="4dp"
-                    android:layout_marginHorizontal="8dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="8dp">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Adrress: "
-                                android:textSize="16sp"
-                                android:textStyle="bold"/>
-                            <EditText
-                                android:id="@+id/address"
-                                android:layout_width="0dp"
-                                android:layout_height="48dp"
-                                android:text="Address"
-                                android:padding="8dp"
-                                android:layout_weight="1">
+                    android:layout_margin="10dp">
 
-                            </EditText>
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@drawable/ic_chevron_right"
-                                android:background="@android:color/transparent"
-                                android:padding="8dp"/>
-                        </LinearLayout>
+                </androidx.recyclerview.widget.RecyclerView>
 
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -206,44 +175,13 @@
                     android:textSize="26sp"
                     android:textStyle="bold" />
 
-                <androidx.cardview.widget.CardView
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/userVehicleRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardElevation="4dp"
-                    android:layout_marginHorizontal="8dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="8dp">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Plate: "
-                                android:textSize="16sp"
-                                android:textStyle="bold"/>
-                            <EditText
-                                android:id="@+id/plate"
-                                android:layout_width="0dp"
-                                android:layout_height="48dp"
-                                android:text="Plate"
-                                android:padding="8dp"
-                                android:layout_weight="1">
+                    android:layout_margin="10dp">
 
-                            </EditText>
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@drawable/ic_chevron_right"
-                                android:background="@android:color/transparent"
-                                android:padding="8dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </androidx.recyclerview.widget.RecyclerView>
 
                 <TextView
                     android:layout_width="match_parent"

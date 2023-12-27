@@ -12,7 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+
 import androidx.appcompat.widget.SearchView;
 
 import com.example.aber.FirebaseManager;
@@ -20,10 +20,8 @@ import android.Manifest;
 
 import android.widget.Toast;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 
 import com.example.aber.R;
-import com.example.aber.RequestManager;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,7 +38,6 @@ import com.google.android.gms.location.LocationServices;
 
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
@@ -57,7 +54,6 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     private ProgressDialog progressDialog;
     private SearchView searchView;
     private LatLng currentLocation;
-    private RequestManager requestManager;
     private Marker searchedLocation;
 
     private FloatingActionButton mapTypeButton,currentLocationButton;
@@ -69,7 +65,6 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_main_home, container, false);
         firebaseManager = new FirebaseManager();
-        requestManager = new RequestManager(requireContext());
 
         // Initialize the SDK
         if(!Places.isInitialized()) {
@@ -144,17 +139,19 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                     mMap.animateCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
                     searchedLocation.showInfoWindow();
 
-                    requestManager.getPlaceDetails(id, API_KEY, new RequestManager.OnFetchDataListener() {
-                        @Override
-                        public void onFetchData(String response) {
-                            hideLoadingDialog();
-                        }
+                    hideLoadingDialog();
 
-                        @Override
-                        public void onError(String message) {
-                            hideLoadingDialog();
-                        }
-                    });
+//                    requestManager.getPlaceDetails(id, API_KEY, new RequestManager.OnFetchDataListener() {
+//                        @Override
+//                        public void onFetchData(String response) {
+//                            hideLoadingDialog();
+//                        }
+//
+//                        @Override
+//                        public void onError(String message) {
+//                            hideLoadingDialog();
+//                        }
+//                    });
                 }
 
                 @Override

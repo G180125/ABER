@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +31,8 @@ import com.canhub.cropper.CropImageOptions;
 import com.example.aber.FirebaseManager;
 
 import com.example.aber.Models.User.Gender;
-import com.example.aber.Models.User.Home;
 import com.example.aber.Models.User.SOS;
 import com.example.aber.Models.User.User;
-import com.example.aber.Models.User.Vehicle;
 import com.example.aber.R;
 
 import java.util.ArrayList;
@@ -76,21 +75,21 @@ public class ProfileEditFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         showLoadingDialog();
-        // Inflate the layout for this fragment
+
         View root =  inflater.inflate(R.layout.fragment_profile_edit, container, false);
         firebaseManager = new FirebaseManager();
 
         userID = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
-        firebaseManager.getUserByID(userID, new FirebaseManager.OnFetchUserListener() {
+        firebaseManager.getUserByID(userID, new FirebaseManager.OnFetchListener<User>() {
             @Override
-            public void onFetchUserSuccess(User user) {
+            public void onFetchSuccess(User user) {
                 originalUser = user;
                 currentUser = user;
                 updateUI(currentUser);
             }
 
             @Override
-            public void onFetchUserFailure(String message) {
+            public void onFetchFailure(String message) {
                 hideLoadingDialog();
                 showToast(message);
             }
@@ -104,8 +103,8 @@ public class ProfileEditFragment extends Fragment {
         maleRadioButton = root.findViewById(R.id.radioButtonMale);
         femaleRadiusButton = root.findViewById(R.id.radioButtonFemale);
         phoneEditText = root.findViewById(R.id.phone);
-        addressEditText = root.findViewById(R.id.address);
-        plateEditText = root.findViewById(R.id.plate);
+//        addressEditText = root.findViewById(R.id.address);
+//        plateEditText = root.findViewById(R.id.plate);
         sosEditText = root.findViewById(R.id.sos_name);
         editButton = root.findViewById(R.id.edit_button);
 
@@ -133,56 +132,44 @@ public class ProfileEditFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showLoadingDialog();
-                if(!isProfileChanged(currentUser, originalUser)){
-                    if (cropped != null) {
-                        String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
-                        firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
-                            @Override
-                            public void onTaskSuccess(String message) {
-                                currentUser.setAvatar(message);
-                                firebaseManager.updateUser(userID, currentUser, new FirebaseManager.OnTaskCompleteListener() {
-                                    @Override
-                                    public void onTaskSuccess(String message) {
-                                        showToast(message);
-                                        updateUI(currentUser);
-                                    }
+                isProfileChanged(currentUser, originalUser, new OnProfileChangedListener() {
+                    @Override
+                    public void onProfileChanged(String message) {
 
-                                    @Override
-                                    public void onTaskFailure(String message) {
-                                        showToast(message);
-                                        hideLoadingDialog();
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onTaskFailure(String message) {
-                                showToast(message);
-                                hideLoadingDialog();
-                            }
-                        });
-                    } else {
-                        firebaseManager.updateUser(userID, currentUser, new FirebaseManager.OnTaskCompleteListener() {
-                            @Override
-                            public void onTaskSuccess(String message) {
-                                showToast(message);
-                                updateUI(currentUser);
-                                hideLoadingDialog();
-                            }
-
-                            @Override
-                            public void onTaskFailure(String message) {
-                                showToast(message);
-                                hideLoadingDialog();
-                            }
-                        });
+                        hideLoadingDialog();
+                        showToast(message);
                     }
-                } else {
-                    hideLoadingDialog();
-                    showToast("No Data Changed.");
-                }
+
+                    @Override
+                    public void onProfileNotChanged() {
+
+                        if (cropped != null) {
+                            // Handle the case when only the avatar is changed
+                            String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
+                            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+                                @Override
+                                public void onTaskSuccess(String message) {
+                                    currentUser.setAvatar(message);
+                                    showToast(message);
+                                    updateUI(currentUser);
+                                }
+
+                                @Override
+                                public void onTaskFailure(String message) {
+                                    showToast(message);
+                                    hideLoadingDialog();
+                                }
+                            });
+                        } else {
+                            // Handle the case when no data is changed
+                            hideLoadingDialog();
+                            showToast("No Data Changed.");
+                        }
+                    }
+                });
             }
         });
+
 
         return root;
     }
@@ -213,8 +200,8 @@ public class ProfileEditFragment extends Fragment {
         avatar.setImageBitmap(bitmap);
     }
 
-    private void updateUI(User user){
-        if(!user.getAvatar().isEmpty()){
+    private void updateUI(User user) {
+        if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
             firebaseManager.retrieveImage(user.getAvatar(), new FirebaseManager.OnRetrieveImageListener() {
                 @Override
                 public void onRetrieveImageSuccess(Bitmap bitmap) {
@@ -231,16 +218,19 @@ public class ProfileEditFragment extends Fragment {
         } else {
             hideLoadingDialog();
         }
+
+
         nameEditText.setText(user.getName());
         emailEditText.setText(user.getEmail());
         setGenderFromRadiusButton(user);
         phoneEditText.setText(user.getPhoneNumber());
-        addressEditText.setText(user.getHome().getAddress());
-        plateEditText.setText(user.getVehicle().getNumberPlate());
-        if(!user.getEmergencyContacts().isEmpty()){
+
+
+        if (!user.getEmergencyContacts().isEmpty()) {
             sosEditText.setText(user.getEmergencyContacts().get(0).getName());
         }
     }
+
 
     private void setGenderFromRadiusButton(User user){
         if (user.getGender() == Gender.MALE) {
@@ -259,32 +249,74 @@ public class ProfileEditFragment extends Fragment {
         return null;
     }
 
-    private boolean isProfileChanged(User currentUser, User originalUser) {
-        currentUser.setName(nameEditText.getText().toString());
-        currentUser.setEmail(emailEditText.getText().toString());
-        currentUser.setGender(getGenderFromRadiusButton());
-        currentUser.setPhoneNumber(phoneEditText.getText().toString());
+    private void isProfileChanged(User currentUser, User originalUser, OnProfileChangedListener listener) {
+        User editedUser = originalUser.clone();
 
-        Home newHome = currentUser.getHome();
-        newHome.setAddress(addressEditText.getText().toString());
-        currentUser.setHome(newHome);
+        editedUser.setName(nameEditText.getText().toString());
+        editedUser.setEmail(emailEditText.getText().toString());
+        editedUser.setGender(getGenderFromRadiusButton());
+        editedUser.setPhoneNumber(phoneEditText.getText().toString());
 
-        Vehicle newVehicle = currentUser.getVehicle();
-        newVehicle.setNumberPlate(plateEditText.getText().toString());
-        currentUser.setVehicle(newVehicle);
 
         List<SOS> newList = new ArrayList<>();
-        if(!sosEditText.getText().toString().isEmpty()){
+        if (!sosEditText.getText().toString().isEmpty()) {
             SOS newSOS = new SOS(sosEditText.getText().toString(), "");
             newList.add(newSOS);
         }
-        currentUser.setEmergencyContacts(newList);
-        if(cropped != null){
-            return false;
+        editedUser.setEmergencyContacts(newList);
+
+        boolean nameChanged = !Objects.equals(originalUser.getName(), editedUser.getName());
+        boolean emailChanged = !Objects.equals(originalUser.getEmail(), editedUser.getEmail());
+        boolean genderChanged = originalUser.getGender() != editedUser.getGender();
+        boolean phoneChanged = !Objects.equals(originalUser.getPhoneNumber(), editedUser.getPhoneNumber());
+
+        boolean sosChanged = !Objects.equals(originalUser.getEmergencyContacts(), editedUser.getEmergencyContacts());
+        boolean avatarChanged = cropped != null;
+
+        boolean profileChanged = nameChanged || emailChanged || genderChanged || phoneChanged  || sosChanged || avatarChanged;
+
+        if (profileChanged) {
+            Log.d("ProfileEditFragment", "Changes detected: ");
+//            if (nameChanged) Log.d("ProfileEditFragment", "Name changed");
+//            if (emailChanged) Log.d("ProfileEditFragment", "Email changed");
+//            if (genderChanged) Log.d("ProfileEditFragment", "Gender changed");
+//            if (phoneChanged) Log.d("ProfileEditFragment", "Phone changed");
+//
+//            if (sosChanged) Log.d("ProfileEditFragment", "SOS changed");
+//            if (avatarChanged) Log.d("ProfileEditFragment", "Avatar changed");
+
+            updateUserInFirestore(editedUser, listener);
+        } else {
+            listener.onProfileNotChanged();
         }
 
-        return originalUser.equals(currentUser);
     }
+
+
+    private void updateUserInFirestore(User updatedUser, OnProfileChangedListener listener) {
+        firebaseManager.updateUser(userID, updatedUser, new FirebaseManager.OnTaskCompleteListener() {
+            @Override
+            public void onTaskSuccess(String message) {
+                showToast(message);
+                updateUI(updatedUser);
+                hideLoadingDialog();
+                listener.onProfileChanged(message);
+            }
+
+            @Override
+            public void onTaskFailure(String message) {
+                showToast(message);
+                hideLoadingDialog();
+            }
+        });
+    }
+
+
+    public interface OnProfileChangedListener {
+        void onProfileChanged(String message);
+        void onProfileNotChanged();
+    }
+
 
     private void showLoadingDialog() {
         requireActivity().runOnUiThread(() -> {
