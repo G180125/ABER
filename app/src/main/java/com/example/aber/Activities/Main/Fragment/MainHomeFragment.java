@@ -1,7 +1,10 @@
 package com.example.aber.Activities.Main.Fragment;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,9 +18,12 @@ import android.view.ViewGroup;
 
 import androidx.appcompat.widget.SearchView;
 
+import com.example.aber.Adapters.InfoWindowViewHolder;
 import com.example.aber.FirebaseManager;
 import android.Manifest;
 
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.PopupMenu;
 
@@ -41,8 +47,13 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
 
 
 public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
@@ -141,17 +152,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
 
                     hideLoadingDialog();
 
-//                    requestManager.getPlaceDetails(id, API_KEY, new RequestManager.OnFetchDataListener() {
-//                        @Override
-//                        public void onFetchData(String response) {
-//                            hideLoadingDialog();
-//                        }
-//
-//                        @Override
-//                        public void onError(String message) {
-//                            hideLoadingDialog();
-//                        }
-//                    });
+                    //TODO: I want to display the custom info window on top of the marker
                 }
 
                 @Override
@@ -172,6 +173,38 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoContents(Marker marker) {
+                return null; // Use default info window
+            }
+
+            @SuppressLint("RestrictedApi")
+            @Override
+            public View getInfoWindow(Marker marker) {
+                // Create a custom info window layout
+                View infoView = getLayoutInflater().inflate(R.layout.custom_info_window, null);
+                InfoWindowViewHolder viewHolder = new InfoWindowViewHolder(infoView);
+
+                Double lat = marker.getPosition().latitude;
+                Double lng = marker.getPosition().longitude;
+                Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+                Log.d("Placeselected", lat + ", " + lng);
+                if (lat != 0) {
+                    try {
+                        List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+                        assert addresses != null;
+                        viewHolder.bind(marker.getTitle(), addresses.toString());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+                return infoView;
+            }
+        });
 
         getCurrentLocation();
         hideLoadingDialog();
