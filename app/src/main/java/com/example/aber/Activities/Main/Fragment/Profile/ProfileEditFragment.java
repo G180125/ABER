@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -28,6 +29,8 @@ import android.widget.Toast;
 import com.canhub.cropper.CropImageContract;
 import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
+import com.example.aber.Activities.Main.EditActivity.EditAddressActivity;
+import com.example.aber.Activities.Main.EditActivity.EditVehicleActivity;
 import com.example.aber.FirebaseManager;
 
 import com.example.aber.Models.User.Gender;
@@ -53,6 +56,7 @@ public class ProfileEditFragment extends Fragment {
     private CircleImageView avatar;
     private Button uploadButton, editButton;
     private Bitmap cropped;
+    private CardView editAddressCardView, editVehicleCardView;
     private final ActivityResultLauncher<Intent> getImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
@@ -107,6 +111,24 @@ public class ProfileEditFragment extends Fragment {
 //        plateEditText = root.findViewById(R.id.plate);
         sosEditText = root.findViewById(R.id.sos_name);
         editButton = root.findViewById(R.id.edit_button);
+        editAddressCardView = root.findViewById(R.id.defaultAddressCardView);
+        editVehicleCardView = root.findViewById(R.id.defaultVehicleCardView);
+
+        editAddressCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(requireContext(),EditAddressActivity.class));
+//                requireActivity().finish();
+            }
+        });
+
+        editVehicleCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(requireContext(),EditVehicleActivity.class));
+//                requireActivity().finish();
+            }
+        });
 
         backImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -309,6 +331,13 @@ public class ProfileEditFragment extends Fragment {
                 hideLoadingDialog();
             }
         });
+    }
+
+
+
+    public void vehicleOnClick(View view) {
+        startActivity(new Intent(requireContext(), EditVehicleActivity.class));
+        requireActivity().finish();
     }
 
 
