@@ -62,9 +62,17 @@ public class RegisterSOSFragment extends Fragment {
                 List<String> vehicleImages = new ArrayList<>();
                 vehicleImages.add(vehicleImage);
 
+                List<Home> homeList = new ArrayList<>();
+                Home home = new Home(address, homeImage);
+                homeList.add(home);
+
+                List<Vehicle> vehicleList = new ArrayList<>();
+                Vehicle vehicle = new Vehicle(brand, vehicleName, color, seat, plate, vehicleImages);
+                vehicleList.add(vehicle);
+
                 Gender userGender = Gender.valueOf(gender);
 
-                User user = new User(email, name, userGender, phoneNumber, new Home(address, homeImage), new Vehicle(brand, vehicleName, color, seat, plate, vehicleImages), new ArrayList<>());
+                User user = new User(email, name, userGender, phoneNumber, homeList, vehicleList, new ArrayList<>());
                 firebaseManager.addUser(userID, user, new FirebaseManager.OnTaskCompleteListener() {
                     @Override
                     public void onTaskSuccess(String message) {

@@ -1,5 +1,8 @@
 package com.example.aber.Models.User;
 
+import com.example.aber.Models.Booking.Booking;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,21 +13,23 @@ public class User {
     private Gender gender;
     private String phoneNumber;
     private String avatar;
-    private Home home;
-    private Vehicle vehicle;
+    private List<Home> homes;
+    private List<Vehicle> vehicles;
     private List<SOS> emergencyContacts;
+    private List<Booking> bookings;
 
     public User(){};
 
-    public User(String email, String name, Gender gender, String phoneNumber, Home home, Vehicle vehicle, List<SOS> emergencyContacts) {
+    public User(String email, String name, Gender gender, String phoneNumber, List<Home> homes, List<Vehicle> vehicles, List<SOS> emergencyContacts) {
         this.email = email;
         this.name = name;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         this.avatar = "";
-        this.home = home;
-        this.vehicle = vehicle;
+        this.homes = homes;
+        this.vehicles = vehicles;
         this.emergencyContacts = emergencyContacts;
+        this.bookings = new ArrayList<>();
     }
 
     public String getEmail() {
@@ -67,20 +72,28 @@ public class User {
         this.avatar = avatar;
     }
 
-    public Home getHome() {
-        return home;
+    public List<Home> getHomes() {
+        return homes;
     }
 
-    public void setHome(Home home) {
-        this.home = home;
+    public void setHomes(List<Home> homes) {
+        this.homes = homes;
     }
 
-    public Vehicle getVehicle() {
-        return vehicle;
+    public List<Vehicle> getVehicles() {
+        return vehicles;
     }
 
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
+    public void setVehicles(List<Vehicle> vehicles) {
+        this.vehicles = vehicles;
+    }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 
     public List<SOS> getEmergencyContacts() {
@@ -96,12 +109,12 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return email.equals(user.email) && name.equals(user.name) && gender == user.gender && phoneNumber.equals(user.phoneNumber) && avatar.equals(user.avatar) && home.equals(user.home) && vehicle.equals(user.vehicle) && emergencyContacts.equals(user.emergencyContacts);
+        return email.equals(user.email) && name.equals(user.name) && gender == user.gender && phoneNumber.equals(user.phoneNumber) && avatar.equals(user.avatar) && homes.equals(user.homes) && vehicles.equals(user.vehicles) && emergencyContacts.equals(user.emergencyContacts);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(email, name, gender, phoneNumber, avatar, home, vehicle, emergencyContacts);
+        return Objects.hash(email, name, gender, phoneNumber, avatar, homes, vehicles, emergencyContacts);
     }
 
     @Override
@@ -112,8 +125,8 @@ public class User {
                 ", gender=" + gender +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", avatar='" + avatar + '\'' +
-                ", home=" + home +
-                ", vehicle=" + vehicle +
+                ", home=" + homes +
+                ", vehicle=" + vehicles +
                 ", emergencyContacts=" + emergencyContacts +
                 '}';
     }

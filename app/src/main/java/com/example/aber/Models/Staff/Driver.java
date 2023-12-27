@@ -1,7 +1,9 @@
 package com.example.aber.Models.Staff;
 
+import com.example.aber.Models.Booking.Booking;
 import com.example.aber.Models.User.Gender;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Driver extends Staff{
@@ -17,6 +19,7 @@ public class Driver extends Staff{
     private boolean active;
     private String documentID;
     private String status;
+    private List<Booking> bookings;
 
     public Driver(){};
 
@@ -34,6 +37,7 @@ public class Driver extends Staff{
         this.active = active;
         this.documentID = documentID;
         this.status = "Register Pending";
+        this.bookings = new ArrayList<>();
     }
 
     public String getName() {
@@ -127,26 +131,15 @@ public class Driver extends Staff{
     public String getStatus() {
         return status;
     }
-
     public void setStatus(String status) {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "Driver{" +
-                "name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", gender=" + gender +
-                ", licenseNumber='" + licenseNumber + '\'' +
-                ", totalDrive=" + totalDrive +
-                ", avatar='" + avatar + '\'' +
-                ", avatarUploadDate='" + avatarUploadDate + '\'' +
-                ", title=" + title +
-                ", permission=" + permission +
-                ", active=" + active +
-                ", documentID='" + documentID + '\'' +
-                ", status='" + status + '\'' +
-                '}';
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 }

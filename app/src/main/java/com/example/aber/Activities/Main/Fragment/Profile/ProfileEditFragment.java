@@ -235,8 +235,8 @@ public class ProfileEditFragment extends Fragment {
         emailEditText.setText(user.getEmail());
         setGenderFromRadiusButton(user);
         phoneEditText.setText(user.getPhoneNumber());
-        addressEditText.setText(user.getHome().getAddress());
-        plateEditText.setText(user.getVehicle().getNumberPlate());
+        addressEditText.setText(user.getHomes().get(0).getAddress());
+        plateEditText.setText(user.getVehicles().get(0).getNumberPlate());
         if(!user.getEmergencyContacts().isEmpty()){
             sosEditText.setText(user.getEmergencyContacts().get(0).getName());
         }
@@ -265,13 +265,13 @@ public class ProfileEditFragment extends Fragment {
         currentUser.setGender(getGenderFromRadiusButton());
         currentUser.setPhoneNumber(phoneEditText.getText().toString());
 
-        Home newHome = currentUser.getHome();
-        newHome.setAddress(addressEditText.getText().toString());
-        currentUser.setHome(newHome);
+//        Home newHome = currentUser.getHomes().get(0);
+//        newHome.setAddress(addressEditText.getText().toString());
+//        currentUser.setHome(newHome);
 
-        Vehicle newVehicle = currentUser.getVehicle();
-        newVehicle.setNumberPlate(plateEditText.getText().toString());
-        currentUser.setVehicle(newVehicle);
+//        Vehicle newVehicle = currentUser.getVehicle();
+//        newVehicle.setNumberPlate(plateEditText.getText().toString());
+//        currentUser.setVehicle(newVehicle);
 
         List<SOS> newList = new ArrayList<>();
         if(!sosEditText.getText().toString().isEmpty()){
