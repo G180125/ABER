@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,7 +19,7 @@ import com.example.aber.FirebaseManager;
 import com.example.aber.R;
 
 public class LoginActivity extends AppCompatActivity {
-    private Button loginButton, registerButton;
+    private Button loginButton;
     private EditText emailEditText, passwordEditText;
     private ProgressDialog progressDialog;
     private FirebaseManager firebaseManager;
@@ -30,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         firebaseManager = new FirebaseManager();
 
         loginButton = findViewById(R.id.login_button);
-        registerButton = findViewById(R.id.register_button);
+
         emailEditText = findViewById(R.id.email_edit_text);
         passwordEditText = findViewById(R.id.password_edit_text);
 
@@ -47,39 +48,43 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showLoadingDialog();
-
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
-                if (!email.isEmpty() && !password.isEmpty()){
-                    firebaseManager.login(email, password, new FirebaseManager.OnTaskCompleteListener() {
-                        @Override
-                        public void onTaskSuccess(String message) {
-                            hideLoadingDialog();
-                            showToast(message);
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            finish();
-                        }
 
-                        @Override
-                        public void onTaskFailure(String message) {
-                            hideLoadingDialog();
-                            showToast(message);
-                        }
-                    });
+                if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                    if(!password.isEmpty()) {
+                        firebaseManager.login(email, password, new FirebaseManager.OnTaskCompleteListener() {
+                            @Override
+                            public void onTaskSuccess(String message) {
+                                hideLoadingDialog();
+                                showToast(message);
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                finish();
+                            }
+
+                            @Override
+                            public void onTaskFailure(String message) {
+                                hideLoadingDialog();
+                                message = "You have enter invalid information!";
+                                showToast(message);
+                                emailEditText.setError("Please enter your email again!");
+                                passwordEditText.setError("Please enter your password again!");
+                            }
+                        });
+                    } else {
+                        hideLoadingDialog();
+                        passwordEditText.setError("Password cannot be empty");
+                    }
+                } else if (email.isEmpty()){
+                    hideLoadingDialog();
+                    emailEditText.setError("Email cannot be empty");
                 } else {
                     hideLoadingDialog();
-                    showToast("Email or Password is empty");
+                    emailEditText.setError("Please enter a valid email");
                 }
             }
         });
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-                finish();
-            }
-        });
     }
 
     private void showLoadingDialog() {
@@ -101,5 +106,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showToast(String message){
         Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void onClickRegister(View view) {
+        startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+        finish();
     }
 }
