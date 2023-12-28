@@ -55,6 +55,10 @@ dependencies {
     implementation ("com.google.android.libraries.places:places:3.3.0")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    //Dot progress bar
+    implementation ("com.agrawalsuneet.androidlibs:dotsloader:1.4")
+
 }
 
 secrets {

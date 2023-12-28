@@ -4,4 +4,6 @@
     <string name="GOOGLE_MAP_API">AIzaSyAk79eOlfksqlm74wCmRbY_yddK75iZ4dM</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
 </resources>

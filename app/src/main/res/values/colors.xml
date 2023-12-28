@@ -3,9 +3,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="pale_blue">#04E1F8</color>
+    <color name="pale_blue">#48CEDC</color>
     <color name="white_smoke">#E6E6E6</color>
     <color name="light_orange_red">#F45E0B</color>
     <color name="light_gray">#D3D3D3</color>
     <color name="purple">#9575CD</color>
+    <color name="transperant">#00000000</color>
+    <color name="background_color_blue">#45B2E7E8</color>
+    <color name="background_color_dark_blue">#54C9D5</color>
+    <color name="light_black">#56000000</color>
+    <color name="light_dark_black">#C1000000</color>
 </resources>

@@ -37,6 +37,7 @@ import com.example.aber.Models.User.Gender;
 import com.example.aber.Models.User.SOS;
 import com.example.aber.Models.User.User;
 import com.example.aber.R;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,7 @@ public class ProfileEditFragment extends Fragment {
     private ImageView backImageView, homeImageView, vehicleImageView, sosImageView;
     private RadioButton maleRadioButton, femaleRadiusButton;
     private CircleImageView avatar;
-    private Button uploadButton, editButton;
+    private MaterialButton uploadButton, editButton;
     private Bitmap cropped;
     private CardView editAddressCardView, editVehicleCardView;
     private final ActivityResultLauncher<Intent> getImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {

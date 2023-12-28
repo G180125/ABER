@@ -27,8 +27,8 @@
                         android:id="@+id/avatar"
                         android:layout_width="120dp"
                         android:layout_height="120dp"
-                        android:src="@drawable/ic_profile"
-                        android:layout_margin="16dp"/>
+                        android:src="@drawable/ic_profile_avatar"
+                        android:layout_margin="16dp" />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -63,11 +63,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="32dp">
+                android:layout_marginTop="32dp"
+                >
                 <androidx.cardview.widget.CardView
                     android:id="@+id/wallet"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -78,7 +80,9 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_wallet"/>
+                            android:src="@drawable/ic_wallet"
+                            app:tint="@color/light_dark_black"
+                             />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -96,7 +100,9 @@
                     android:id="@+id/history"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp">
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="3dp"
+                    >
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -108,7 +114,10 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:src="@drawable/ic_history" />
+                            android:src="@drawable/ic_history"
+                            app:tint="@color/light_dark_black"
+
+                            />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -126,7 +135,8 @@
                     android:id="@+id/about_us"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp">
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="3dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -138,7 +148,10 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:src="@drawable/ic_about_us" />
+                            android:src="@drawable/ic_about_us"
+                            app:tint="@color/light_dark_black"
+
+                            />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -156,7 +169,8 @@
                     android:id="@+id/help"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp">
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="3dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -168,7 +182,10 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:src="@drawable/ic_help" />
+                            android:src="@drawable/ic_help"
+                            app:tint="@color/light_dark_black"
+
+                            />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -197,13 +214,15 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_logout"/>
+                            android:src="@drawable/ic_logout"
+                            android:tint="@color/quantum_googred"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Logout"
                             android:layout_marginLeft="8dp"
-                            android:layout_weight="1"/>
+                            android:layout_weight="1"
+                            android:textColor="@color/quantum_googred"/>
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>

@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +99,10 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback{
             public void onClick(View v) {
                 PopupMenu popupMenu = new PopupMenu(requireContext(), v);
                 popupMenu.getMenuInflater().inflate(R.menu.map_type_menu,popupMenu.getMenu());
+                popupMenu.setGravity(Gravity.END);
+
+                
+
 
                 popupMenu.setOnMenuItemClickListener(item -> {
                     if (item.getItemId() == R.id.buttonNormal){
@@ -120,6 +125,9 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback{
             }
 
         });
+
+
+
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
