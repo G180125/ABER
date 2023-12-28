@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             app:tashieloader_animDelay="200"
             app:tashieloader_animDur="1000"
-            app:tashieloader_dotsColor="@color/black"
+            app:tashieloader_dotsColor="@color/light_black"
             app:tashieloader_dotsDist="5dp"
             app:tashieloader_dotsRadius="5dp"
             app:tashieloader_interpolator="@android:anim/accelerate_interpolator"
