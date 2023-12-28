@@ -88,6 +88,11 @@ public class RegisterAccountFragment extends Fragment {
     }
 
     private boolean validateInputs(String email, String password, String confirmPassword){
+//        if (!isValidEmail(email) && password.length() == 0){
+//            showToast("Send nude");
+//            return false;
+//        }
+
         if (!isValidEmail(email)){
             showToast("Invalid Email");
             return false;

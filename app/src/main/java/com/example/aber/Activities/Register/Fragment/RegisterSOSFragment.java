@@ -5,10 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +14,10 @@ import android.widget.Toast;
 
 import com.example.aber.Activities.LoginActivity;
 import com.example.aber.FirebaseManager;
-import com.example.aber.Models.Gender;
-import com.example.aber.Models.Home;
-import com.example.aber.Models.User;
-import com.example.aber.Models.Vehicle;
+import com.example.aber.Models.User.Gender;
+import com.example.aber.Models.User.Home;
+import com.example.aber.Models.User.User;
+import com.example.aber.Models.User.Vehicle;
 import com.example.aber.R;
 
 import java.util.ArrayList;
@@ -65,9 +62,17 @@ public class RegisterSOSFragment extends Fragment {
                 List<String> vehicleImages = new ArrayList<>();
                 vehicleImages.add(vehicleImage);
 
+                List<Home> homeList = new ArrayList<>();
+                Home home = new Home(address, homeImage);
+                homeList.add(home);
+
+                List<Vehicle> vehicleList = new ArrayList<>();
+                Vehicle vehicle = new Vehicle(brand, vehicleName, color, seat, plate, vehicleImages);
+                vehicleList.add(vehicle);
+
                 Gender userGender = Gender.valueOf(gender);
 
-                User user = new User(email, name, userGender, phoneNumber, new Home(address, homeImage), new Vehicle(brand, vehicleName, color, seat, plate, vehicleImages), new ArrayList<>());
+                User user = new User(email, name, userGender, phoneNumber, homeList, vehicleList, new ArrayList<>());
                 firebaseManager.addUser(userID, user, new FirebaseManager.OnTaskCompleteListener() {
                     @Override
                     public void onTaskSuccess(String message) {
