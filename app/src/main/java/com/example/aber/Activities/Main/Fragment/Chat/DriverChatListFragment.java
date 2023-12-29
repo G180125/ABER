@@ -74,33 +74,33 @@ public class DriverChatListFragment extends Fragment implements DriverChatAdapte
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                String searchQuery = newText.toString().toLowerCase();
-                filterList(searchQuery);
+//                String searchQuery = newText.toString().toLowerCase();
+//                filterList(searchQuery);
                 return true;
             }
         });
 
         return root;
     }
-
-    private void filterList(String searchQuery){
-        filteredList = new ArrayList<>();
-        for (Driver driver : driverList){
-            if (driver.getName().toLowerCase().contains(searchQuery)){
-                filteredList.add(driver);
-            }
-        }
-        updateUI(filteredList);
-    }
+        //Search filter (can be use later if needed)
+//    private void filterList(String searchQuery){
+//        filteredList = new ArrayList<>();
+//        for (Driver driver : driverList){
+//            if (driver.getName().toLowerCase().contains(searchQuery)){
+//                filteredList.add(driver);
+//            }
+//        }
+//        updateUI(filteredList);
+//    }
 
     @SuppressLint("NotifyDataSetChanged")
     private void updateUI(List<Driver> driverList){
         adapter.setDriverList(driverList);
         adapter.notifyDataSetChanged();
         AndroidUtil.hideLoadingDialog(progressDialog);
-        if(filteredList != null){
-            adapter.setDriverList(filteredList);
-        }
+//        if(filteredList != null){
+//            adapter.setDriverList(filteredList);
+//        }
     }
 
     @Override
