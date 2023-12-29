@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 public class EditAddressActivity extends AppCompatActivity {
-    private ImageView buttonBack;
+    private TextView buttonBack;
     private UserHomeAdapter userHomeAdapter;
     private FirebaseAuth mAuth;
 

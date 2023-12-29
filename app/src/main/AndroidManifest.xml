@@ -41,7 +41,9 @@
 
         <activity
             android:name=".Activities.Main.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".Activities.LoginActivity"
             android:exported="false" />

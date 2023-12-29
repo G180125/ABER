@@ -13,4 +13,5 @@
     <color name="background_color_dark_blue">#54C9D5</color>
     <color name="light_black">#56000000</color>
     <color name="light_dark_black">#C1000000</color>
+    <color name="right_chat_blue">#405DE6</color>
 </resources>

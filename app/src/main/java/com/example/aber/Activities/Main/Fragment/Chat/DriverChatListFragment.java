@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,8 @@ public class DriverChatListFragment extends Fragment implements DriverChatAdapte
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
+                String searchQuery = newText.toString().toLowerCase();
+                filterList(searchQuery);
                 return true;
             }
         });
@@ -81,11 +83,24 @@ public class DriverChatListFragment extends Fragment implements DriverChatAdapte
         return root;
     }
 
+    private void filterList(String searchQuery){
+        filteredList = new ArrayList<>();
+        for (Driver driver : driverList){
+            if (driver.getName().toLowerCase().contains(searchQuery)){
+                filteredList.add(driver);
+            }
+        }
+        updateUI(filteredList);
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private void updateUI(List<Driver> driverList){
         adapter.setDriverList(driverList);
         adapter.notifyDataSetChanged();
         AndroidUtil.hideLoadingDialog(progressDialog);
+        if(filteredList != null){
+            adapter.setDriverList(filteredList);
+        }
     }
 
     @Override

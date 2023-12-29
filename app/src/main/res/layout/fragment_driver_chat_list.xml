@@ -9,17 +9,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/shadow_background">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardElevation="8dp"
-            android:layout_margin="8dp">
+            android:elevation="5dp"
+            >
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/search_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="35dp"
+                android:background="@drawable/rouned_background"
+                android:layout_margin="5dp"
+                android:backgroundTint="@color/light_gray"
+                app:searchHintIcon="@color/transperant"
+                />
         </androidx.cardview.widget.CardView>
 
         <ScrollView
@@ -31,9 +37,9 @@
                 android:orientation="vertical">
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_chat_driver"
-                    android:layout_margin="8dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"/>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

@@ -145,7 +145,8 @@ public class ChatDetailFragment extends Fragment {
             }
         });
 
-        nameTextView.setText(driver.getName());
+        //Get the driver captilizing the first letter (just change to driver.getName() if don't need it
+        nameTextView.setText(driver.getName().substring(0,1).toUpperCase() + driver.getName().substring(1).toLowerCase());
     }
 
     private void updateMessageList(List<MyMessage> newMessageList) {
