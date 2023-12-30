@@ -8,6 +8,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.aber.Activities.Main.Fragment.Profile.ProfileEditFragment;
 import com.example.aber.Adapters.UserHomeAdapter;
 import com.example.aber.Models.User.Home;
 import com.example.aber.Models.User.User;
@@ -31,7 +34,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class HomeListFragment extends Fragment implements UserHomeAdapter.RecyclerViewClickListener{
-    private ImageView buttonBack, addButton;
+    private ImageView buttonBack;
+    private Button addButton;
     private UserHomeAdapter userHomeAdapter;
     private FirebaseManager firebaseManager;
     private ProgressDialog progressBar;
@@ -64,6 +68,19 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
         });
 
         buttonBack = root.findViewById(R.id.buttonBack);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                fragmentTransaction.replace(R.id.fragment_main_container, new ProfileEditFragment());
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+            }
+        });
         addButton = root.findViewById(R.id.add_button);
 
         RecyclerView recyclerView = root.findViewById(R.id.addressRecyclerView);
