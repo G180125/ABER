@@ -1,7 +1,4 @@
-package com.example.aber;
-
-import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
+package com.example.aber.Activities.Main.Fragment.Profile.Edit;
 
 import static com.example.aber.Utils.AndroidUtil.replaceFragment;
 
@@ -26,15 +23,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.aber.Activities.Main.Fragment.Profile.ProfileEditFragment;
 import com.example.aber.Adapters.UserHomeAdapter;
+import com.example.aber.FirebaseManager;
 import com.example.aber.Models.User.Home;
 import com.example.aber.Models.User.User;
+import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +38,6 @@ import java.util.Objects;
 
 public class HomeListFragment extends Fragment implements UserHomeAdapter.RecyclerViewClickListener{
     private ImageView buttonBack;
-    private UserHomeAdapter userHomeAdapter;
     private FirebaseManager firebaseManager;
     private ProgressDialog progressBar;
     private String id;
@@ -240,10 +235,4 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
             }
         });
     }
-
-
-
-
-
-
 }

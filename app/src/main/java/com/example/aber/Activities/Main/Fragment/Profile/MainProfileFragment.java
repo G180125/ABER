@@ -20,10 +20,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.aber.Activities.LoginActivity;
+import com.example.aber.Activities.Main.Fragment.Profile.Edit.ProfileEditFragment;
 import com.example.aber.FirebaseManager;
+import com.example.aber.HelpActivity;
 import com.example.aber.Models.User.User;
 import com.example.aber.R;
 
@@ -108,9 +109,7 @@ public class MainProfileFragment extends Fragment {
         helpCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                replaceFragment(new ProfileHelpFragment(), fragmentManager, fragmentTransaction, R.id.fragment_main_container);
+                startActivity(new Intent(requireContext(), HelpActivity.class));
             }
         });
 
