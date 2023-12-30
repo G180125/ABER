@@ -1,5 +1,6 @@
 package com.example.aber.Adapters;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +53,7 @@ public class UserHomeAdapter extends RecyclerView.Adapter<UserHomeAdapter.UserHo
 
     public class UserHomeViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView addressTextView;
+        TextView addressTextView,defaultTextView;
         CardView cardView;
         Button editButton, deleteButton;
         MaterialButton setDefaultButton;
@@ -66,9 +67,13 @@ public class UserHomeAdapter extends RecyclerView.Adapter<UserHomeAdapter.UserHo
             editButton = itemView.findViewById(R.id.edit_button);
             deleteButton = itemView.findViewById(R.id.delete_button);
 
+
             setDefaultButton.setOnClickListener(new View.OnClickListener() {
+
+                @SuppressLint("SetTextI18n")
                 @Override
                 public void onClick(View v) {
+
                     mListener.onSetDefaultButtonClick(getAdapterPosition());
                 }
             });
@@ -90,6 +95,13 @@ public class UserHomeAdapter extends RecyclerView.Adapter<UserHomeAdapter.UserHo
 
         public void bind(Home home, int position) {
             addressTextView.setText(home.getAddress());
+            defaultTextView = itemView.findViewById(R.id.isDefaultTextView);
+            // Set defaultTextView based on position
+            if (position == 0) {
+                defaultTextView.setText("Default Address");
+            } else {
+                defaultTextView.setText("");
+            }
 
             FirebaseManager firebaseManager = new FirebaseManager();
             firebaseManager.retrieveImage(home.getImage(), new FirebaseManager.OnRetrieveImageListener() {

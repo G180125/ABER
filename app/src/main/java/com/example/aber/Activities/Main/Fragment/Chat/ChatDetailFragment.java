@@ -52,7 +52,7 @@ public class ChatDetailFragment extends Fragment {
         progressDialog = new ProgressDialog(requireContext());
         AndroidUtil.showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_chat_detail, container, false);
+        View root = inflater.inflate(R.layout.activity_driver_chat, container, false);
         firebaseManager = new FirebaseManager();
         currentUser = new User();
         currentDriver = new Driver();
