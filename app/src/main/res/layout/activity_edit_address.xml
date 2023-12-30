@@ -6,22 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".Activities.Main.EditActivity.EditAddressActivity"
     android:orientation="vertical">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
 
-    <TextView
+    <ImageView
         android:id="@+id/buttonBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/address"
-        android:textSize="40sp"
-        android:drawablePadding="10dp"
-        android:fontFamily="@font/instagramsansregular"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        app:drawableStartCompat="@drawable/ic_back_arrow" />
-</LinearLayout>
+        android:src="@drawable/ic_back_arrow"
+         />
+
 
 <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/addressRecyclerView"

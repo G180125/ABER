@@ -27,7 +27,7 @@ public class UserHomeAdapter extends RecyclerView.Adapter<UserHomeAdapter.UserHo
     @NonNull
     @Override
     public UserHomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.pop_up_address, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.user_address_card_view, parent, false);
         return new UserHomeViewHolder(view);
     }
 
@@ -51,17 +51,11 @@ public class UserHomeAdapter extends RecyclerView.Adapter<UserHomeAdapter.UserHo
     public class UserHomeViewHolder extends RecyclerView.ViewHolder {
 
         TextView addressTextView;
-
-
-
-
         CardView cardView;
 
         public UserHomeViewHolder(@NonNull View itemView) {
             super(itemView);
-
             addressTextView = itemView.findViewById(R.id.addressTitle);
-
             addressTextView.setSelected(true);
             cardView = itemView.findViewById(R.id.address_list_container);
         }

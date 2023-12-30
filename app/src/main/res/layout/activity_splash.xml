@@ -46,7 +46,8 @@
             android:gravity="center"
             android:id="@+id/splashScreen_ProgressBar"
             android:layout_gravity="bottom"
-            android:layout_margin="30dp"/>
+            android:layout_margin="30dp"
+           />
     </LinearLayout>
 
 

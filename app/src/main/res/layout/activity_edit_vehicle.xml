@@ -15,13 +15,36 @@
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_back_arrow"
         />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Vehicle List"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:fontFamily="@font/lobster">
 
+    </TextView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/vehicleRecyclerView"
+
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="10dp">
+        android:layout_height="wrap_content"
+        >
 
     </androidx.recyclerview.widget.RecyclerView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="230dp"
+        android:text=" + New Vehicle"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:onClick="newVehicle">
+
+    </TextView>
 </LinearLayout>

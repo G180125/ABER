@@ -65,6 +65,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <TextView
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="SOS"
@@ -99,6 +100,7 @@
                     android:layout_marginBottom="16dp"
                     app:cardCornerRadius="30dp">
                     <EditText
+                        android:id="@+id/name_sos_editText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Name"
@@ -115,16 +117,16 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginVertical="8dp"/>
+                    android:padding="5dp"/>
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardElevation="4dp"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginBottom="100dp"
                     app:cardCornerRadius="30dp">
                     <EditText
+                        android:id="@+id/sos_phone_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Phone Number"
@@ -132,10 +134,12 @@
                         android:padding="10dp"
                         android:drawableLeft="@drawable/baseline_local_phone_24"
                         android:drawablePadding="5dp"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp"
+                        android:inputType="number"/>
                 </androidx.cardview.widget.CardView>
 
                 <Button
+                    android:layout_marginTop="50dp"
                     android:id="@+id/done_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

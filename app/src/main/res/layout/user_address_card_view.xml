@@ -17,12 +17,11 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/addressImageView"
+                android:id="@+id/dishImageView"
                 android:layout_width="150dp"
                 android:scaleType="centerCrop"
                 android:layout_margin="8dp"
                 android:layout_height="200dp"
-                android:src="@drawable/address_holder"
                 />
         </LinearLayout>
 

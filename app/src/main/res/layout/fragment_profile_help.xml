@@ -53,8 +53,9 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_message"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_margin="8dp" />
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
