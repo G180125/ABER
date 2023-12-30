@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -29,10 +28,10 @@ import android.widget.Toast;
 import com.canhub.cropper.CropImageContract;
 import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
-import com.example.aber.Activities.Main.EditActivity.EditAddressActivity;
 import com.example.aber.Activities.Main.EditActivity.EditVehicleActivity;
 import com.example.aber.FirebaseManager;
 
+import com.example.aber.HomeListFragment;
 import com.example.aber.Models.User.Gender;
 import com.example.aber.Models.User.SOS;
 import com.example.aber.Models.User.User;
@@ -118,8 +117,13 @@ public class ProfileEditFragment extends Fragment {
         editAddressCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(requireContext(),EditAddressActivity.class));
-//                requireActivity().finish();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                fragmentTransaction.replace(R.id.fragment_main_container, new HomeListFragment());
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
@@ -253,7 +257,6 @@ public class ProfileEditFragment extends Fragment {
             sosEditText.setText(user.getEmergencyContacts().get(0).getName());
         }
     }
-
 
     private void setGenderFromRadiusButton(User user){
         if (user.getGender() == Gender.MALE) {

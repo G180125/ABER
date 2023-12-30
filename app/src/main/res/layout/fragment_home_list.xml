@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Main.EditActivity.EditVehicleActivity"
+    tools:context=".Activities.Main.EditActivity.EditAddressActivity"
     android:orientation="vertical">
 
     <ImageView
@@ -15,11 +15,12 @@
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_back_arrow"
         />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="Vehicle List"
+        android:text="Home List"
         android:gravity="center"
         android:textStyle="bold"
         android:textSize="30sp"
@@ -28,24 +29,21 @@
     </TextView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/vehicleRecyclerView"
-
+        android:id="@+id/addressRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
     </androidx.recyclerview.widget.RecyclerView>
+
     <Button
         android:id="@+id/add_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:text=" + New Vehicle"
+        android:text=" + New Home"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginTop="10dp"
         android:padding="10dp"
-        android:onClick="newVehicle">
-
-    </Button>
+        android:onClick="newVehicle"/>
 </LinearLayout>
