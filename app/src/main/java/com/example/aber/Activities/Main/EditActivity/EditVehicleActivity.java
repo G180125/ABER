@@ -116,10 +116,11 @@ public class EditVehicleActivity extends AppCompatActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the submit button click
+
             }
         });
     }
+
     public void newVehicle(View view) {
         popupWindow.showAsDropDown(view, 0, 0);
     }

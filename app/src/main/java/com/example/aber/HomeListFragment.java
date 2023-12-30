@@ -96,7 +96,7 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initPopupWindow(null, "Edit Home", 0);
+                initPopupWindow(null, "Enter Additional Home", 0);
                 popupWindow.showAsDropDown(root, 0, 0);
             }
         });
@@ -152,10 +152,12 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
                 .show();
     }
 
-    public void initPopupWindow(Home home, String title, int position){
+    public void initPopupWindow(Home home, String title, int position) {
         LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.pop_up_address_form, null);
 
+        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        popupWindow.setTouchable(true);
         // Set the background color with alpha transparency
         popupView.setBackgroundColor(getResources().getColor(R.color.popup_background, null));
 
@@ -166,8 +168,10 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
         ImageView cancelBtn = popupView.findViewById(R.id.cancelBtn);
 
         titleTextView.setText(title);
+
         if (home != null) {
             addressEditText.setText(home.getAddress());
+
             firebaseManager.retrieveImage(home.getAddress(), new FirebaseManager.OnRetrieveImageListener() {
                 @Override
                 public void onRetrieveImageSuccess(Bitmap bitmap) {
@@ -192,21 +196,33 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
             @Override
             public void onClick(View v) {
                 AndroidUtil.showLoadingDialog(progressBar);
+
+                String newAddress = addressEditText.getText().toString();
+
                 if (title.equals("Edit Home")) {
-                    String newAddress = addressEditText.getText().toString();
-                    home.setAddress(newAddress);
-                    homeList.set(position, home);
-                    updateList(user, homeList, "Update Successfully");
+                    // Update existing home
+                    if (home != null) {
+                        home.setAddress(newAddress);
+                        homeList.set(position, home);
+                    }
                 } else {
-                    Home newHome = new Home(addressEditText.getText().toString(), "path");
+                    // Add a new home
+                    Home newHome = new Home(newAddress, "path");
                     homeList.add(0, newHome);
-                    updateList(user, homeList,"Add Successfully" );
                 }
 
+                // Update the user with the modified homeList
+                updateList(user, homeList, "Update Successful");
+
+                // Dismiss the PopupWindow after updating the homeList
                 popupWindow.dismiss();
             }
         });
+
+        popupWindow.showAsDropDown(root, 0, 0);
+
     }
+
 
     private void updateList(User user, List<Home> homeList, String successMessage){
         user.setHomes(homeList);
@@ -224,4 +240,10 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
             }
         });
     }
+
+
+
+
+
+
 }
