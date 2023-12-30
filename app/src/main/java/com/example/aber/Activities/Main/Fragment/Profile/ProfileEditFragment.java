@@ -169,7 +169,6 @@ public class ProfileEditFragment extends Fragment {
 
                     @Override
                     public void onProfileNotChanged() {
-
                         if (cropped != null) {
                             // Handle the case when only the avatar is changed
                             String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";

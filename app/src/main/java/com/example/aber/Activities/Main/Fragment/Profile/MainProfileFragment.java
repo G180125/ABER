@@ -1,5 +1,10 @@
 package com.example.aber.Activities.Main.Fragment.Profile;
 
+import static com.example.aber.Utils.AndroidUtil.hideLoadingDialog;
+import static com.example.aber.Utils.AndroidUtil.replaceFragment;
+import static com.example.aber.Utils.AndroidUtil.showLoadingDialog;
+import static com.example.aber.Utils.AndroidUtil.showToast;
+
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -39,7 +44,8 @@ public class MainProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        showLoadingDialog();
+        progressDialog = new ProgressDialog(requireContext());
+        showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_main_profile, container, false);
         firebaseManager = new FirebaseManager();
@@ -54,8 +60,8 @@ public class MainProfileFragment extends Fragment {
 
             @Override
             public void onFetchFailure(String message) {
-                hideLoadingDialog();
-                showToast(message);
+                hideLoadingDialog(progressDialog);
+                showToast(requireContext(),message);
             }
         });
 
@@ -74,28 +80,28 @@ public class MainProfileFragment extends Fragment {
             public void onClick(View v) {
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                replaceFragment(new ProfileEditFragment(), fragmentManager, fragmentTransaction);
+                replaceFragment(new ProfileEditFragment(), fragmentManager, fragmentTransaction, R.id.fragment_main_container);
             }
         });
 
         walletCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("wallet card is clicked");
+                showToast(requireContext(),"wallet card is clicked");
             }
         });
 
         historyCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("history card is clicked");
+                showToast(requireContext(),"history card is clicked");
             }
         });
 
         aboutUsCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("about us card is clicked");
+                showToast(requireContext(),"about us card is clicked");
             }
         });
 
@@ -104,7 +110,7 @@ public class MainProfileFragment extends Fragment {
             public void onClick(View v) {
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                replaceFragment(new ProfileHelpFragment(), fragmentManager, fragmentTransaction);
+                replaceFragment(new ProfileHelpFragment(), fragmentManager, fragmentTransaction, R.id.fragment_main_container);
             }
         });
 
@@ -130,48 +136,19 @@ public class MainProfileFragment extends Fragment {
                 @Override
                 public void onRetrieveImageSuccess(Bitmap bitmap) {
                     updateAvatar(bitmap);
-                    hideLoadingDialog();
+                    hideLoadingDialog(progressDialog);
                 }
 
                 @Override
                 public void onRetrieveImageFailure(String message) {
-                    showToast(message);
-                    hideLoadingDialog();
+                    showToast(requireContext(),message);
+                    hideLoadingDialog(progressDialog);
                 }
             });
         } else {
-            hideLoadingDialog();
+            hideLoadingDialog(progressDialog);
         }
         nameTextView.setText(user.getName());
         emailTextView.setText(user.getEmail());
-    }
-
-    private void showLoadingDialog() {
-        requireActivity().runOnUiThread(() -> {
-            progressDialog = new ProgressDialog(requireContext());
-            progressDialog.setMessage("Loading...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        });
-    }
-
-    private void hideLoadingDialog() {
-        requireActivity().runOnUiThread(() -> {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
-        });
-    }
-
-    private void replaceFragment(Fragment fragment, FragmentManager fragmentManager, FragmentTransaction fragmentTransaction) {
-        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-        fragmentTransaction.replace(R.id.fragment_main_container, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-    private void showToast(String message){
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
