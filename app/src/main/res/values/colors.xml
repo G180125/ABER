@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
+    <color name="popup_background">#80000000</color>
     <color name="pale_blue">#48CEDC</color>
     <color name="white_smoke">#E6E6E6</color>
     <color name="light_orange_red">#F45E0B</color>
