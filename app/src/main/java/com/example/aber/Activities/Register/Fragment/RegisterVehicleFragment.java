@@ -1,7 +1,16 @@
 package com.example.aber.Activities.Register.Fragment;
 
+import static com.example.aber.Utils.AndroidUtil.showToast;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -12,12 +21,19 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.canhub.cropper.CropImageContract;
+import com.canhub.cropper.CropImageContractOptions;
+import com.canhub.cropper.CropImageOptions;
+import com.example.aber.FirebaseManager;
 import com.example.aber.R;
 
 public class RegisterVehicleFragment extends Fragment {
+    private static final String STORAGE_PATH = "vehicle/";
     private final String[] PROVINCE_NUMBER = {
             "11", "65", "12", "66", "14", "67", "15", "16", "68", "17",
             "69", "18", "70", "19", "71", "20", "72", "21", "73", "22",
@@ -32,12 +48,36 @@ public class RegisterVehicleFragment extends Fragment {
     private String userID, email, password, name, phoneNumber, gender, address, homeImage;
     private EditText vehicleBrandEditText, vehicleNameEditText, vehicleColorEditText, vehiclePlateEditText;
     private Spinner seatCapacitySpinner;
+    private ImageView vehicleImageView;
+    private LinearLayout imageUploadSuccessLayout;
+    private Bitmap cropped;
+    private FirebaseManager firebaseManager;
+    private String vehicleImage;
+
+    private final ActivityResultLauncher<Intent> getImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == Activity.RESULT_OK) {
+            Intent data = result.getData();
+            if (data != null && data.getData() != null) {
+                Uri imageUri = data.getData();
+                launchImageCropper(imageUri);
+            }
+        }
+    });
+
+    private final ActivityResultLauncher<CropImageContractOptions> cropImage = registerForActivityResult(new CropImageContract(), result -> {
+        if (result.isSuccessful()) {
+            cropped = BitmapFactory.decodeFile(result.getUriFilePath(requireContext(), true));
+            uploadImage();
+        }
+    });
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_register_vehicle, container, false);
+        firebaseManager = new FirebaseManager();
+
         Bundle args = getArguments();
         if (args != null) {
             userID = args.getString("userID", "");
@@ -54,6 +94,7 @@ public class RegisterVehicleFragment extends Fragment {
         vehicleNameEditText = root.findViewById(R.id.vehicle_name_edit_text);
         vehicleColorEditText = root.findViewById(R.id.vehicle_color_edit_text);
         vehiclePlateEditText = root.findViewById(R.id.vehicle_number_plate_edit_text);
+        imageUploadSuccessLayout = root.findViewById(R.id.img_upload_success);
 
         seatCapacitySpinner = root.findViewById(R.id.seat_capacity_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -63,6 +104,14 @@ public class RegisterVehicleFragment extends Fragment {
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         seatCapacitySpinner.setAdapter(adapter);
+
+        vehicleImageView = root.findViewById(R.id.vehicle_image_view);
+        vehicleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage();
+            }
+        });
 
         doneButton = root.findViewById(R.id.done_button);
         doneButton.setOnClickListener(new View.OnClickListener() {
@@ -83,27 +132,73 @@ public class RegisterVehicleFragment extends Fragment {
         return root;
     }
 
+    private void launchImageCropper(Uri uri) {
+        CropImageOptions cropImageOptions = new CropImageOptions();
+        cropImageOptions.imageSourceIncludeGallery = false;
+        cropImageOptions.imageSourceIncludeCamera = true;
+        CropImageContractOptions cropImageContractOptions = new CropImageContractOptions(uri, cropImageOptions);
+        cropImage.launch(cropImageContractOptions);
+    }
+
+    private void selectImage() {
+        getImageFile();
+    }
+
+    private void getImageFile() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        getImage.launch(intent);
+    }
+
+    private String generateUniquePath() {
+        return String.valueOf(System.currentTimeMillis());
+    }
+
+    private void uploadImage(){
+        if (cropped != null) {
+            // Handle the case when only the avatar is changed
+            String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
+            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+                @Override
+                public void onTaskSuccess(String message) {
+                    showToast(requireContext(), "Upload Image success");
+                    vehicleImage = message;
+                    updateUI(vehicleImage);
+                }
+
+                @Override
+                public void onTaskFailure(String message) {
+                    showToast(requireContext(), "Upload Image failed");
+                }
+            });
+        }
+    }
+
+    private void updateUI(String imagePath){
+
+    }
+
     private boolean validateInputs(String brand, String name, String color, String selectedSeatCapacity, String plate){
         if(brand.isEmpty()){
-            showToast("Vehicle Brand can not be empty");
+            showToast(requireContext(),"Vehicle Brand can not be empty");
             return false;
         }
         if(name.isEmpty()){
-            showToast("Vehicle Name can not be empty");
+            showToast(requireContext(),"Vehicle Name can not be empty");
             return false;
         }
         if(color.isEmpty()){
-            showToast("Vehicle Color can not be empty");
+            showToast(requireContext(),"Vehicle Color can not be empty");
             return false;
         }
         if(selectedSeatCapacity.isEmpty()){
-            showToast("Vehicle Seat Capacity can not be empty");
+            showToast(requireContext(),"Vehicle Seat Capacity can not be empty");
             return false;
         }
         if(!validatePlate(plate)){
             return false;
         }
-        showToast("Finish Step 4/5");
+        showToast(requireContext(),"Finish Step 4/5");
         return true;
     }
 
@@ -115,11 +210,11 @@ public class RegisterVehicleFragment extends Fragment {
             if (isValidProvinceNumber(provinceNumber)) {
                 return true;
             } else {
-                showToast("Invalid province number");
+                showToast(requireContext(),"Invalid province number");
                 return false;
             }
         } else {
-            showToast("Invalid plate format");
+            showToast(requireContext(),"Invalid plate format");
             return false;
         }
     }
@@ -151,7 +246,7 @@ public class RegisterVehicleFragment extends Fragment {
         bundle.putString("color", color);
         bundle.putString("seat", seat);
         bundle.putString("plate", plate);
-        bundle.putString("vehicleImage", "path");
+        bundle.putString("vehicleImage", vehicleImage);
         fragment.setArguments(bundle);
 
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -165,9 +260,5 @@ public class RegisterVehicleFragment extends Fragment {
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-    }
-
-    private void showToast(String message){
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

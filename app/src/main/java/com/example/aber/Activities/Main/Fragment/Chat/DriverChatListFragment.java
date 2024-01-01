@@ -2,6 +2,7 @@ package com.example.aber.Activities.Main.Fragment.Chat;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.SearchView;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.aber.Adapters.DriverChatAdapter;
+import com.example.aber.DriverChatActivity;
 import com.example.aber.FirebaseManager;
 import com.example.aber.Models.Staff.Driver;
 import com.example.aber.R;
@@ -108,15 +110,7 @@ public class DriverChatListFragment extends Fragment implements DriverChatAdapte
         String id = driverList.get(position).getDocumentID();
 
         if(id != null){
-            ChatDetailFragment fragment = new ChatDetailFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("driverID", id);
-            fragment.setArguments(bundle);
-
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_main_chat_container, fragment)
-                    .addToBackStack(null)
-                    .commit();
+            startActivity(new Intent(requireContext(), DriverChatActivity.class).putExtra("driverID", id));
         }
     }
 }

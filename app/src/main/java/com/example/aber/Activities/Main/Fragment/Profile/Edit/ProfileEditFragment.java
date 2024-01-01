@@ -1,4 +1,4 @@
-package com.example.aber.Activities.Main.Fragment.Profile;
+package com.example.aber.Activities.Main.Fragment.Profile.Edit;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -28,10 +28,12 @@ import android.widget.Toast;
 import com.canhub.cropper.CropImageContract;
 import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
-import com.example.aber.Activities.Main.EditActivity.EditVehicleActivity;
+import com.example.aber.Activities.Main.Fragment.Profile.Edit.HomeListFragment;
+import com.example.aber.Activities.Main.Fragment.Profile.MainProfileFragment;
+import com.example.aber.Activities.Main.MainActivity;
 import com.example.aber.FirebaseManager;
 
-import com.example.aber.HomeListFragment;
+import com.example.aber.HelpActivity;
 import com.example.aber.Models.User.Gender;
 import com.example.aber.Models.User.SOS;
 import com.example.aber.Models.User.User;
@@ -130,8 +132,13 @@ public class ProfileEditFragment extends Fragment {
         editVehicleCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(requireContext(),EditVehicleActivity.class));
-//                requireActivity().finish();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                fragmentTransaction.replace(R.id.fragment_main_container, new VehicleListFragment());
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
@@ -169,7 +176,6 @@ public class ProfileEditFragment extends Fragment {
 
                     @Override
                     public void onProfileNotChanged() {
-
                         if (cropped != null) {
                             // Handle the case when only the avatar is changed
                             String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
@@ -336,14 +342,6 @@ public class ProfileEditFragment extends Fragment {
             }
         });
     }
-
-
-
-    public void vehicleOnClick(View view) {
-        startActivity(new Intent(requireContext(), EditVehicleActivity.class));
-        requireActivity().finish();
-    }
-
 
     public interface OnProfileChangedListener {
         void onProfileChanged(String message);

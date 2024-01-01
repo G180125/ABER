@@ -25,6 +25,7 @@ public class UserHomeAdapter extends RecyclerView.Adapter<UserHomeAdapter.UserHo
 
     public UserHomeAdapter(List<Home> addressList, RecyclerViewClickListener listener) {
         this.homeList = addressList;
+        this.mListener = listener;
     }
 
     public void setHomeList(List<Home> homeList){
