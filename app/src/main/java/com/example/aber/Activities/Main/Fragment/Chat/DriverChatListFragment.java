@@ -10,15 +10,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.aber.Adapters.DriverChatAdapter;
-import com.example.aber.DriverChatActivity;
 import com.example.aber.FirebaseManager;
 import com.example.aber.Models.Staff.Driver;
+import com.example.aber.Models.User.User;
 import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
 
@@ -31,6 +30,8 @@ public class DriverChatListFragment extends Fragment implements DriverChatAdapte
     private ProgressDialog progressDialog;
     private List<Driver> driverList, filteredList;
     private SearchView searchView;
+    private String id;
+    private User user;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -40,16 +41,18 @@ public class DriverChatListFragment extends Fragment implements DriverChatAdapte
         View root = inflater.inflate(R.layout.fragment_driver_chat_list, container, false);
         firebaseManager = new FirebaseManager();
 
-        firebaseManager.getAllDrivers(new FirebaseManager.OnFetchDriverListListener() {
+        id = firebaseManager.mAuth.getCurrentUser().getUid();
+        firebaseManager.getUserByID(id, new FirebaseManager.OnFetchListener<User>() {
             @Override
-            public void onFetchDriverListSuccess(List<Driver> list) {
-                driverList = list;
+            public void onFetchSuccess(User object) {
+                user = object;
+                driverList = user.getChattedDriver();
                 updateUI(driverList);
                 AndroidUtil.hideLoadingDialog(progressDialog);
             }
 
             @Override
-            public void onFetchDriverListFailure(String message) {
+            public void onFetchFailure(String message) {
                 AndroidUtil.showToast(requireContext(), message);
                 AndroidUtil.hideLoadingDialog(progressDialog);
             }

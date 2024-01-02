@@ -18,6 +18,9 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.aber.Activities.Main.Fragment.Profile.Edit.HomeListFragment;
+import com.example.aber.Activities.Main.Fragment.Profile.Edit.SOSListFragment;
+import com.example.aber.Activities.Main.Fragment.Profile.Edit.VehicleListFragment;
 import com.example.aber.FirebaseManager;
 import com.example.aber.Models.Booking.Booking;
 import com.example.aber.Models.Booking.Card;
@@ -101,21 +104,60 @@ public class ConfirmBookingFragment extends Fragment {
         homeCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidUtil.showToast(requireContext(), "Home card view is clicked");
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                HomeListFragment fragment = new HomeListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("previous", "Confirm Booking");
+                bundle.putString("name", name);
+                bundle.putString("address", address);
+                fragment.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.fragment_main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
         vehicleCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidUtil.showToast(requireContext(), "Vehicle card view is clicked");
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                VehicleListFragment fragment = new VehicleListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("previous", "Confirm Booking");
+                bundle.putString("name", name);
+                bundle.putString("address", address);
+                fragment.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.fragment_main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
         sosCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidUtil.showToast(requireContext(), "SOS card view is clicked");
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                SOSListFragment fragment = new SOSListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("previous", "Confirm Booking");
+                bundle.putString("name", name);
+                bundle.putString("address", address);
+                fragment.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.fragment_main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 

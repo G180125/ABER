@@ -27,6 +27,7 @@ import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.aber.Activities.Main.Fragment.Home.ConfirmBookingFragment;
 import com.example.aber.Activities.Main.Fragment.Profile.Edit.ProfileEditFragment;
 import com.example.aber.Adapters.UserVehicleAdapter;
 import com.example.aber.FirebaseManager;
@@ -45,7 +46,7 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
     private ImageView buttonBack;
     private FirebaseManager firebaseManager;
     private ProgressDialog progressBar;
-    private String id;
+    private String id, previous, name, address;
     private User user;
     private List<Vehicle> vehicleList;
     private UserVehicleAdapter adapter;
@@ -60,6 +61,13 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
         firebaseManager = new FirebaseManager();
+
+        Bundle args = getArguments();
+        if (args != null) {
+            previous = args.getString("previous","");
+            name = args.getString("name","");
+            address = args.getString("address","");
+        }
 
         id = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
         firebaseManager.getUserByID(id, new FirebaseManager.OnFetchListener<User>() {
@@ -89,7 +97,17 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
             public void onClick(View v) {
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                replaceFragment(new ProfileEditFragment(), fragmentManager, fragmentTransaction, R.id.fragment_main_container);
+                if(previous.equals("Profile Edit")) {
+                    replaceFragment(new ProfileEditFragment(), fragmentManager, fragmentTransaction, R.id.fragment_main_container);
+                } else if (previous.equals("Confirm Booking")){
+                    ConfirmBookingFragment fragment = new ConfirmBookingFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("name", name);
+                    bundle.putString("address", address);
+                    fragment.setArguments(bundle);
+
+                    replaceFragment(fragment, fragmentManager, fragmentTransaction, R.id.fragment_main_container);
+                }
             }
         });
 

@@ -19,42 +19,49 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.aber.Activities.Main.Fragment.Home.ConfirmBookingFragment;
-import com.example.aber.Adapters.UserHomeAdapter;
+import com.example.aber.Adapters.UserSOSAdapter;
+import com.example.aber.Adapters.UserVehicleAdapter;
 import com.example.aber.FirebaseManager;
-import com.example.aber.Models.User.Home;
+import com.example.aber.Models.User.SOS;
 import com.example.aber.Models.User.User;
+import com.example.aber.Models.User.Vehicle;
 import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class HomeListFragment extends Fragment implements UserHomeAdapter.RecyclerViewClickListener{
+
+public class SOSListFragment extends Fragment implements UserSOSAdapter.RecyclerViewClickListener{
     private ImageView buttonBack;
     private FirebaseManager firebaseManager;
     private ProgressDialog progressBar;
     private String id, previous, name, address;
     private User user;
-    private List<Home> homeList;
-    private UserHomeAdapter adapter;
+    private List<SOS> sosList;
+    private UserSOSAdapter adapter;
     private PopupWindow popupWindow;
     private Button addButton;
     private View root;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         progressBar = new ProgressDialog(requireContext());
         AndroidUtil.showLoadingDialog(progressBar);
         // Inflate the layout for this fragment
-        root = inflater.inflate(R.layout.fragment_home_list, container, false);
+        root =  inflater.inflate(R.layout.fragment_sos_list, container, false);
         firebaseManager = new FirebaseManager();
 
         Bundle args = getArguments();
@@ -69,8 +76,8 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
             @Override
             public void onFetchSuccess(User object) {
                 user = object;
-                homeList = user.getHomes();
-                updateUI(homeList);
+                sosList = user.getEmergencyContacts();
+                updateUI(sosList);
             }
 
             @Override
@@ -82,9 +89,9 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
         buttonBack = root.findViewById(R.id.buttonBack);
         addButton = root.findViewById(R.id.add_button);
 
-        RecyclerView recyclerView = root.findViewById(R.id.addressRecyclerView);
+        RecyclerView recyclerView = root.findViewById(R.id.sosRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new UserHomeAdapter(new ArrayList<>(),this);
+        adapter = new UserSOSAdapter(new ArrayList<>(),this);
         recyclerView.setAdapter(adapter);
 
         buttonBack.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +116,7 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initPopupWindow(null, "Enter Additional Home", 0);
+                initPopupWindow(null, "Enter Additional SOS", 0);
                 popupWindow.showAsDropDown(root, 0, 0);
             }
         });
@@ -118,20 +125,20 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void updateUI(List<Home> homeList){
-        adapter.setHomeList(homeList);
+    private void updateUI(List<SOS> sosList){
+        adapter.setSosList(sosList);
         adapter.notifyDataSetChanged();
         AndroidUtil.hideLoadingDialog(progressBar);
     }
 
     @Override
     public void onSetDefaultButtonClick(int position) {
-        if (position > 0 && position < homeList.size()) {
+        if (position > 0 && position < sosList.size()) {
             AndroidUtil.showLoadingDialog(progressBar);
-            Home selectedHome = homeList.get(position);
-            homeList.remove(position);
-            homeList.add(0, selectedHome);
-            updateList(user, homeList,"This Home is set to default." );
+            SOS selectedContact = sosList.get(position);
+            sosList.remove(position);
+            sosList.add(0, selectedContact);
+            updateList(user, sosList,"This Vehicle is set to default." );
         } else {
             AndroidUtil.showToast(getContext(), "Error! Please Try Again.");
         }
@@ -140,21 +147,21 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
 
     @Override
     public void onEditButtonClicked(int position) {
-        Home home = homeList.get(position);
-        initPopupWindow(home, "Edit Home", position);
+        SOS selectedContact = sosList.get(position);
+        initPopupWindow(selectedContact, "Edit SOS", position);
         popupWindow.showAsDropDown(root, 0, 0);
-        updateUI(homeList);
+        updateUI(sosList);
     }
 
     @Override
     public void onDeleteButtonClicked(int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Confirm Delete")
-                .setMessage("Are you sure you want to delete this home?")
+                .setMessage("Are you sure you want to delete this vehicle?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        homeList.remove(position);
-                        updateList(user, homeList, "Delete Home Successful");
+                        sosList.remove(position);
+                        updateList(user, sosList, "Delete Home Successful");
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -165,11 +172,9 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
                 .show();
     }
 
-
-
-    public void initPopupWindow(Home home, String title, int position) {
+    public void initPopupWindow(SOS sos, String title, int position) {
         LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.pop_up_address_form, null);
+        View popupView = inflater.inflate(R.layout.pop_up_sos_form, null);
 
         popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
         popupWindow.setTouchable(true);
@@ -177,27 +182,16 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
         popupView.setBackgroundColor(getResources().getColor(R.color.popup_background, null));
 
         TextView titleTextView = popupView.findViewById(R.id.title);
-        EditText addressEditText = popupView.findViewById(R.id.address_edit_text);
-        ImageView homeImageView = popupView.findViewById(R.id.home_image);
-        Button submitButton = popupView.findViewById(R.id.submitNewAddressBtn);
+        EditText phoneEditText = popupView.findViewById(R.id.phone_edit_text);
+        EditText nameEditText = popupView.findViewById(R.id.name_edit_text);
+        Button submitButton = popupView.findViewById(R.id.submitNewVehicleBtn);
         ImageView cancelBtn = popupView.findViewById(R.id.cancelBtn);
 
         titleTextView.setText(title);
-
-        if (home != null) {
-            addressEditText.setText(home.getAddress());
-
-            firebaseManager.retrieveImage(home.getAddress(), new FirebaseManager.OnRetrieveImageListener() {
-                @Override
-                public void onRetrieveImageSuccess(Bitmap bitmap) {
-                    homeImageView.setImageBitmap(bitmap);
-                }
-
-                @Override
-                public void onRetrieveImageFailure(String message) {
-
-                }
-            });
+        //Initialize seat capacity spinner
+        if (sos != null) {
+            phoneEditText.setText(sos.getPhoneNumber());
+            nameEditText.setText(sos.getName());
         }
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -212,24 +206,25 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
             public void onClick(View v) {
                 AndroidUtil.showLoadingDialog(progressBar);
 
-                String newAddress = addressEditText.getText().toString();
+                String phone = phoneEditText.getText().toString();
+                String name = nameEditText.getText().toString();
 
-                if (title.equals("Edit Home")) {
+                if (title.equals("Edit Vehicle")) {
                     // Update existing home
-                    if (home != null) {
-                        home.setAddress(newAddress);
-                        homeList.set(position, home);
+                    if (sos != null) {
+                        sos.setName(name);
+                        sos.setPhoneNumber(phone);
                     }
                 } else {
-                    // Add a new home
-                    Home newHome = new Home(newAddress, "path");
-                    homeList.add(0, newHome);
+                    SOS newSOS = new SOS(name, phone);
+
+                    sosList.add(0, newSOS);
                 }
 
-                // Update the user with the modified homeList
-                updateList(user, homeList, "Update Successful");
 
-                // Dismiss the PopupWindow after updating the homeList
+                updateList(user, sosList, "Update Successful");
+
+                // Dismiss the PopupWindow after updating
                 popupWindow.dismiss();
             }
         });
@@ -238,14 +233,13 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
 
     }
 
-
-    private void updateList(User user, List<Home> homeList, String successMessage){
-        user.setHomes(homeList);
+    private void updateList(User user, List<SOS> sosList, String successMessage){
+        user.setEmergencyContacts(sosList);
         firebaseManager.updateUser(id, user, new FirebaseManager.OnTaskCompleteListener() {
             @Override
             public void onTaskSuccess(String message) {
                 AndroidUtil.showToast(getContext(), successMessage);
-                updateUI(homeList);
+                updateUI(sosList);
             }
 
             @Override

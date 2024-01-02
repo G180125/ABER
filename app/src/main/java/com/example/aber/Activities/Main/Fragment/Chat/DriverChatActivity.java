@@ -1,4 +1,4 @@
-package com.example.aber;
+package com.example.aber.Activities.Main.Fragment.Chat;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,11 +13,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.aber.Activities.Main.Fragment.Chat.DriverChatListFragment;
 import com.example.aber.Adapters.MessageAdapter;
+import com.example.aber.FirebaseManager;
 import com.example.aber.Models.Message.MyMessage;
 import com.example.aber.Models.Staff.Driver;
 import com.example.aber.Models.User.User;
+import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
 
 import java.util.ArrayList;
@@ -83,10 +84,6 @@ public class DriverChatActivity extends AppCompatActivity {
         backImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_main_chat_container, new DriverChatListFragment())
-                        .addToBackStack(null)
-                        .commit();
                 finish();
             }
         });
