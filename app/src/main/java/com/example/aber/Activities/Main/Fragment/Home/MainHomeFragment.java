@@ -26,6 +26,11 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.directions.route.AbstractRouting;
+import com.directions.route.Route;
+import com.directions.route.RouteException;
+import com.directions.route.Routing;
+import com.directions.route.RoutingListener;
 import com.example.aber.Adapters.InfoWindowViewHolder;
 import com.example.aber.FirebaseManager;
 
@@ -36,7 +41,10 @@ import android.widget.PopupMenu;
 
 import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -50,6 +58,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
@@ -57,14 +67,16 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
-public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
+public class MainHomeFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, RoutingListener {
 
     private static final String API_KEY = "AIzaSyAk79eOlfksqlm74wCmRbY_yddK75iZ4dM";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
@@ -79,6 +91,9 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     private LocationRequest mLocationRequest;
 
     private FloatingActionButton mapTypeButton, currentLocationButton;
+    private LatLng start;
+    private LatLng end;
+    private List<Polyline> polylines;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -253,12 +268,21 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
             public void onMapClick(@NonNull LatLng latLng) {
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng).title("Test");
+
+                // Remove the previous selected location
+                if (searchedLocation != null) {
+                    searchedLocation.remove();
+                }
                 searchedLocation = mMap.addMarker(markerOptions);
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
                 searchedLocation.showInfoWindow();
+
+                end=searchedLocation.getPosition();
+                startLocationUpdate();
+                Findroutes(start, end);
             }
         });
     }
@@ -314,7 +338,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
                 LatLng latLng = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
-
+                start = latLng;
                 focusOnLocation(latLng);
             }
         }, null);
@@ -333,5 +357,91 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         LatLng latestLocation = firebaseManager.getLatestLocation(userId);
 
         return latestLocation == null || !latestLocation.equals(newLocation);
+    }
+
+    // function to find Routes.
+    public void Findroutes(LatLng Start, LatLng End) {
+        if(Start==null || End==null) {
+            Toast.makeText(getActivity(),"Unable to get location",Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Routing routing = new Routing.Builder()
+                    .travelMode(AbstractRouting.TravelMode.DRIVING)
+                    .withListener((RoutingListener) MainHomeFragment.this)
+                    .alternativeRoutes(true)
+                    .waypoints(Start, End)
+                    .key(getString(R.string.GOOGLE_MAP_API))  //also define your api key here.
+                    .build();
+            routing.execute();
+        }
+    }
+
+    //Routing call back functions.
+    @Override
+    public void onRoutingFailure(RouteException e) {
+        View parentLayout = getActivity().findViewById(android.R.id.content);
+        Snackbar snackbar= Snackbar.make(parentLayout, e.toString(), Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
+
+    @Override
+    public void onRoutingStart() {
+        Toast.makeText(getActivity(),"Finding Route...",Toast.LENGTH_LONG).show();
+    }
+
+    //If Route finding success..
+    @Override
+    public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
+
+        CameraUpdate center = CameraUpdateFactory.newLatLng(start);
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
+        if(polylines!=null) {
+            for (Polyline polyline : polylines) {
+                polyline.remove();
+            }
+            polylines.clear();
+        }
+        PolylineOptions polyOptions = new PolylineOptions();
+        LatLng polylineStartLatLng=null;
+        LatLng polylineEndLatLng=null;
+
+
+        polylines = new ArrayList<>();
+        //add route(s) to the map using polyline
+        for (int i = 0; i <route.size(); i++) {
+
+            if(i==shortestRouteIndex)
+            {
+                polyOptions.color(getResources().getColor(R.color.pale_blue));
+                polyOptions.width(7);
+                polyOptions.addAll(route.get(shortestRouteIndex).getPoints());
+                Polyline polyline = mMap.addPolyline(polyOptions);
+                polylineStartLatLng=polyline.getPoints().get(0);
+                int k=polyline.getPoints().size();
+                polylineEndLatLng=polyline.getPoints().get(k-1);
+                polylines.add(polyline);
+
+            }
+
+        }
+
+        //Add Marker on route starting position
+        MarkerOptions startMarker = new MarkerOptions();
+        startMarker.position(polylineStartLatLng);
+
+        //Add Marker on route ending position
+        MarkerOptions endMarker = new MarkerOptions();
+        endMarker.position(polylineEndLatLng);
+    }
+
+    @Override
+    public void onRoutingCancelled() {
+        Findroutes(start,end);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Findroutes(start,end);
     }
 }
