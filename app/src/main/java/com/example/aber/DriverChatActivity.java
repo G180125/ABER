@@ -83,10 +83,6 @@ public class DriverChatActivity extends AppCompatActivity {
         backImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_main_chat_container, new DriverChatListFragment())
-                        .addToBackStack(null)
-                        .commit();
                 finish();
             }
         });
