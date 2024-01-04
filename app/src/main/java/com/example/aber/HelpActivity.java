@@ -72,10 +72,6 @@ public class HelpActivity extends AppCompatActivity {
         backImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_main_chat_container, new MainProfileFragment())
-                        .addToBackStack(null)
-                        .commit();
                 finish();
             }
         });
