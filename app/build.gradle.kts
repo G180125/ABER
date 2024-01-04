@@ -59,6 +59,11 @@ dependencies {
     //Dot progress bar
     implementation ("com.agrawalsuneet.androidlibs:dotsloader:1.4")
 
+    //View Page
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
+    implementation("com.tbuonomo:dotsindicator:5.0")
+
+
 }
 
 secrets {

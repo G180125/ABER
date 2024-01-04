@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/back_ground_color_title"
+    >
+    <TextView
+        android:id="@+id/headingTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/heading_one"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        android:fontFamily="@font/instagramsansregular"
+        android:textColor="@color/white"
+        android:layout_marginBottom="15dp"
+        android:layout_margin="15dp" />
+    <TextView
+        android:id="@+id/textDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/desc_one"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/white"
+        android:layout_margin="15dp"
+        android:lineSpacingExtra="6sp"
+        />
+</LinearLayout>

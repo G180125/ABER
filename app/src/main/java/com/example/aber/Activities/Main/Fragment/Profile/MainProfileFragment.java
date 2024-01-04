@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.aber.Activities.LoginActivity;
+import com.example.aber.Activities.Main.Fragment.AboutUs.AboutUsActivity;
 import com.example.aber.Activities.Main.Fragment.Profile.Edit.ProfileEditFragment;
 import com.example.aber.FirebaseManager;
 import com.example.aber.HelpActivity;
@@ -103,6 +104,7 @@ public class MainProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showToast(requireContext(),"about us card is clicked");
+                startActivity(new Intent(requireContext(), AboutUsActivity.class));
             }
         });
 
