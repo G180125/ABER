@@ -27,11 +27,17 @@ import com.example.aber.Models.User.SOS;
 import com.example.aber.Models.User.User;
 import com.example.aber.Models.User.Vehicle;
 import com.example.aber.R;
+import com.example.aber.StripeConnect.StripeClient;
+import com.example.aber.StripeConnect.StripeServices;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class RegisterAccountFragment extends Fragment {
     private final String EMAIL_PATTERN =
@@ -43,7 +49,9 @@ public class RegisterAccountFragment extends Fragment {
     private EditText emailEditText, passwordEditText, confirmPasswordEditText;
     private FirebaseManager firebaseManager;
     private ProgressDialog progressDialog;
-    private String name, phoneNumber, gender, address, homeImage, brand, vehicleName, color, seat, plate, vehicleImage, sosName, sosPhone;
+    private String name, phoneNumber, gender, address, homeImage, brand, vehicleName, color, seat, plate, vehicleImage, sosName, sosPhone, stripeCusID;
+    private StripeServices stripeServices;
+    private CompositeDisposable compositeDisposable;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +60,8 @@ public class RegisterAccountFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_register_account, container, false);
         firebaseManager = new FirebaseManager();
+        stripeServices = StripeClient.getRetrofit().create(StripeServices.class);
+        compositeDisposable = new CompositeDisposable();
 
         Bundle args = getArguments();
         if (args != null) {
@@ -165,7 +175,24 @@ public class RegisterAccountFragment extends Fragment {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
-        User user = new User(email, name, userGender, phoneNumber, homeList, vehicleList, emergencyContactList);
+        compositeDisposable.add(stripeServices.createCustomer(
+                        email)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(customer -> {
+                    if (customer.getId() == null) {
+                        System.out.println("Try again");
+                    } else {
+                        stripeCusID = customer.getId();
+                        System.out.println("===> customerID : " + customer.getId());
+                    }
+                }, throwable -> {
+                    System.out.println(throwable.getMessage());
+                })
+        );
+
+        User user = new User(email, name, userGender, phoneNumber, homeList, vehicleList, emergencyContactList, stripeCusID);
+
         firebaseManager.addUser(userID, user, new FirebaseManager.OnTaskCompleteListener() {
             @Override
             public void onTaskSuccess(String message) {
