@@ -69,6 +69,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     private static final String API_KEY = "AIzaSyAk79eOlfksqlm74wCmRbY_yddK75iZ4dM";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private GoogleMap mMap;
+
     private FusedLocationProviderClient fusedLocationClient;
     private FirebaseManager firebaseManager;
     private ProgressDialog progressDialog;
@@ -186,8 +187,29 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.getUiSettings().setZoomControlsEnabled(true);
 
+
+        if (ActivityCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            // Enable the "My Location" button and display the blue dot on the map
+            mMap.setMyLocationEnabled(true);
+
+            // Set the "My Location" button to be visible
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+            // Your existing code for setting up the map and markers...
+        } else {
+            // If permissions are not granted, request them
+            requestPermissions(new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+            }, LOCATION_PERMISSION_REQUEST_CODE);
+        }
+
+        mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoContents(Marker marker) {
@@ -246,7 +268,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         getCurrentLocation();
         hideLoadingDialog(progressDialog);
 
-        startLocationUpdate();
+//        startLocationUpdate();
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -277,7 +299,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                     if (locationResult.getLastLocation() != null) {
                         currentLocation = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
 
-                        mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location"));
+//                        mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location"));
                         focusOnLocation(currentLocation);
 
                         fusedLocationClient.removeLocationUpdates(this);

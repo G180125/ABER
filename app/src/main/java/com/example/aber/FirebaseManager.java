@@ -145,15 +145,21 @@ public class FirebaseManager {
         final long ONE_MEGABYTE = 1024 * 1024;
 
         new Thread(() -> {
-            this.storageRef.child(path)
-                    .getBytes(ONE_MEGABYTE)
-                    .addOnSuccessListener(bytes -> {
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        listener.onRetrieveImageSuccess(bitmap);
-                    })
-                    .addOnFailureListener(exception -> {
-                        listener.onRetrieveImageFailure("Error: " + exception.getMessage());
-                    });
+            // Check if the path is null or empty before creating the StorageReference
+            if (path != null && !path.isEmpty()) {
+                this.storageRef.child(path)
+                        .getBytes(ONE_MEGABYTE)
+                        .addOnSuccessListener(bytes -> {
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            listener.onRetrieveImageSuccess(bitmap);
+                        })
+                        .addOnFailureListener(exception -> {
+                            listener.onRetrieveImageFailure("Error: " + exception.getMessage());
+                        });
+            } else {
+                // Handle the case where path is null or empty
+                listener.onRetrieveImageFailure("Error: Image path is null or empty");
+            }
         }).start();
     }
 
