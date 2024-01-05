@@ -7,4 +7,16 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="address">Address</string>
+    <string name="aber">ABER</string>
+    <string name="login">Login</string>
+    <string name="forgot_your_password">Forget password</string>
+
+    <!-- About Us Page    -->
+    <string name="heading_one">Our History</string>
+    <string name="heading_two">Our Mission</string>
+    <string name="heading_three">Our Team</string>
+
+    <string name="desc_one">While the idea of a safe way home after celebrating has been around for ages, Aber came about in 2024 with a clear mission: to make getting home after a good night out as simple and safe as ordering a pizza. It all started with a personal experience that highlighted the gap between fun nights and responsible choices. We knew there had to be a better way than relying on shaky judgment or pushing friends into uncomfortable situations. And so, Aber was born – a platform that connects responsible designated drivers with those ready to celebrate without the worry of the drive home. Since then, we\'ve grown from a local solution to a nationwide network, all thanks to the amazing community of drivers and riders who prioritize safety and fun in equal measure. We\'re proud to be more than just an app; we\'re a movement pushing for a world where every celebration ends as happily as it begins.</string>
+    <string name="desc_two">At Aber, we\'re more than just an app; we\'re a community built on trust and responsibility. We connect neighbors, colleagues, and friends, creating a network of reliable drivers who ensure everyone reaches home safely. By empowering responsible choices, we foster a world where celebration and care go hand-in-hand.</string>
+    <string name="desc_three">Nguyen Mau Bach - s3926937 \nNguyen Minh Hung - s3924473 \nNguyen Vi Phi Long - s3904632 \nLe Tran Minh Trung - s3927071</string>
 </resources>
