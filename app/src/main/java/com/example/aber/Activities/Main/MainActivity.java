@@ -9,7 +9,7 @@ import android.os.Bundle;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.aber.Activities.Main.Fragment.MainBookingFragment;
-import com.example.aber.Activities.Main.Fragment.MainHomeFragment;
+import com.example.aber.Activities.Main.Fragment.Home.MainHomeFragment;
 import com.example.aber.Activities.Main.Fragment.Chat.MainChatFragment;
 import com.example.aber.Activities.Main.Fragment.Profile.MainProfileFragment;
 import com.example.aber.R;

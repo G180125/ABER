@@ -17,10 +17,15 @@ import com.example.aber.Activities.Main.MainActivity;
 import com.example.aber.Activities.Register.RegisterActivity;
 import com.example.aber.FirebaseManager;
 import com.example.aber.R;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class LoginActivity extends AppCompatActivity {
-    private Button loginButton;
-    private EditText emailEditText, passwordEditText;
+    private MaterialButton loginButton;
+    private TextInputEditText emailEditText, passwordEditText;
+
+    private TextInputLayout emailTextLayout,passwordTextLayout;
     private ProgressDialog progressDialog;
     private FirebaseManager firebaseManager;
 
@@ -33,6 +38,8 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
 
         emailEditText = findViewById(R.id.email_edit_text);
+        emailTextLayout = findViewById(R.id.email_layout_text);
+        passwordTextLayout = findViewById(R.id.password_layout_text);
         passwordEditText = findViewById(R.id.password_edit_text);
 
         Intent intent = getIntent();
@@ -43,6 +50,8 @@ public class LoginActivity extends AppCompatActivity {
             emailEditText.setText(email);
             passwordEditText.setText(password);
         }
+
+
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

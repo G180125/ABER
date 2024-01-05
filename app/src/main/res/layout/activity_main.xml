@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         app:mbn_shadowColor="@color/light_gray"
-        app:mbn_backgroundBottomColor="@color/pale_blue"
+        app:mbn_backgroundBottomColor="@color/background_color_dark_blue"
         app:mbn_circleColor="@color/white"
         app:mbn_countBackgroundColor="@color/light_orange_red"
         app:mbn_countTextColor="@color/white"

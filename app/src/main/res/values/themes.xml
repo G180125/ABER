@@ -1,8 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.ABER" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Primary Brand Color -->
+        <item name="colorPrimary">@color/pale_blue</item>
+        <item name="colorPrimaryVariant">@color/purple</item>
+        <!-- Secondary Brand Color -->
+        <item name="android:colorBackground">@color/white</item>
+        <item name="colorOnSurface">@color/white</item>
+        <!-- Status Bar Color -->
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textCursorDrawable">@color/black</item>
+
+<!--        Pop up menu style-->
+        <item name="popupMenuStyle">@style/MyPopupMenu</item>
+        <item name="popupMenuBackground">@drawable/rouned_background</item>
+
+
+
+        <item name="itemStrokeWidth">20dp</item>
+        <item name="itemPaddingBottom">100dp</item>
+
     </style>
 
     <style name="Theme.ABER" parent="Base.Theme.ABER" />
@@ -15,5 +34,14 @@
     <style name="Theme.ABER.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.ABER.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="MyPopupMenu" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="android:dropDownHorizontalOffset">20dp</item>
+        <item name="android:dropDownVerticalOffset">20dp</item>
+        <item name="popupMenuBackground">@drawable/rouned_background</item>
+        <item name="itemTextColor">@color/pale_blue</item>
+    </style>
+
+
 
 </resources>

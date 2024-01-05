@@ -3,17 +3,20 @@ package com.example.aber.Activities;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.agrawalsuneet.dotsloader.loaders.LinearDotsLoader;
+import com.agrawalsuneet.dotsloader.loaders.TashieLoader;
 import com.example.aber.Activities.Main.MainActivity;
 import com.example.aber.R;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SplashActivity extends AppCompatActivity {
-    private ProgressBar progressBar;
+    private TashieLoader progressBar;
 
     private FirebaseAuth mAuth;
 
@@ -29,20 +32,6 @@ public class SplashActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
-        ValueAnimator animator = ValueAnimator.ofInt(0, 100);
-        animator.setDuration(durationMillis);
-
-
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int animatedValue = (int) animation.getAnimatedValue();
-                progressBar.setProgress(animatedValue);
-            }
-        });
-
-
-        animator.start();
 
 
         progressBar.postDelayed(new Runnable() {

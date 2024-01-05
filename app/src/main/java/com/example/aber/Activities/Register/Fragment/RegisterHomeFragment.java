@@ -1,9 +1,18 @@
 package com.example.aber.Activities.Register.Fragment;
 
-import android.app.ProgressDialog;
+import static com.example.aber.Utils.AndroidUtil.showToast;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -14,27 +23,52 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.canhub.cropper.CropImageContract;
+import com.canhub.cropper.CropImageContractOptions;
+import com.canhub.cropper.CropImageOptions;
+import com.example.aber.FirebaseManager;
 import com.example.aber.R;
-import com.example.aber.Utils.AndroidUtil;
 
 public class RegisterHomeFragment extends Fragment {
+    private static final String STORAGE_PATH = "home/";
     private Button doneButton;
-    private String name, phoneNumber, gender;
+    private String userID, email, password, name, phoneNumber, gender;
     private EditText addressEditText;
     private ImageView homeImageView;
-    private ProgressDialog progressDialog;
+    private Bitmap cropped;
+    private FirebaseManager firebaseManager;
+
+    private final ActivityResultLauncher<Intent> getImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == Activity.RESULT_OK) {
+            Intent data = result.getData();
+            if (data != null && data.getData() != null) {
+                Uri imageUri = data.getData();
+                launchImageCropper(imageUri);
+            }
+        }
+    });
+
+    private final ActivityResultLauncher<CropImageContractOptions> cropImage = registerForActivityResult(new CropImageContract(), result -> {
+        if (result.isSuccessful()) {
+            cropped = BitmapFactory.decodeFile(result.getUriFilePath(requireContext(), true));
+            updateHomeImage(cropped);
+        }
+    });
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        progressDialog = new ProgressDialog(requireContext());
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_register_home, container, false);
+        firebaseManager = new FirebaseManager();
+
         Bundle args = getArguments();
         if (args != null) {
+            userID = args.getString("userID", "");
+            email = args.getString("email", "");
+            password = args.getString("password","");
             name = args.getString("name", "");
             phoneNumber = args.getString("phoneNumber", "");
             gender = args.getString("gender", "");
@@ -48,30 +82,67 @@ public class RegisterHomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String address = addressEditText.getText().toString();
-                String homeImage = "path";
-                AndroidUtil.showLoadingDialog(progressDialog);
-                if (validateInputs(address, homeImage)){
-                    toRegisterVehicleFragment(address, homeImage);
+
+                if (cropped != null && validateInputs(address)) {
+                    // Handle the case when only the avatar is changed
+                    String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
+                    firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+                        @Override
+                        public void onTaskSuccess(String message) {
+                            showToast(requireContext(),"Finish Step 3/5");
+                            toRegisterVehicleFragment(address, imagePath);
+                        }
+
+                        @Override
+                        public void onTaskFailure(String message) {
+                            showToast(requireContext(), "Upload Image failed");
+                        }
+                    });
                 }
+            }
+        });
+
+        homeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage();
             }
         });
 
         return root;
     }
 
-    private boolean validateInputs(String address, String homeImage){
+    private void launchImageCropper(Uri uri) {
+        CropImageOptions cropImageOptions = new CropImageOptions();
+        cropImageOptions.imageSourceIncludeGallery = false;
+        cropImageOptions.imageSourceIncludeCamera = true;
+        CropImageContractOptions cropImageContractOptions = new CropImageContractOptions(uri, cropImageOptions);
+        cropImage.launch(cropImageContractOptions);
+    }
+
+    private void selectImage() {
+        getImageFile();
+    }
+
+    private void getImageFile() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        getImage.launch(intent);
+    }
+
+    private String generateUniquePath() {
+        return String.valueOf(System.currentTimeMillis());
+    }
+
+    private void updateHomeImage(Bitmap bitmap){
+        homeImageView.setImageBitmap(bitmap);
+    }
+
+    private boolean validateInputs(String address){
         if(address.isEmpty()){
-            showToast("Address can not be empty");
-            AndroidUtil.hideLoadingDialog(progressDialog);
+            showToast(requireContext(),"Address can not be empty");
             return false;
         }
-        if(homeImage.isEmpty()){
-            AndroidUtil.hideLoadingDialog(progressDialog);
-            showToast("Failed to upload Image");
-            return false;
-        }
-        AndroidUtil.hideLoadingDialog(progressDialog);
-        showToast("Finish Step 2/5");
         return true;
     }
 
@@ -79,6 +150,9 @@ public class RegisterHomeFragment extends Fragment {
         RegisterVehicleFragment fragment = new RegisterVehicleFragment();
 
         Bundle bundle = new Bundle();
+        bundle.putString("userID", userID);
+        bundle.putString("email", email);
+        bundle.putString("password", password);
         bundle.putString("name", name);
         bundle.putString("phoneNumber", phoneNumber);
         bundle.putString("gender", gender);
@@ -97,9 +171,5 @@ public class RegisterHomeFragment extends Fragment {
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-    }
-
-    private void showToast(String message){
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

@@ -2,6 +2,7 @@ package com.example.aber.Activities.Main.Fragment.Chat;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.SearchView;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import com.example.aber.Adapters.DriverChatAdapter;
 import com.example.aber.FirebaseManager;
 import com.example.aber.Models.Staff.Driver;
+import com.example.aber.Models.User.User;
 import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
 
@@ -28,6 +30,8 @@ public class DriverChatListFragment extends Fragment implements DriverChatAdapte
     private ProgressDialog progressDialog;
     private List<Driver> driverList, filteredList;
     private SearchView searchView;
+    private String id;
+    private User user;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,16 +41,18 @@ public class DriverChatListFragment extends Fragment implements DriverChatAdapte
         View root = inflater.inflate(R.layout.fragment_driver_chat_list, container, false);
         firebaseManager = new FirebaseManager();
 
-        firebaseManager.getAllDrivers(new FirebaseManager.OnFetchDriverListListener() {
+        id = firebaseManager.mAuth.getCurrentUser().getUid();
+        firebaseManager.getUserByID(id, new FirebaseManager.OnFetchListener<User>() {
             @Override
-            public void onFetchDriverListSuccess(List<Driver> list) {
-                driverList = list;
+            public void onFetchSuccess(User object) {
+                user = object;
+                driverList = user.getChattedDriver();
                 updateUI(driverList);
                 AndroidUtil.hideLoadingDialog(progressDialog);
             }
 
             @Override
-            public void onFetchDriverListFailure(String message) {
+            public void onFetchFailure(String message) {
                 AndroidUtil.showToast(requireContext(), message);
                 AndroidUtil.hideLoadingDialog(progressDialog);
             }
@@ -73,19 +79,33 @@ public class DriverChatListFragment extends Fragment implements DriverChatAdapte
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
+//                String searchQuery = newText.toString().toLowerCase();
+//                filterList(searchQuery);
                 return true;
             }
         });
 
         return root;
     }
+        //Search filter (can be use later if needed)
+//    private void filterList(String searchQuery){
+//        filteredList = new ArrayList<>();
+//        for (Driver driver : driverList){
+//            if (driver.getName().toLowerCase().contains(searchQuery)){
+//                filteredList.add(driver);
+//            }
+//        }
+//        updateUI(filteredList);
+//    }
 
     @SuppressLint("NotifyDataSetChanged")
     private void updateUI(List<Driver> driverList){
         adapter.setDriverList(driverList);
         adapter.notifyDataSetChanged();
         AndroidUtil.hideLoadingDialog(progressDialog);
+//        if(filteredList != null){
+//            adapter.setDriverList(filteredList);
+//        }
     }
 
     @Override
@@ -93,15 +113,7 @@ public class DriverChatListFragment extends Fragment implements DriverChatAdapte
         String id = driverList.get(position).getDocumentID();
 
         if(id != null){
-            ChatDetailFragment fragment = new ChatDetailFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("driverID", id);
-            fragment.setArguments(bundle);
-
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_main_chat_container, fragment)
-                    .addToBackStack(null)
-                    .commit();
+            startActivity(new Intent(requireContext(), DriverChatActivity.class).putExtra("driverID", id));
         }
     }
 }

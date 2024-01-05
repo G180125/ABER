@@ -6,11 +6,13 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.aber.Models.Booking.Booking;
 import com.example.aber.Models.Message.MyMessage;
 import com.example.aber.Models.Staff.Admin;
 import com.example.aber.Models.Staff.Driver;
 import com.example.aber.Models.Staff.Staff;
 import com.example.aber.Models.User.User;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
@@ -202,6 +204,45 @@ public class FirebaseManager {
 
             }
         });
+    }
+
+    public void updateCurrentLocation(LatLng latLng, String time, String id){
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("Latlng", latLng);
+        hashMap.put("time", time);
+
+        this.database.getReference().child(id)
+                .push()
+                .setValue(hashMap);
+    }
+
+    public LatLng getLatestLocation(String userId) {
+        final LatLng[] latestLocation = {null};
+
+        DatabaseReference reference = this.database.getReference(userId);
+        reference.limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot s : snapshot.getChildren()) {
+                    HashMap<String, Object> data = (HashMap<String, Object>) s.getValue();
+                    if (data != null && data.containsKey("Latlng")) {
+                        HashMap<String, Double> latLngData = (HashMap<String, Double>) data.get("Latlng");
+                        if (latLngData != null && latLngData.containsKey("latitude") && latLngData.containsKey("longitude")) {
+                            double latitude = latLngData.get("latitude");
+                            double longitude = latLngData.get("longitude");
+                            latestLocation[0] = new LatLng(latitude, longitude);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle the error
+            }
+        });
+
+        return latestLocation[0];
     }
 
     public void getDriverByID(String driverID, OnFetchListener<Driver> listener) {

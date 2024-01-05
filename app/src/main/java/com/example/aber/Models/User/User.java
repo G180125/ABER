@@ -3,6 +3,7 @@ package com.example.aber.Models.User;
 import androidx.annotation.NonNull;
 
 import com.example.aber.Models.Booking.Booking;
+import com.example.aber.Models.Staff.Driver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,8 @@ public class User {
     private List<Vehicle> vehicles;
     private List<SOS> emergencyContacts;
     private List<Booking> bookings;
+    private String stripeCusId;
+    private List<Driver>  chattedDriver;
 
     public User(){};
 
@@ -32,6 +35,9 @@ public class User {
         this.vehicles = vehicles;
         this.emergencyContacts = emergencyContacts;
         this.bookings = new ArrayList<>();
+        this.stripeCusId = "";
+        this.chattedDriver = new ArrayList<>();
+
     }
 
     @NonNull
@@ -119,6 +125,22 @@ public class User {
 
     public void setEmergencyContacts(List<SOS> emergencyContacts) {
         this.emergencyContacts = emergencyContacts;
+    }
+
+    public String getStripeCusId() {
+        return stripeCusId;
+    }
+
+    public void setStripeCusId(String stripeCusId) {
+        this.stripeCusId = stripeCusId;
+    }
+
+    public List<Driver> getChattedDriver() {
+        return chattedDriver;
+    }
+
+    public void setChattedDriver(List<Driver> chattedDriver) {
+        this.chattedDriver = chattedDriver;
     }
 
     @Override

@@ -10,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.aber.Activities.LoginActivity;
 import com.example.aber.FirebaseManager;
 import com.example.aber.Models.User.Gender;
 import com.example.aber.Models.User.Home;
+import com.example.aber.Models.User.SOS;
 import com.example.aber.Models.User.User;
 import com.example.aber.Models.User.Vehicle;
 import com.example.aber.R;
@@ -26,6 +28,7 @@ import java.util.List;
 public class RegisterSOSFragment extends Fragment {
     private String userID, email, password, name, phoneNumber, gender, address, homeImage, brand, vehicleName, color, seat, plate, vehicleImage;
     private Button doneButton;
+    private EditText sosNameEditText, sosPhoneNumberEditText;
     private FirebaseManager firebaseManager;
     private ProgressDialog progressDialog;
 
@@ -54,6 +57,10 @@ public class RegisterSOSFragment extends Fragment {
             vehicleImage = args.getString("vehicleImage", "");
         }
 
+        sosNameEditText = root.findViewById(R.id.name_sos_editText);
+        sosPhoneNumberEditText = root.findViewById(R.id.sos_phone_number);
+
+
         doneButton = root.findViewById(R.id.done_button);
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,9 +77,16 @@ public class RegisterSOSFragment extends Fragment {
                 Vehicle vehicle = new Vehicle(brand, vehicleName, color, seat, plate, vehicleImages);
                 vehicleList.add(vehicle);
 
+                String sosName = sosNameEditText.getText().toString();
+                String sosPhone = sosPhoneNumberEditText.getText().toString();
+
+                List<SOS> emergencyContactList = new ArrayList<>();
+                SOS emergencyContacts = new SOS(sosName, sosPhone);
+                emergencyContactList.add(emergencyContacts);
+
                 Gender userGender = Gender.valueOf(gender);
 
-                User user = new User(email, name, userGender, phoneNumber, homeList, vehicleList, new ArrayList<>());
+                User user = new User(email, name, userGender, phoneNumber, homeList, vehicleList, emergencyContactList);
                 firebaseManager.addUser(userID, user, new FirebaseManager.OnTaskCompleteListener() {
                     @Override
                     public void onTaskSuccess(String message) {

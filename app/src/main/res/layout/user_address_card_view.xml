@@ -27,11 +27,12 @@
 
         <LinearLayout
             android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
 
             <TextView
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginRight="10dp"
                 android:id="@+id/addressTitle"
                 android:layout_width="match_parent"
@@ -41,8 +42,6 @@
                 android:padding="8dp"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
-
-
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -68,17 +67,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="5dp"
                 android:text="Set as default"
                 >
 
             </com.google.android.material.button.MaterialButton>
             </LinearLayout>
 
-
-
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/edit_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Edit"
+                    android:layout_weight="1"
+                    android:layout_marginRight="8dp"
+                    android:backgroundTint="@color/quantum_googgreen"/>
+                <Button
+                    android:id="@+id/delete_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Delete"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="8dp"
+                    android:backgroundTint="@color/light_orange_red"/>
+            </LinearLayout>
             </LinearLayout>
 
 

@@ -1,4 +1,4 @@
-package com.example.aber.Activities.Main.Fragment.Profile;
+package com.example.aber.Activities.Main.Fragment.Profile.Edit;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -20,23 +20,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.canhub.cropper.CropImageContract;
 import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
-import com.example.aber.Activities.Main.EditActivity.EditAddressActivity;
-import com.example.aber.Activities.Main.EditActivity.EditVehicleActivity;
+import com.example.aber.Activities.Main.Fragment.Profile.MainProfileFragment;
 import com.example.aber.FirebaseManager;
 
 import com.example.aber.Models.User.Gender;
 import com.example.aber.Models.User.SOS;
 import com.example.aber.Models.User.User;
 import com.example.aber.R;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,13 +50,14 @@ public class ProfileEditFragment extends Fragment {
     private User currentUser, originalUser;
     private FirebaseManager firebaseManager;
     private ProgressDialog progressDialog;
-    private EditText nameEditText, emailEditText, phoneEditText, addressEditText, plateEditText, sosEditText;
+    private EditText nameEditText, emailEditText, phoneEditText;
+    private TextView addressTextView, vehicleTextView, sosTextView;
     private ImageView backImageView, homeImageView, vehicleImageView, sosImageView;
     private RadioButton maleRadioButton, femaleRadiusButton;
     private CircleImageView avatar;
-    private Button uploadButton, editButton;
+    private MaterialButton uploadButton, editButton;
     private Bitmap cropped;
-    private CardView editAddressCardView, editVehicleCardView;
+    private CardView editAddressCardView, editVehicleCardView, editSOSCardVIew;
     private final ActivityResultLauncher<Intent> getImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
@@ -107,26 +108,65 @@ public class ProfileEditFragment extends Fragment {
         maleRadioButton = root.findViewById(R.id.radioButtonMale);
         femaleRadiusButton = root.findViewById(R.id.radioButtonFemale);
         phoneEditText = root.findViewById(R.id.phone);
-//        addressEditText = root.findViewById(R.id.address);
-//        plateEditText = root.findViewById(R.id.plate);
-        sosEditText = root.findViewById(R.id.sos_name);
+        addressTextView= root.findViewById(R.id.address);
+        vehicleTextView = root.findViewById(R.id.vehicle);
+        sosTextView = root.findViewById(R.id.sos_name);
         editButton = root.findViewById(R.id.edit_button);
         editAddressCardView = root.findViewById(R.id.defaultAddressCardView);
         editVehicleCardView = root.findViewById(R.id.defaultVehicleCardView);
+        editSOSCardVIew = root.findViewById(R.id.defaultSOSCardView);
 
         editAddressCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(requireContext(),EditAddressActivity.class));
-//                requireActivity().finish();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                HomeListFragment fragment = new HomeListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("previous", "Profile Edit");
+                fragment.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.fragment_main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
         editVehicleCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(requireContext(),EditVehicleActivity.class));
-//                requireActivity().finish();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                VehicleListFragment fragment = new VehicleListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("previous", "Profile Edit");
+                fragment.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.fragment_main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
+        editSOSCardVIew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                SOSListFragment fragment = new SOSListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("previous", "Profile Edit");
+                fragment.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.fragment_main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
@@ -164,7 +204,6 @@ public class ProfileEditFragment extends Fragment {
 
                     @Override
                     public void onProfileNotChanged() {
-
                         if (cropped != null) {
                             // Handle the case when only the avatar is changed
                             String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
@@ -246,13 +285,16 @@ public class ProfileEditFragment extends Fragment {
         emailEditText.setText(user.getEmail());
         setGenderFromRadiusButton(user);
         phoneEditText.setText(user.getPhoneNumber());
-
+        addressTextView.setText(user.getHomes().get(0).getAddress());
+        vehicleTextView.setText(user.getVehicles().get(0).getNumberPlate());
+        if (!user.getEmergencyContacts().isEmpty()) {
+            sosTextView.setText(user.getEmergencyContacts().get(0).getName());
+        }
 
         if (!user.getEmergencyContacts().isEmpty()) {
-            sosEditText.setText(user.getEmergencyContacts().get(0).getName());
+            sosTextView.setText(user.getEmergencyContacts().get(0).getName());
         }
     }
-
 
     private void setGenderFromRadiusButton(User user){
         if (user.getGender() == Gender.MALE) {
@@ -281,8 +323,8 @@ public class ProfileEditFragment extends Fragment {
 
 
         List<SOS> newList = new ArrayList<>();
-        if (!sosEditText.getText().toString().isEmpty()) {
-            SOS newSOS = new SOS(sosEditText.getText().toString(), "");
+        if (!sosTextView.getText().toString().isEmpty()) {
+            SOS newSOS = new SOS(sosTextView.getText().toString(), "");
             newList.add(newSOS);
         }
         editedUser.setEmergencyContacts(newList);
@@ -332,14 +374,6 @@ public class ProfileEditFragment extends Fragment {
             }
         });
     }
-
-
-
-    public void vehicleOnClick(View view) {
-        startActivity(new Intent(requireContext(), EditVehicleActivity.class));
-        requireActivity().finish();
-    }
-
 
     public interface OnProfileChangedListener {
         void onProfileChanged(String message);
