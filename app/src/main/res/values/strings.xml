@@ -9,7 +9,7 @@
     <string name="address">Address</string>
     <string name="aber">ABER</string>
     <string name="login">Login</string>
-    <string name="forgot_your_password">Forget password</string>
+    <string name="forgot_your_password">Forget password ?</string>
 
     <!-- About Us Page    -->
     <string name="heading_one">Our History</string>
