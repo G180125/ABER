@@ -83,8 +83,8 @@ public class RegisterHomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String address = addressEditText.getText().toString();
-
-                if (cropped != null && validateInputs(address)) {
+                validateInputs(address);
+                if (cropped != null) {
                     AndroidUtil.showLoadingDialog(progressDialog);
                     // Handle the case when only the avatar is changed
                     String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
@@ -144,6 +144,7 @@ public class RegisterHomeFragment extends Fragment {
 
     private boolean validateInputs(String address){
         if(address.isEmpty()){
+            addressEditText.setError("Address cannot be empty");
             showToast(requireContext(),"Address can not be empty");
             return false;
         }

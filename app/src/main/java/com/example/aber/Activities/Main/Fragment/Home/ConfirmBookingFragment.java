@@ -45,6 +45,8 @@ import com.stripe.android.paymentsheet.PaymentSheetResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class ConfirmBookingFragment extends Fragment {
@@ -260,7 +262,14 @@ public class ConfirmBookingFragment extends Fragment {
 
                 Booking booking = new Booking(address, home, "ETA", bookingTime, "", "", payment, sos, vehicle);
 
-                currentUser.getBookings().add(booking);
+                if(currentUser.getBookings() != null) {
+                    currentUser.getBookings().add(booking);
+                } else {
+                    List<Booking> newBookingList = new ArrayList<>();
+                    newBookingList.add(booking);
+                    currentUser.setBookings(newBookingList);
+                }
+
                 firebaseManager.updateUser(id, currentUser, new FirebaseManager.OnTaskCompleteListener() {
                     @Override
                     public void onTaskSuccess(String message) {

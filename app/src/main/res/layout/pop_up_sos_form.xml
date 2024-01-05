@@ -122,7 +122,7 @@
                             </androidx.cardview.widget.CardView>
 
                             <Button
-                                android:id="@+id/submitNewVehicleBtn"
+                                android:id="@+id/submitNewSOSBtn"
                                 android:layout_gravity="bottom"
                                 android:layout_marginHorizontal="10dp"
                                 android:layout_marginBottom="20dp"

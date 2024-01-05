@@ -1,6 +1,5 @@
 package com.example.aber.Activities.Register.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +13,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.aber.Activities.LoginActivity;
 import com.example.aber.R;
 
 public class RegisterProfileFragment extends Fragment {
-    private Button doneButton, loginButton;
-    private EditText nameEditText, phoneNumberEditText;
+    private Button doneButton;
+    private String userID, email, password;
+    private EditText nameEditText, phoneNumberEditText, genderSetError;
     private RadioGroup genderRadioGroup;
 
     @Override
@@ -27,8 +26,13 @@ public class RegisterProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_register_profile, container, false);
-
-        loginButton = root.findViewById(R.id.login_button);
+        Bundle args = getArguments();
+        if (args != null) {
+            userID = args.getString("userID", "");
+            email = args.getString("email", "");
+            password = args.getString("password","");
+        }
+        genderSetError = root.findViewById(R.id.set_error_edit_text);
         nameEditText = root.findViewById(R.id.name_edit_text);
         phoneNumberEditText = root.findViewById(R.id.phone_number_edit_text);
         genderRadioGroup = root.findViewById(R.id.radioGroupGender);
@@ -47,14 +51,6 @@ public class RegisterProfileFragment extends Fragment {
             }
         });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(requireContext(), LoginActivity.class));
-                requireActivity().finish();
-            }
-        });
-
         return root;
     }
 
@@ -69,27 +65,40 @@ public class RegisterProfileFragment extends Fragment {
         return null;
     }
 
-    private boolean validateInputs(String name, String phoneNumber, String gender){
-//        if (name.isEmpty() && !validatePhoneNumber(phoneNumber) && gender == null){
-//            showToast("Send nude");
-//            return false;
-//        }
-        if(name.isEmpty()){
-            showToast("Name can not be empty");
-            return false;
+    private boolean validateInputs(String name, String phoneNumber, String gender) {
+        StringBuilder errorMessage = new StringBuilder();
+
+        if (name.isEmpty()) {
+            errorMessage.append("Name cannot be empty\n");
         }
-        if(!validatePhoneNumber(phoneNumber)) {
-            showToast("Invalid phone number");
-            return false;
+
+        if (!validatePhoneNumber(phoneNumber)) {
+            errorMessage.append("Invalid phone number\n");
         }
+
         if (gender == null) {
-            showToast("Please select your gender");
+            errorMessage.append("Please select your gender\n");
+        }
+
+        // Display error messages for each field
+        if (errorMessage.length() > 0) {
+            showToast(errorMessage.toString().trim()); // Trim to remove trailing newline
+            if (name.isEmpty()) {
+                nameEditText.setError("Name cannot be empty");
+            }
+            if (!validatePhoneNumber(phoneNumber)) {
+                phoneNumberEditText.setError("Invalid phone number");
+            }
+            if (gender == null) {
+                genderSetError.setError("Please select your gender");
+            }
             return false;
         }
 
-        showToast("Finish Step 1/5");
+        showToast("Finish Step 2/5");
         return true;
     }
+
 
     private boolean validatePhoneNumber(String phoneNumber) {
         phoneNumber = phoneNumber.replaceAll("\\s", "");
@@ -109,6 +118,9 @@ public class RegisterProfileFragment extends Fragment {
         RegisterHomeFragment fragment = new RegisterHomeFragment();
 
         Bundle bundle = new Bundle();
+        bundle.putString("userID", userID);
+        bundle.putString("email", email);
+        bundle.putString("password", password);
         bundle.putString("name", name);
         bundle.putString("phoneNumber", phoneNumber);
         bundle.putString("gender", gender);

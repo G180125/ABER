@@ -101,6 +101,8 @@ public class UserHomeAdapter extends RecyclerView.Adapter<UserHomeAdapter.UserHo
                 defaultTextView.setText("");
             }
 
+            addressTextView.setSelected(true);
+
             FirebaseManager firebaseManager = new FirebaseManager();
             firebaseManager.retrieveImage(home.getImage(), new FirebaseManager.OnRetrieveImageListener() {
                 @Override

@@ -50,12 +50,14 @@ public class UserSOSAdapter extends RecyclerView.Adapter<UserSOSAdapter.UserSOSV
     }
 
     public class UserSOSViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTExtVIew;
+        TextView nameTextView, phoneTextView, defaultTextView;
         Button editButton, deleteButton;
         MaterialButton setDefaultButton;
         public UserSOSViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameTExtVIew = itemView.findViewById(R.id.isDefaultTextView);
+            defaultTextView = itemView.findViewById(R.id.isDefaultTextView);
+            nameTextView = itemView.findViewById(R.id.sos_name);
+            phoneTextView = itemView.findViewById(R.id.sos_phone_number);
             setDefaultButton = itemView.findViewById(R.id.setDefaultBtn);
             editButton = itemView.findViewById(R.id.edit_button);
             deleteButton = itemView.findViewById(R.id.delete_button);
@@ -83,7 +85,14 @@ public class UserSOSAdapter extends RecyclerView.Adapter<UserSOSAdapter.UserSOSV
         }
 
         public void bind(SOS sos, int position) {
-            nameTExtVIew.setText(sos.getName());
+            nameTextView.setText(sos.getName());
+            phoneTextView.setText(sos.getPhoneNumber());
+
+            if (position == 0) {
+                defaultTextView.setText("Default SOS");
+            } else {
+                defaultTextView.setText("");
+            }
         }
     }
 
