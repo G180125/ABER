@@ -275,6 +275,11 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
             public void onMapClick(@NonNull LatLng latLng) {
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng).title("Test");
+
+                // Remove the previous selected location
+                if (searchedLocation != null) {
+                    searchedLocation.remove();
+                }
                 searchedLocation = mMap.addMarker(markerOptions);
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));

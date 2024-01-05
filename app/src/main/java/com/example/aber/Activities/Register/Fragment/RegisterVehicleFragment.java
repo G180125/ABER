@@ -178,32 +178,52 @@ public class RegisterVehicleFragment extends Fragment {
 
     }
 
-    private boolean validateInputs(String brand, String name, String color, String selectedSeatCapacity, String plate){
-        if(brand.isEmpty()){
+    private boolean validateInputs(String brand, String name, String color, String selectedSeatCapacity, String plate) {
+        StringBuilder errorMessage = new StringBuilder();
+
+        if (brand.isEmpty()) {
+            errorMessage.append("Vehicle Brand can not be empty\n");
             vehicleBrandEditText.setError("Vehicle Brand can not be empty");
-            showToast(requireContext(),"Vehicle Brand can not be empty");
-            return false;
         }
-        if(name.isEmpty()){
+
+        if (name.isEmpty()) {
+            errorMessage.append("Vehicle Name can not be empty\n");
             vehicleNameEditText.setError("Vehicle Name can not be empty");
-            showToast(requireContext(),"Vehicle Name can not be empty");
-            return false;
         }
-        if(color.isEmpty()){
+
+        if (color.isEmpty()) {
+            errorMessage.append("Vehicle Color can not be empty\n");
             vehicleColorEditText.setError("Vehicle Color can not be empty");
-            showToast(requireContext(),"Vehicle Color can not be empty");
+        }
+
+        if (selectedSeatCapacity.isEmpty()) {
+            errorMessage.append("Vehicle Seat Capacity can not be empty\n");
+        } else {
+            try {
+                int seatCapacity = Integer.parseInt(selectedSeatCapacity);
+                if (seatCapacity <= 0) {
+                    errorMessage.append("Invalid Seat Capacity\n");
+                }
+            } catch (NumberFormatException e) {
+                errorMessage.append("Invalid Seat Capacity\n");
+            }
+        }
+
+        if (!validatePlate(plate)) {
+            errorMessage.append("Invalid Plate\n");
+        }
+
+        // Display error messages for each field
+        if (errorMessage.length() > 0) {
+            showToast(requireContext(), errorMessage.toString().trim()); // Trim to remove trailing newline
             return false;
         }
-        if(selectedSeatCapacity.isEmpty()){
-            showToast(requireContext(),"Vehicle Seat Capacity can not be empty");
-            return false;
-        }
-        if(!validatePlate(plate)){
-            return false;
-        }
-        showToast(requireContext(),"Finish Step 4/5");
+
+        showToast(requireContext(), "Finish Step 4/5");
         return true;
     }
+
+
 
     private boolean validatePlate(String plate) {
         String plateRegex = "^[0-9]{2}-[A-Z]\\s[0-9]{5}$";

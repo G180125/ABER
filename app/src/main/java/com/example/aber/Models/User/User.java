@@ -25,7 +25,7 @@ public class User {
 
     public User(){};
 
-    public User(String email, String name, Gender gender, String phoneNumber, List<Home> homes, List<Vehicle> vehicles, List<SOS> emergencyContacts) {
+    public User(String email, String name, Gender gender, String phoneNumber, List<Home> homes, List<Vehicle> vehicles, List<SOS> emergencyContacts, String stripeCusId) {
         this.email = email;
         this.name = name;
         this.gender = gender;
@@ -35,7 +35,7 @@ public class User {
         this.vehicles = vehicles;
         this.emergencyContacts = emergencyContacts;
         this.bookings = new ArrayList<>();
-        this.stripeCusId = "";
+        this.stripeCusId = stripeCusId;
         this.chattedDriver = new ArrayList<>();
 
     }
