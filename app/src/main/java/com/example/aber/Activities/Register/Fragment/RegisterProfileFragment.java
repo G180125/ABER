@@ -1,5 +1,6 @@
 package com.example.aber.Activities.Register.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +14,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.aber.Activities.LoginActivity;
 import com.example.aber.R;
 
 public class RegisterProfileFragment extends Fragment {
-    private Button doneButton;
-    private String userID, email, password;
+    private Button doneButton, loginButton;
     private EditText nameEditText, phoneNumberEditText;
     private RadioGroup genderRadioGroup;
 
@@ -26,13 +27,8 @@ public class RegisterProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_register_profile, container, false);
-        Bundle args = getArguments();
-        if (args != null) {
-            userID = args.getString("userID", "");
-            email = args.getString("email", "");
-            password = args.getString("password","");
-        }
 
+        loginButton = root.findViewById(R.id.login_button);
         nameEditText = root.findViewById(R.id.name_edit_text);
         phoneNumberEditText = root.findViewById(R.id.phone_number_edit_text);
         genderRadioGroup = root.findViewById(R.id.radioGroupGender);
@@ -48,6 +44,14 @@ public class RegisterProfileFragment extends Fragment {
                 if(validateInputs(name, phoneNumber, selectedGender)){
                     toRegisterHomeFragment(name, phoneNumber, selectedGender);
                 }
+            }
+        });
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(requireContext(), LoginActivity.class));
+                requireActivity().finish();
             }
         });
 
@@ -83,7 +87,7 @@ public class RegisterProfileFragment extends Fragment {
             return false;
         }
 
-        showToast("Finish Step 2/5");
+        showToast("Finish Step 1/5");
         return true;
     }
 
@@ -105,9 +109,6 @@ public class RegisterProfileFragment extends Fragment {
         RegisterHomeFragment fragment = new RegisterHomeFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putString("userID", userID);
-        bundle.putString("email", email);
-        bundle.putString("password", password);
         bundle.putString("name", name);
         bundle.putString("phoneNumber", phoneNumber);
         bundle.putString("gender", gender);

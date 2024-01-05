@@ -1,5 +1,6 @@
 package com.example.aber.Activities.Register.Fragment;
 
+import android.app.ProgressDialog;
 import android.media.Image;
 import android.os.Bundle;
 
@@ -13,26 +14,27 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.aber.R;
+import com.example.aber.Utils.AndroidUtil;
 
 public class RegisterHomeFragment extends Fragment {
     private Button doneButton;
-    private String userID, email, password, name, phoneNumber, gender;
+    private String name, phoneNumber, gender;
     private EditText addressEditText;
     private ImageView homeImageView;
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        progressDialog = new ProgressDialog(requireContext());
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_register_home, container, false);
         Bundle args = getArguments();
         if (args != null) {
-            userID = args.getString("userID", "");
-            email = args.getString("email", "");
-            password = args.getString("password","");
             name = args.getString("name", "");
             phoneNumber = args.getString("phoneNumber", "");
             gender = args.getString("gender", "");
@@ -47,6 +49,7 @@ public class RegisterHomeFragment extends Fragment {
             public void onClick(View v) {
                 String address = addressEditText.getText().toString();
                 String homeImage = "path";
+                AndroidUtil.showLoadingDialog(progressDialog);
                 if (validateInputs(address, homeImage)){
                     toRegisterVehicleFragment(address, homeImage);
                 }
@@ -59,13 +62,16 @@ public class RegisterHomeFragment extends Fragment {
     private boolean validateInputs(String address, String homeImage){
         if(address.isEmpty()){
             showToast("Address can not be empty");
+            AndroidUtil.hideLoadingDialog(progressDialog);
             return false;
         }
         if(homeImage.isEmpty()){
+            AndroidUtil.hideLoadingDialog(progressDialog);
             showToast("Failed to upload Image");
             return false;
         }
-        showToast("Finish Step 3/5");
+        AndroidUtil.hideLoadingDialog(progressDialog);
+        showToast("Finish Step 2/5");
         return true;
     }
 
@@ -73,9 +79,6 @@ public class RegisterHomeFragment extends Fragment {
         RegisterVehicleFragment fragment = new RegisterVehicleFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putString("userID", userID);
-        bundle.putString("email", email);
-        bundle.putString("password", password);
         bundle.putString("name", name);
         bundle.putString("phoneNumber", phoneNumber);
         bundle.putString("gender", gender);
