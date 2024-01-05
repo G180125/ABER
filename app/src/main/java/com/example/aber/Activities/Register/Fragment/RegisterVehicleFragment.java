@@ -180,14 +180,17 @@ public class RegisterVehicleFragment extends Fragment {
 
     private boolean validateInputs(String brand, String name, String color, String selectedSeatCapacity, String plate){
         if(brand.isEmpty()){
+            vehicleBrandEditText.setError("Vehicle Brand can not be empty");
             showToast(requireContext(),"Vehicle Brand can not be empty");
             return false;
         }
         if(name.isEmpty()){
+            vehicleNameEditText.setError("Vehicle Name can not be empty");
             showToast(requireContext(),"Vehicle Name can not be empty");
             return false;
         }
         if(color.isEmpty()){
+            vehicleColorEditText.setError("Vehicle Color can not be empty");
             showToast(requireContext(),"Vehicle Color can not be empty");
             return false;
         }
@@ -210,10 +213,12 @@ public class RegisterVehicleFragment extends Fragment {
             if (isValidProvinceNumber(provinceNumber)) {
                 return true;
             } else {
+                vehiclePlateEditText.setError("Invalid province number");
                 showToast(requireContext(),"Invalid province number");
                 return false;
             }
         } else {
+            vehiclePlateEditText.setError("Invalid plate format");
             showToast(requireContext(),"Invalid plate format");
             return false;
         }

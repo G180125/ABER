@@ -18,7 +18,7 @@ import com.example.aber.R;
 public class RegisterProfileFragment extends Fragment {
     private Button doneButton;
     private String userID, email, password;
-    private EditText nameEditText, phoneNumberEditText;
+    private EditText nameEditText, phoneNumberEditText, genderSetError;
     private RadioGroup genderRadioGroup;
 
     @Override
@@ -32,7 +32,7 @@ public class RegisterProfileFragment extends Fragment {
             email = args.getString("email", "");
             password = args.getString("password","");
         }
-
+        genderSetError = root.findViewById(R.id.set_error_edit_text);
         nameEditText = root.findViewById(R.id.name_edit_text);
         phoneNumberEditText = root.findViewById(R.id.phone_number_edit_text);
         genderRadioGroup = root.findViewById(R.id.radioGroupGender);
@@ -66,19 +66,19 @@ public class RegisterProfileFragment extends Fragment {
     }
 
     private boolean validateInputs(String name, String phoneNumber, String gender){
-//        if (name.isEmpty() && !validatePhoneNumber(phoneNumber) && gender == null){
-//            showToast("Send nude");
-//            return false;
-//        }
+
         if(name.isEmpty()){
+            nameEditText.setError("Name cannot be empty");
             showToast("Name can not be empty");
             return false;
         }
         if(!validatePhoneNumber(phoneNumber)) {
+            phoneNumberEditText.setError("Invalid phone number ");
             showToast("Invalid phone number");
             return false;
         }
         if (gender == null) {
+            genderSetError.setError("Please select yout gender");
             showToast("Please select your gender");
             return false;
         }

@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Main.Fragment.Profile.Edit.VehicleListFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".Activities.Main.Fragment.Profile.Edit.SOSListFragment">
 
     <ImageView
         android:id="@+id/buttonBack"
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="Vehicle List"
+        android:text="SOS List"
         android:gravity="center"
         android:textStyle="bold"
         android:textSize="30sp"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/vehicleRecyclerView"
+                android:id="@+id/sosRecyclerView"
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:text=" + New Vehicle"
+        android:text=" + New Emergency Contact"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginTop="10dp"

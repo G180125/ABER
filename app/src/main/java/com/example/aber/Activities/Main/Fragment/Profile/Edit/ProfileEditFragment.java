@@ -23,17 +23,15 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.canhub.cropper.CropImageContract;
 import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
-import com.example.aber.Activities.Main.Fragment.Profile.Edit.HomeListFragment;
 import com.example.aber.Activities.Main.Fragment.Profile.MainProfileFragment;
-import com.example.aber.Activities.Main.MainActivity;
 import com.example.aber.FirebaseManager;
 
-import com.example.aber.HelpActivity;
 import com.example.aber.Models.User.Gender;
 import com.example.aber.Models.User.SOS;
 import com.example.aber.Models.User.User;
@@ -52,13 +50,14 @@ public class ProfileEditFragment extends Fragment {
     private User currentUser, originalUser;
     private FirebaseManager firebaseManager;
     private ProgressDialog progressDialog;
-    private EditText nameEditText, emailEditText, phoneEditText, addressEditText, plateEditText, sosEditText;
+    private EditText nameEditText, emailEditText, phoneEditText;
+    private TextView addressTextView, vehicleTextView, sosTextView;
     private ImageView backImageView, homeImageView, vehicleImageView, sosImageView;
     private RadioButton maleRadioButton, femaleRadiusButton;
     private CircleImageView avatar;
     private MaterialButton uploadButton, editButton;
     private Bitmap cropped;
-    private CardView editAddressCardView, editVehicleCardView;
+    private CardView editAddressCardView, editVehicleCardView, editSOSCardVIew;
     private final ActivityResultLauncher<Intent> getImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
@@ -109,12 +108,13 @@ public class ProfileEditFragment extends Fragment {
         maleRadioButton = root.findViewById(R.id.radioButtonMale);
         femaleRadiusButton = root.findViewById(R.id.radioButtonFemale);
         phoneEditText = root.findViewById(R.id.phone);
-//        addressEditText = root.findViewById(R.id.address);
-//        plateEditText = root.findViewById(R.id.plate);
-        sosEditText = root.findViewById(R.id.sos_name);
+        addressTextView= root.findViewById(R.id.address);
+        vehicleTextView = root.findViewById(R.id.vehicle);
+        sosTextView = root.findViewById(R.id.sos_name);
         editButton = root.findViewById(R.id.edit_button);
         editAddressCardView = root.findViewById(R.id.defaultAddressCardView);
         editVehicleCardView = root.findViewById(R.id.defaultVehicleCardView);
+        editSOSCardVIew = root.findViewById(R.id.defaultSOSCardView);
 
         editAddressCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +123,12 @@ public class ProfileEditFragment extends Fragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-                fragmentTransaction.replace(R.id.fragment_main_container, new HomeListFragment());
+                HomeListFragment fragment = new HomeListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("previous", "Profile Edit");
+                fragment.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.fragment_main_container, fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
@@ -136,7 +141,30 @@ public class ProfileEditFragment extends Fragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-                fragmentTransaction.replace(R.id.fragment_main_container, new VehicleListFragment());
+                VehicleListFragment fragment = new VehicleListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("previous", "Profile Edit");
+                fragment.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.fragment_main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
+        editSOSCardVIew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                SOSListFragment fragment = new SOSListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("previous", "Profile Edit");
+                fragment.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.fragment_main_container, fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
@@ -257,10 +285,14 @@ public class ProfileEditFragment extends Fragment {
         emailEditText.setText(user.getEmail());
         setGenderFromRadiusButton(user);
         phoneEditText.setText(user.getPhoneNumber());
-
+        addressTextView.setText(user.getHomes().get(0).getAddress());
+        vehicleTextView.setText(user.getVehicles().get(0).getNumberPlate());
+        if (!user.getEmergencyContacts().isEmpty()) {
+            sosTextView.setText(user.getEmergencyContacts().get(0).getName());
+        }
 
         if (!user.getEmergencyContacts().isEmpty()) {
-            sosEditText.setText(user.getEmergencyContacts().get(0).getName());
+            sosTextView.setText(user.getEmergencyContacts().get(0).getName());
         }
     }
 
@@ -291,8 +323,8 @@ public class ProfileEditFragment extends Fragment {
 
 
         List<SOS> newList = new ArrayList<>();
-        if (!sosEditText.getText().toString().isEmpty()) {
-            SOS newSOS = new SOS(sosEditText.getText().toString(), "");
+        if (!sosTextView.getText().toString().isEmpty()) {
+            SOS newSOS = new SOS(sosTextView.getText().toString(), "");
             newList.add(newSOS);
         }
         editedUser.setEmergencyContacts(newList);

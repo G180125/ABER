@@ -1,10 +1,14 @@
 package com.example.aber.Activities.Register.Fragment;
 
+import static com.example.aber.Utils.AndroidUtil.showToast;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,24 +30,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RegisterSOSFragment extends Fragment {
-    private String userID, email, password, name, phoneNumber, gender, address, homeImage, brand, vehicleName, color, seat, plate, vehicleImage;
+    private String name, phoneNumber, gender, address, homeImage, brand, vehicleName, color, seat, plate, vehicleImage;
     private Button doneButton;
     private EditText sosNameEditText, sosPhoneNumberEditText;
-    private FirebaseManager firebaseManager;
-    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_register_sos, container, false);
-        firebaseManager = new FirebaseManager();
 
         Bundle args = getArguments();
         if (args != null) {
-            userID = args.getString("userID", "");
-            email = args.getString("email", "");
-            password = args.getString("password","");
             name = args.getString("name", "");
             phoneNumber = args.getString("phoneNumber", "");
             gender = args.getString("gender", "");
@@ -65,67 +63,46 @@ public class RegisterSOSFragment extends Fragment {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLoadingDialog();
-                List<String> vehicleImages = new ArrayList<>();
-                vehicleImages.add(vehicleImage);
-
-                List<Home> homeList = new ArrayList<>();
-                Home home = new Home(address, homeImage);
-                homeList.add(home);
-
-                List<Vehicle> vehicleList = new ArrayList<>();
-                Vehicle vehicle = new Vehicle(brand, vehicleName, color, seat, plate, vehicleImages);
-                vehicleList.add(vehicle);
-
                 String sosName = sosNameEditText.getText().toString();
                 String sosPhone = sosPhoneNumberEditText.getText().toString();
 
-                List<SOS> emergencyContactList = new ArrayList<>();
-                SOS emergencyContacts = new SOS(sosName, sosPhone);
-                emergencyContactList.add(emergencyContacts);
-
-                Gender userGender = Gender.valueOf(gender);
-
-                User user = new User(email, name, userGender, phoneNumber, homeList, vehicleList, emergencyContactList);
-                firebaseManager.addUser(userID, user, new FirebaseManager.OnTaskCompleteListener() {
-                    @Override
-                    public void onTaskSuccess(String message) {
-                        hideLoadingDialog();
-                        showToast(message);
-                        startActivity(new Intent(requireContext(), LoginActivity.class).putExtra("email", email).putExtra("password", password));
-                        requireActivity().finish();
-                    }
-
-                    @Override
-                    public void onTaskFailure(String message) {
-                        hideLoadingDialog();
-                        showToast(message);
-                    }
-                });
+                showToast(requireContext(),"Finish Step 4/5");
+                toRegisterAccountFragment(sosName, sosPhone);
             }
         });
 
         return root;
     }
 
-    private void showLoadingDialog() {
-        requireActivity().runOnUiThread(() -> {
-            progressDialog = new ProgressDialog(requireContext());
-            progressDialog.setMessage("Loading...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        });
-    }
+    private void toRegisterAccountFragment(String sosName, String sosPhone){
+        RegisterAccountFragment fragment = new RegisterAccountFragment();
 
-    private void hideLoadingDialog() {
-        requireActivity().runOnUiThread(() -> {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
-        });
-    }
+        Bundle bundle = new Bundle();
+        bundle.putString("name", name);
+        bundle.putString("phoneNumber", phoneNumber);
+        bundle.putString("gender", gender);
+        bundle.putString("address", address);
+        bundle.putString("homeImage", homeImage);
+        bundle.putString("brand", brand);
+        bundle.putString("vehicleName", vehicleName);
+        bundle.putString("color", color);
+        bundle.putString("seat", seat);
+        bundle.putString("plate", plate);
+        bundle.putString("vehicleImage", vehicleImage);
+        bundle.putString("sosName", sosName);
+        bundle.putString("sosPhone", sosPhone);
+        fragment.setArguments(bundle);
 
-    private void showToast(String message){
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_right,
+                R.anim.slide_out_left
+        );
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

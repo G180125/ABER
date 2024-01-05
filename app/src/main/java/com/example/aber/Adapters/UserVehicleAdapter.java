@@ -62,7 +62,7 @@ public class UserVehicleAdapter extends RecyclerView.Adapter<UserVehicleAdapter.
         public UserVehicleViewHolder(@NonNull View itemView) {
             super(itemView);
             plateTextView = itemView.findViewById(R.id.vehiclePlate);
-            imageView = itemView.findViewById(R.id.dishImageView);
+            imageView = itemView.findViewById(R.id.vehicleImageView);
             cardView = itemView.findViewById(R.id.address_list_container);
             setDefaultButton = itemView.findViewById(R.id.setDefaultBtn);
             editButton = itemView.findViewById(R.id.edit_button);
@@ -94,7 +94,7 @@ public class UserVehicleAdapter extends RecyclerView.Adapter<UserVehicleAdapter.
 
             defaultTextView = itemView.findViewById(R.id.isDefaultTextView);
             // Check if the list is not empty before accessing elements
-            if (!vehicleList.isEmpty() && defaultTextView != null) {
+            if (vehicleList != null && !vehicleList.isEmpty() && defaultTextView != null) {
                 // Set defaultTextView based on position
                 if (position == 0) {
                     defaultTextView.setText("Default Vehicle");
@@ -107,7 +107,7 @@ public class UserVehicleAdapter extends RecyclerView.Adapter<UserVehicleAdapter.
 
             FirebaseManager firebaseManager = new FirebaseManager();
             // Check if the vehicle has images before retrieving the image
-            if (!vehicle.getImages().isEmpty()) {
+            if (vehicle.getImages() != null && !vehicle.getImages().isEmpty()) {
                 firebaseManager.retrieveImage(vehicle.getImages().get(0), new FirebaseManager.OnRetrieveImageListener() {
                     @Override
                     public void onRetrieveImageSuccess(Bitmap bitmap) {

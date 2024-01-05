@@ -23,10 +23,10 @@
             android:name=".AboutUsActivity"
             android:exported="false" />
         <activity
-            android:name=".DriverChatActivity"
+            android:name=".Activities.Main.Fragment.Chat.DriverChatActivity"
             android:exported="false" />
         <activity
-            android:name=".HelpActivity"
+            android:name=".Activities.Main.Fragment.Profile.HelpActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.SplashActivity"
@@ -37,6 +37,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.canhub.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"
+            />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

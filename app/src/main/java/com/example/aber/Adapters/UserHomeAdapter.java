@@ -69,8 +69,6 @@ public class UserHomeAdapter extends RecyclerView.Adapter<UserHomeAdapter.UserHo
 
 
             setDefaultButton.setOnClickListener(new View.OnClickListener() {
-
-                @SuppressLint("SetTextI18n")
                 @Override
                 public void onClick(View v) {
 
@@ -102,6 +100,8 @@ public class UserHomeAdapter extends RecyclerView.Adapter<UserHomeAdapter.UserHo
             } else {
                 defaultTextView.setText("");
             }
+
+            addressTextView.setSelected(true);
 
             FirebaseManager firebaseManager = new FirebaseManager();
             firebaseManager.retrieveImage(home.getImage(), new FirebaseManager.OnRetrieveImageListener() {

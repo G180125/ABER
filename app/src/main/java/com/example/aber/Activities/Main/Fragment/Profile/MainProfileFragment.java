@@ -25,7 +25,6 @@ import com.example.aber.Activities.LoginActivity;
 import com.example.aber.Activities.Main.Fragment.AboutUs.AboutUsActivity;
 import com.example.aber.Activities.Main.Fragment.Profile.Edit.ProfileEditFragment;
 import com.example.aber.FirebaseManager;
-import com.example.aber.HelpActivity;
 import com.example.aber.Models.User.User;
 import com.example.aber.R;
 

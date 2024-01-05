@@ -12,6 +12,7 @@ import com.example.aber.Models.Staff.Admin;
 import com.example.aber.Models.Staff.Driver;
 import com.example.aber.Models.Staff.Staff;
 import com.example.aber.Models.User.User;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
@@ -39,6 +40,7 @@ public class FirebaseManager {
     public final String COLLECTION_USERS = "users";
     public final String COLLECTION_DRIVERS = "drivers";
     public final String COLLECTION_CHATS = "Chats";
+    public final String COLLECTION_BOOKINGS = "Bookings";
     public final String COLLECTION_ADMINS = "admins";
     public final String COLLECTION_DRIVER = "drivers";
     public final String DOCUMENTID = "documentID";
@@ -143,15 +145,21 @@ public class FirebaseManager {
         final long ONE_MEGABYTE = 1024 * 1024;
 
         new Thread(() -> {
-            this.storageRef.child(path)
-                    .getBytes(ONE_MEGABYTE)
-                    .addOnSuccessListener(bytes -> {
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        listener.onRetrieveImageSuccess(bitmap);
-                    })
-                    .addOnFailureListener(exception -> {
-                        listener.onRetrieveImageFailure("Error: " + exception.getMessage());
-                    });
+            // Check if the path is null or empty before creating the StorageReference
+            if (path != null && !path.isEmpty()) {
+                this.storageRef.child(path)
+                        .getBytes(ONE_MEGABYTE)
+                        .addOnSuccessListener(bytes -> {
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            listener.onRetrieveImageSuccess(bitmap);
+                        })
+                        .addOnFailureListener(exception -> {
+                            listener.onRetrieveImageFailure("Error: " + exception.getMessage());
+                        });
+            } else {
+                // Handle the case where path is null or empty
+                listener.onRetrieveImageFailure("Error: Image path is null or empty");
+            }
         }).start();
     }
 
@@ -180,6 +188,16 @@ public class FirebaseManager {
                 .setValue(hashMap);
     }
 
+    public void addBooking(String userID, Booking booking){
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("user", userID);
+        hashMap.put("booking", booking);
+
+        this.database.getReference().child(COLLECTION_BOOKINGS)
+                .push()
+                .setValue(hashMap);
+    }
+
     public void readMessage(final String myID, final String userID, OnReadingMessageListener listener){
         List<MyMessage> messageList = new ArrayList<>();
 
@@ -203,6 +221,45 @@ public class FirebaseManager {
 
             }
         });
+    }
+
+    public void updateCurrentLocation(LatLng latLng, String time, String id){
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("Latlng", latLng);
+        hashMap.put("time", time);
+
+        this.database.getReference().child(id)
+                .push()
+                .setValue(hashMap);
+    }
+
+    public LatLng getLatestLocation(String userId) {
+        final LatLng[] latestLocation = {null};
+
+        DatabaseReference reference = this.database.getReference(userId);
+        reference.limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot s : snapshot.getChildren()) {
+                    HashMap<String, Object> data = (HashMap<String, Object>) s.getValue();
+                    if (data != null && data.containsKey("Latlng")) {
+                        HashMap<String, Double> latLngData = (HashMap<String, Double>) data.get("Latlng");
+                        if (latLngData != null && latLngData.containsKey("latitude") && latLngData.containsKey("longitude")) {
+                            double latitude = latLngData.get("latitude");
+                            double longitude = latLngData.get("longitude");
+                            latestLocation[0] = new LatLng(latitude, longitude);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle the error
+            }
+        });
+
+        return latestLocation[0];
     }
 
     public void getDriverByID(String driverID, OnFetchListener<Driver> listener) {
@@ -252,6 +309,11 @@ public class FirebaseManager {
 
     public interface OnFetchListener<T> {
         void onFetchSuccess(T object);
+        void onFetchFailure(String message);
+    }
+
+    public interface OnFetchListListener<T>{
+        void onFetchSuccess(List<T> object);
         void onFetchFailure(String message);
     }
 

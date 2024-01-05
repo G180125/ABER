@@ -20,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
-                android:text="Register"
+                android:text="Account"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -32,11 +32,6 @@
                 android:text="(Required)"
                 android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/login_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Login" />
         </LinearLayout>
 
         <LinearLayout
@@ -50,19 +45,19 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/count_gray"/>
+                android:src="@drawable/count_green"/>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/count_gray"/>
+                android:src="@drawable/count_green"/>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/count_gray"/>
+                android:src="@drawable/count_green"/>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/count_gray"/>
+                android:src="@drawable/count_green"/>
         </LinearLayout>
 
         <androidx.cardview.widget.CardView

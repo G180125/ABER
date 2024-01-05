@@ -1,22 +1,18 @@
 package com.example.aber.Activities.Main.Fragment.Chat;
 
-import android.app.ProgressDialog;
-import android.graphics.Bitmap;
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
+import android.app.ProgressDialog;
+import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.aber.Activities.Main.Fragment.Chat.DriverChatListFragment;
 import com.example.aber.Adapters.MessageAdapter;
 import com.example.aber.FirebaseManager;
 import com.example.aber.Models.Message.MyMessage;
@@ -31,7 +27,7 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ChatDetailFragment extends Fragment {
+public class DriverChatActivity extends AppCompatActivity {
     private String id;
     private User currentUser;
     private Driver currentDriver;
@@ -45,24 +41,24 @@ public class ChatDetailFragment extends Fragment {
     private MessageAdapter messageAdapter;
     private List<MyMessage> messageList;
     private RecyclerView recyclerView;
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        progressDialog = new ProgressDialog(requireContext());
+    protected void onCreate(Bundle savedInstanceState) {
+        progressDialog = new ProgressDialog(DriverChatActivity.this);
         AndroidUtil.showLoadingDialog(progressDialog);
-        // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.activity_driver_chat, container, false);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_driver_chat);
+
         firebaseManager = new FirebaseManager();
         currentUser = new User();
         currentDriver = new Driver();
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            id = bundle.getString("driverID");
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey("driverID")) {
+            id = extras.getString("driverID");
         }
-        recyclerView = root.findViewById(R.id.recycler_message);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        recyclerView = findViewById(R.id.recycler_message);
+        recyclerView.setLayoutManager(new LinearLayoutManager(DriverChatActivity.this));
 
         // Initialize messageAdapter with an empty list and a placeholder avatar
         messageAdapter = new MessageAdapter(new ArrayList<>(), null);
@@ -70,11 +66,11 @@ public class ChatDetailFragment extends Fragment {
 
         fetchDriver(id);
 
-        backImageView = root.findViewById(R.id.back);
-        avatar = root.findViewById(R.id.avatar);
-        nameTextView = root.findViewById(R.id.name);
-        sendText = root.findViewById(R.id.send_text);
-        sendButton = root.findViewById(R.id.send_button);
+        backImageView = findViewById(R.id.back);
+        avatar = findViewById(R.id.avatar);
+        nameTextView = findViewById(R.id.name);
+        sendText = findViewById(R.id.send_text);
+        sendButton = findViewById(R.id.send_button);
 
         firebaseManager.readMessage(
                 Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid(), id, new FirebaseManager.OnReadingMessageListener() {
@@ -88,10 +84,7 @@ public class ChatDetailFragment extends Fragment {
         backImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_main_chat_container, new DriverChatListFragment())
-                        .addToBackStack(null)
-                        .commit();
+                finish();
             }
         });
 
@@ -103,14 +96,12 @@ public class ChatDetailFragment extends Fragment {
                     String sender = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
                     firebaseManager.sendMessage(sender, id, message);
                 } else {
-                    AndroidUtil.showToast(requireContext(),"You haven't typed anything");
+                    AndroidUtil.showToast(DriverChatActivity.this,"You haven't typed anything");
                 }
                 sendText.setText("");
             }
 
         });
-
-        return root;
     }
 
     private void fetchDriver(String id){
@@ -124,7 +115,7 @@ public class ChatDetailFragment extends Fragment {
             @Override
             public void onFetchFailure(String message) {
                 AndroidUtil.hideLoadingDialog(progressDialog);
-                AndroidUtil.showToast(requireContext(), message);
+                AndroidUtil.showToast(DriverChatActivity.this, message);
             }
         });
     }
@@ -140,7 +131,7 @@ public class ChatDetailFragment extends Fragment {
 
             @Override
             public void onRetrieveImageFailure(String message) {
-                AndroidUtil.showToast(requireContext(), message);
+                AndroidUtil.showToast(DriverChatActivity.this, message);
                 AndroidUtil.hideLoadingDialog(progressDialog);
             }
         });

@@ -1,13 +1,10 @@
-package com.example.aber;
+package com.example.aber.Activities.Main.Fragment.Profile;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
@@ -16,11 +13,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.aber.Activities.Main.Fragment.Chat.DriverChatListFragment;
-import com.example.aber.Activities.Main.Fragment.Profile.MainProfileFragment;
-import com.example.aber.Activities.Main.MainActivity;
 import com.example.aber.Adapters.MessageAdapter;
+import com.example.aber.FirebaseManager;
 import com.example.aber.Models.Message.MyMessage;
+import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
 
 import java.util.ArrayList;

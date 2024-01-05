@@ -28,7 +28,7 @@ public class RegisterAccountFragment extends Fragment {
                     "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
     private final Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-    private Button doneButton, loginButton;
+    private Button doneButton;
     private EditText emailEditText, passwordEditText, confirmPasswordEditText;
     private FirebaseManager firebaseManager;
     private ProgressDialog progressDialog;
@@ -41,7 +41,7 @@ public class RegisterAccountFragment extends Fragment {
         firebaseManager = new FirebaseManager();
 
         doneButton = root.findViewById(R.id.done_button);
-        loginButton = root.findViewById(R.id.login_button);
+
         emailEditText = root.findViewById(R.id.email_edit_text);
         passwordEditText = root.findViewById(R.id.password_edit_text);
         confirmPasswordEditText = root.findViewById(R.id.confirm_password_edit_text);
@@ -61,7 +61,7 @@ public class RegisterAccountFragment extends Fragment {
                             String userID = message;
                             hideLoadingDialog();
                             showToast("Finish Step 1/5");
-                            toRegisterProfileFragment(email, password, userID);
+//                            toRegisterProfileFragment(email, password, userID);
                         }
 
                         @Override
@@ -76,13 +76,7 @@ public class RegisterAccountFragment extends Fragment {
             }
         });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(requireContext(), LoginActivity.class));
-                requireActivity().finish();
-            }
-        });
+
 
         return root;
     }
@@ -90,14 +84,17 @@ public class RegisterAccountFragment extends Fragment {
     private boolean validateInputs(String email, String password, String confirmPassword){
 
         if (!isValidEmail(email)){
+            emailEditText.setError("Invalid Email");
             showToast("Invalid Email");
             return false;
         }
         if(password.length() < 6){
+            passwordEditText.setError("Password must have at least 6 characters");
             showToast("Password must have at least 6 characters");
             return false;
         }
         if(!password.equals(confirmPassword)){
+            confirmPasswordEditText.setError("Passwords are not matching");
             showToast("Passwords are not matching");
             return false;
         }
@@ -109,28 +106,28 @@ public class RegisterAccountFragment extends Fragment {
         return matcher.matches();
     }
 
-    private void toRegisterProfileFragment(String email, String password, String userID){
-        RegisterProfileFragment fragment = new RegisterProfileFragment();
-
-        Bundle bundle = new Bundle();
-        bundle.putString("userID", userID);
-        bundle.putString("email", email);
-        bundle.putString("password", password);
-        fragment.setArguments(bundle);
-
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(
-                R.anim.slide_in_right,
-                R.anim.slide_out_left,
-                R.anim.slide_in_right,
-                R.anim.slide_out_left
-        );
-
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
+//    private void toRegisterProfileFragment(String email, String password, String userID){
+//        RegisterProfileFragment fragment = new RegisterProfileFragment();
+//
+//        Bundle bundle = new Bundle();
+//        bundle.putString("userID", userID);
+//        bundle.putString("email", email);
+//        bundle.putString("password", password);
+//        fragment.setArguments(bundle);
+//
+//        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.setCustomAnimations(
+//                R.anim.slide_in_right,
+//                R.anim.slide_out_left,
+//                R.anim.slide_in_right,
+//                R.anim.slide_out_left
+//        );
+//
+//        fragmentTransaction.replace(R.id.fragment_container, fragment);
+//        fragmentTransaction.addToBackStack(null);
+//        fragmentTransaction.commit();
+//    }
 
     private void showLoadingDialog() {
         requireActivity().runOnUiThread(() -> {

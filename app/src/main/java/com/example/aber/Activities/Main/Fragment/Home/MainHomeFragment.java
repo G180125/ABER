@@ -1,10 +1,15 @@
 package com.example.aber.Activities.Main.Fragment.Home;
 
+import static com.example.aber.Utils.AndroidUtil.hideLoadingDialog;
+import static com.example.aber.Utils.AndroidUtil.showLoadingDialog;
+import static com.example.aber.Utils.AndroidUtil.showToast;
+
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,6 +28,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.aber.Adapters.InfoWindowViewHolder;
 import com.example.aber.FirebaseManager;
+
 import android.Manifest;
 
 import android.widget.Toast;
@@ -50,17 +56,20 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
 
-public class MainHomeFragment extends Fragment implements OnMapReadyCallback{
     private static final String API_KEY = "AIzaSyAk79eOlfksqlm74wCmRbY_yddK75iZ4dM";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private GoogleMap mMap;
+
     private FusedLocationProviderClient fusedLocationClient;
     private FirebaseManager firebaseManager;
     private ProgressDialog progressDialog;
@@ -68,19 +77,21 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback{
     private LatLng currentLocation;
     private Marker searchedLocation;
     private Place searchedPlace;
+    private LocationRequest mLocationRequest;
 
-    private FloatingActionButton mapTypeButton,currentLocationButton;
+    private FloatingActionButton mapTypeButton, currentLocationButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        showLoadingDialog();
+        progressDialog = new ProgressDialog(requireContext());
+        showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_main_home, container, false);
         firebaseManager = new FirebaseManager();
 
         // Initialize the SDK
-        if(!Places.isInitialized()) {
+        if (!Places.isInitialized()) {
             Places.initializeWithNewPlacesApiEnabled(requireContext(), API_KEY);
         }
 
@@ -98,21 +109,17 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback{
             @Override
             public void onClick(View v) {
                 PopupMenu popupMenu = new PopupMenu(requireContext(), v);
-                popupMenu.getMenuInflater().inflate(R.menu.map_type_menu,popupMenu.getMenu());
+                popupMenu.getMenuInflater().inflate(R.menu.map_type_menu, popupMenu.getMenu());
                 popupMenu.setGravity(Gravity.END);
 
-                
-
-
                 popupMenu.setOnMenuItemClickListener(item -> {
-                    if (item.getItemId() == R.id.buttonNormal){
+                    if (item.getItemId() == R.id.buttonNormal) {
                         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                         Log.d("TAG", "Map Type : " + mMap.getMapType());
                         mMap.setIndoorEnabled(true);
                     } else if (item.getItemId() == R.id.buttonSatellite) {
                         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                         Log.d("TAG", "Map Type : " + mMap.getMapType());
-                        
                     } else if (item.getItemId() == R.id.buttonHybrid) {
                         mMap.setIndoorEnabled(false);
                         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
@@ -123,11 +130,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback{
                 });
                 popupMenu.show();
             }
-
         });
-
-
-
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
@@ -147,10 +150,10 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback{
                 @Override
                 public void onPlaceSelected(@NonNull Place place) {
                     searchedPlace = place;
-                    showLoadingDialog();
+                    showLoadingDialog(progressDialog);
                     String id = place.getId();
 
-                    //Remove the previous searched location
+                    // Remove the previous searched location
                     if (searchedLocation != null) {
                         searchedLocation.remove();
                     }
@@ -163,21 +166,20 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback{
                     mMap.animateCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
                     searchedLocation.showInfoWindow();
 
-                    hideLoadingDialog();
+                    hideLoadingDialog(progressDialog);
 
-                    //TODO: I want to display the custom info window on top of the marker
+                    // TODO: Display the custom info window on top of the marker
                 }
 
                 @Override
                 public void onError(@NonNull Status status) {
-                    showToast("Error: " + status);
+                    showToast(requireContext(), "Error: " + status);
                     Log.d("error", "Error: " + status);
                 }
             });
         } else {
-            showToast("AutocompleteFragment is null");
+            showToast(requireContext(), "AutocompleteFragment is null");
         }
-
 
         return root;
     }
@@ -185,8 +187,29 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.getUiSettings().setZoomControlsEnabled(true);
 
+
+        if (ActivityCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            // Enable the "My Location" button and display the blue dot on the map
+            mMap.setMyLocationEnabled(true);
+
+            // Set the "My Location" button to be visible
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+            // Your existing code for setting up the map and markers...
+        } else {
+            // If permissions are not granted, request them
+            requestPermissions(new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+            }, LOCATION_PERMISSION_REQUEST_CODE);
+        }
+
+        mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoContents(Marker marker) {
@@ -238,11 +261,14 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback{
 
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                AndroidUtil.replaceFragment(fragment, fragmentManager, fragmentTransaction, R.id.fragment_main_container);            }
+                AndroidUtil.replaceFragment(fragment, fragmentManager, fragmentTransaction, R.id.fragment_main_container);
+            }
         });
 
         getCurrentLocation();
-        hideLoadingDialog();
+        hideLoadingDialog(progressDialog);
+
+//        startLocationUpdate();
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -273,7 +299,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback{
                     if (locationResult.getLastLocation() != null) {
                         currentLocation = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
 
-                        mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location"));
+//                        mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location"));
                         focusOnLocation(currentLocation);
 
                         fusedLocationClient.removeLocationUpdates(this);
@@ -288,29 +314,46 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback{
         }
     }
 
-    private void focusOnLocation(LatLng location){
+
+    private void focusOnLocation(LatLng location) {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+        String id = firebaseManager.mAuth.getCurrentUser().getUid();
+
+        if (isLocationChanged(location, id)) {
+            firebaseManager.updateCurrentLocation(location, getCurrentDateTime(), id);
+        }
     }
 
-    private void showLoadingDialog() {
-        requireActivity().runOnUiThread(() -> {
-            progressDialog = new ProgressDialog(requireContext());
-            progressDialog.setMessage("Loading...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        });
-    }
+    private void startLocationUpdate() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(30 * 1000); // 30s
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        fusedLocationClient.requestLocationUpdates(mLocationRequest, new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                LatLng latLng = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
 
-    private void hideLoadingDialog() {
-        requireActivity().runOnUiThread(() -> {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
+                focusOnLocation(latLng);
             }
-        });
+        }, null);
     }
 
-    private void showToast(String message){
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+    public static String getCurrentDateTime() {
+        Date currentDate = new Date();
+
+        String pattern = "yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
+
+        return simpleDateFormat.format(currentDate);
+    }
+
+    private boolean isLocationChanged(LatLng newLocation, String userId) {
+        LatLng latestLocation = firebaseManager.getLatestLocation(userId);
+
+        return latestLocation == null || !latestLocation.equals(newLocation);
     }
 }
