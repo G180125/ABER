@@ -6,52 +6,47 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="30dp"
+        app:cardCornerRadius="20dp"
 
         >
     <LinearLayout
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="200dp"
-            android:layout_height="125dp"
-            android:layout_gravity="center_horizontal">
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/shapeableIVBackground"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY">
-            </com.google.android.material.imageview.ShapeableImageView>
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
 
 
-        </RelativeLayout>
 
         <TextView
             android:id="@+id/textViewName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:layout_marginLeft="5dp"
             android:text="Name"
             android:textSize="17dp"
+            android:padding="5dp"
             android:textStyle="bold"
             android:paddingVertical="5dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:src="@drawable/location"
                 android:paddingRight="5dp"/>
             <TextView
                 android:id="@+id/textViewAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:text="814/37 Hẻm 814 Sư Vạn Hạnh, Phường 12, Quận 10, Thành phố Hồ Chí Minh, Vietnam"
                 android:textSize="13dp"
+                android:padding="5dp"
                 android:textColor="@color/black"
                 android:textStyle="normal"/>
         </LinearLayout>
@@ -64,10 +59,12 @@
         </RelativeLayout>
 
         <Button
+            android:layout_gravity="center"
             android:id="@+id/book_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Book now"/>
+            android:text="Book now"
+            android:layout_margin="5dp"/>
     </LinearLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

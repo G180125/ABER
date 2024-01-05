@@ -125,9 +125,14 @@ public class SOSListFragment extends Fragment implements UserSOSAdapter.Recycler
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void updateUI(List<SOS> sosList){
-        adapter.setSosList(sosList);
-        adapter.notifyDataSetChanged();
+    private void updateUI(List<SOS> sosList) {
+        if (sosList != null) {
+            adapter.setSosList(sosList);
+            adapter.notifyDataSetChanged();
+        } else {
+            adapter.setSosList(new ArrayList<>());
+            adapter.notifyDataSetChanged();
+        }
         AndroidUtil.hideLoadingDialog(progressBar);
     }
 
@@ -184,7 +189,7 @@ public class SOSListFragment extends Fragment implements UserSOSAdapter.Recycler
         TextView titleTextView = popupView.findViewById(R.id.title);
         EditText phoneEditText = popupView.findViewById(R.id.phone_edit_text);
         EditText nameEditText = popupView.findViewById(R.id.name_edit_text);
-        Button submitButton = popupView.findViewById(R.id.submitNewVehicleBtn);
+        Button submitButton = popupView.findViewById(R.id.submitNewSOSBtn);
         ImageView cancelBtn = popupView.findViewById(R.id.cancelBtn);
 
         titleTextView.setText(title);
@@ -209,8 +214,8 @@ public class SOSListFragment extends Fragment implements UserSOSAdapter.Recycler
                 String phone = phoneEditText.getText().toString();
                 String name = nameEditText.getText().toString();
 
-                if (title.equals("Edit Vehicle")) {
-                    // Update existing home
+                if (title.equals("Edit SOS")) {
+                    // Update existing SOS
                     if (sos != null) {
                         sos.setName(name);
                         sos.setPhoneNumber(phone);

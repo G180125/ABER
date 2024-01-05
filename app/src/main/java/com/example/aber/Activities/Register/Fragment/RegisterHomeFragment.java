@@ -144,6 +144,7 @@ public class RegisterHomeFragment extends Fragment {
 
     private boolean validateInputs(String address){
         if(address.isEmpty()){
+            addressEditText.setError("Address cannot be empty");
             showToast(requireContext(),"Address can not be empty");
             return false;
         }
