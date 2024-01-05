@@ -81,25 +81,33 @@ public class RegisterAccountFragment extends Fragment {
         return root;
     }
 
-    private boolean validateInputs(String email, String password, String confirmPassword){
+    private boolean validateInputs(String email, String password, String confirmPassword) {
+        StringBuilder errorMessage = new StringBuilder();
 
-        if (!isValidEmail(email)){
+        if (!isValidEmail(email)) {
+            errorMessage.append("Invalid Email\n");
             emailEditText.setError("Invalid Email");
-            showToast("Invalid Email");
-            return false;
         }
-        if(password.length() < 6){
+
+        if (password.length() < 6) {
+            errorMessage.append("Password must have at least 6 characters\n");
             passwordEditText.setError("Password must have at least 6 characters");
-            showToast("Password must have at least 6 characters");
-            return false;
         }
-        if(!password.equals(confirmPassword)){
+
+        if (!password.equals(confirmPassword)) {
+            errorMessage.append("Passwords are not matching\n");
             confirmPasswordEditText.setError("Passwords are not matching");
-            showToast("Passwords are not matching");
+        }
+
+        // Display error messages for each field
+        if (errorMessage.length() > 0) {
+            showToast(errorMessage.toString().trim());
             return false;
         }
+
         return true;
     }
+
 
     private boolean isValidEmail(String email) {
         Matcher matcher = pattern.matcher(email);

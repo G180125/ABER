@@ -65,27 +65,40 @@ public class RegisterProfileFragment extends Fragment {
         return null;
     }
 
-    private boolean validateInputs(String name, String phoneNumber, String gender){
+    private boolean validateInputs(String name, String phoneNumber, String gender) {
+        StringBuilder errorMessage = new StringBuilder();
 
-        if(name.isEmpty()){
-            nameEditText.setError("Name cannot be empty");
-            showToast("Name can not be empty");
-            return false;
+        if (name.isEmpty()) {
+            errorMessage.append("Name cannot be empty\n");
         }
-        if(!validatePhoneNumber(phoneNumber)) {
-            phoneNumberEditText.setError("Invalid phone number ");
-            showToast("Invalid phone number");
-            return false;
+
+        if (!validatePhoneNumber(phoneNumber)) {
+            errorMessage.append("Invalid phone number\n");
         }
+
         if (gender == null) {
-            genderSetError.setError("Please select yout gender");
-            showToast("Please select your gender");
+            errorMessage.append("Please select your gender\n");
+        }
+
+        // Display error messages for each field
+        if (errorMessage.length() > 0) {
+            showToast(errorMessage.toString().trim()); // Trim to remove trailing newline
+            if (name.isEmpty()) {
+                nameEditText.setError("Name cannot be empty");
+            }
+            if (!validatePhoneNumber(phoneNumber)) {
+                phoneNumberEditText.setError("Invalid phone number");
+            }
+            if (gender == null) {
+                genderSetError.setError("Please select your gender");
+            }
             return false;
         }
 
         showToast("Finish Step 2/5");
         return true;
     }
+
 
     private boolean validatePhoneNumber(String phoneNumber) {
         phoneNumber = phoneNumber.replaceAll("\\s", "");
