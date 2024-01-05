@@ -20,9 +20,6 @@
             android:name=".Activities.Main.Fragment.AboutUs.AboutUsActivity"
             android:exported="false" />
         <activity
-            android:name=".AboutUsActivity"
-            android:exported="false" />
-        <activity
             android:name=".Activities.Main.Fragment.Chat.DriverChatActivity"
             android:exported="false" />
         <activity
