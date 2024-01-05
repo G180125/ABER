@@ -3,6 +3,7 @@ package com.example.aber.Activities.Register.Fragment;
 import static com.example.aber.Utils.AndroidUtil.showToast;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,15 +31,17 @@ import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
 import com.example.aber.FirebaseManager;
 import com.example.aber.R;
+import com.example.aber.Utils.AndroidUtil;
 
 public class RegisterHomeFragment extends Fragment {
     private static final String STORAGE_PATH = "home/";
     private Button doneButton;
-    private String userID, email, password, name, phoneNumber, gender;
+    private String name, phoneNumber, gender;
     private EditText addressEditText;
     private ImageView homeImageView;
     private Bitmap cropped;
     private FirebaseManager firebaseManager;
+    private ProgressDialog progressDialog;
 
     private final ActivityResultLauncher<Intent> getImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
@@ -60,15 +63,13 @@ public class RegisterHomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        progressDialog = new ProgressDialog(requireContext());
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_register_home, container, false);
         firebaseManager = new FirebaseManager();
 
         Bundle args = getArguments();
         if (args != null) {
-            userID = args.getString("userID", "");
-            email = args.getString("email", "");
-            password = args.getString("password","");
             name = args.getString("name", "");
             phoneNumber = args.getString("phoneNumber", "");
             gender = args.getString("gender", "");
@@ -84,17 +85,20 @@ public class RegisterHomeFragment extends Fragment {
                 String address = addressEditText.getText().toString();
 
                 if (cropped != null && validateInputs(address)) {
+                    AndroidUtil.showLoadingDialog(progressDialog);
                     // Handle the case when only the avatar is changed
                     String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
                     firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
                         @Override
                         public void onTaskSuccess(String message) {
-                            showToast(requireContext(),"Finish Step 3/5");
+                            AndroidUtil.hideLoadingDialog(progressDialog);
+                            showToast(requireContext(),"Finish Step 2/5");
                             toRegisterVehicleFragment(address, imagePath);
                         }
 
                         @Override
                         public void onTaskFailure(String message) {
+                            AndroidUtil.hideLoadingDialog(progressDialog);
                             showToast(requireContext(), "Upload Image failed");
                         }
                     });
@@ -150,9 +154,6 @@ public class RegisterHomeFragment extends Fragment {
         RegisterVehicleFragment fragment = new RegisterVehicleFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putString("userID", userID);
-        bundle.putString("email", email);
-        bundle.putString("password", password);
         bundle.putString("name", name);
         bundle.putString("phoneNumber", phoneNumber);
         bundle.putString("gender", gender);

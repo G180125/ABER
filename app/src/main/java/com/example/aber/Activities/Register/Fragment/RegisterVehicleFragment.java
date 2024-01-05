@@ -1,8 +1,10 @@
 package com.example.aber.Activities.Register.Fragment;
 
+import static com.example.aber.Utils.AndroidUtil.showLoadingDialog;
 import static com.example.aber.Utils.AndroidUtil.showToast;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,6 +33,7 @@ import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
 import com.example.aber.FirebaseManager;
 import com.example.aber.R;
+import com.example.aber.Utils.AndroidUtil;
 
 public class RegisterVehicleFragment extends Fragment {
     private static final String STORAGE_PATH = "vehicle/";
@@ -45,7 +48,7 @@ public class RegisterVehicleFragment extends Fragment {
             "39", "60", "94", "61", "95", "62", "97", "63", "98", "64", "99"
     };
     private Button doneButton;
-    private String userID, email, password, name, phoneNumber, gender, address, homeImage;
+    private String name, phoneNumber, gender, address, homeImage;
     private EditText vehicleBrandEditText, vehicleNameEditText, vehicleColorEditText, vehiclePlateEditText;
     private Spinner seatCapacitySpinner;
     private ImageView vehicleImageView;
@@ -53,6 +56,7 @@ public class RegisterVehicleFragment extends Fragment {
     private Bitmap cropped;
     private FirebaseManager firebaseManager;
     private String vehicleImage;
+    private ProgressDialog progressDialog;
 
     private final ActivityResultLauncher<Intent> getImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
@@ -74,15 +78,13 @@ public class RegisterVehicleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        progressDialog = new ProgressDialog(requireContext());
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_register_vehicle, container, false);
         firebaseManager = new FirebaseManager();
 
         Bundle args = getArguments();
         if (args != null) {
-            userID = args.getString("userID", "");
-            email = args.getString("email", "");
-            password = args.getString("password","");
             name = args.getString("name", "");
             phoneNumber = args.getString("phoneNumber", "");
             gender = args.getString("gender", "");
@@ -157,10 +159,12 @@ public class RegisterVehicleFragment extends Fragment {
     private void uploadImage(){
         if (cropped != null) {
             // Handle the case when only the avatar is changed
+            showLoadingDialog(progressDialog);
             String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
             firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
                 @Override
                 public void onTaskSuccess(String message) {
+                    AndroidUtil.hideLoadingDialog(progressDialog);
                     showToast(requireContext(), "Upload Image success");
                     vehicleImage = message;
                     updateUI(vehicleImage);
@@ -168,6 +172,7 @@ public class RegisterVehicleFragment extends Fragment {
 
                 @Override
                 public void onTaskFailure(String message) {
+                    AndroidUtil.hideLoadingDialog(progressDialog);
                     showToast(requireContext(), "Upload Image failed");
                 }
             });
@@ -198,7 +203,7 @@ public class RegisterVehicleFragment extends Fragment {
         if(!validatePlate(plate)){
             return false;
         }
-        showToast(requireContext(),"Finish Step 4/5");
+        showToast(requireContext(),"Finish Step 3/5");
         return true;
     }
 
@@ -233,9 +238,6 @@ public class RegisterVehicleFragment extends Fragment {
         RegisterSOSFragment fragment = new RegisterSOSFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putString("userID", userID);
-        bundle.putString("email", email);
-        bundle.putString("password", password);
         bundle.putString("name", name);
         bundle.putString("phoneNumber", phoneNumber);
         bundle.putString("gender", gender);

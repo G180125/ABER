@@ -1,21 +1,29 @@
 package com.example.aber.Activities.Main.Fragment.Profile.Edit;
 
 import static com.example.aber.Utils.AndroidUtil.replaceFragment;
+import static com.example.aber.Utils.AndroidUtil.showToast;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +33,9 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.canhub.cropper.CropImageContract;
+import com.canhub.cropper.CropImageContractOptions;
+import com.canhub.cropper.CropImageOptions;
 import com.example.aber.Activities.Main.Fragment.Home.ConfirmBookingFragment;
 import com.example.aber.Adapters.UserHomeAdapter;
 import com.example.aber.FirebaseManager;
@@ -38,21 +49,40 @@ import java.util.List;
 import java.util.Objects;
 
 public class HomeListFragment extends Fragment implements UserHomeAdapter.RecyclerViewClickListener{
+    private static final String STORAGE_PATH = "home/";
     private ImageView buttonBack;
     private FirebaseManager firebaseManager;
-    private ProgressDialog progressBar;
-    private String id, previous, name, address;
+    private ProgressDialog progressDialog;
+    private String id, previous, name, address, imagePath;
     private User user;
     private List<Home> homeList;
     private UserHomeAdapter adapter;
     private PopupWindow popupWindow;
     private Button addButton;
     private View root;
+    private Bitmap cropped;
+    private ImageView homeImageView;
+    private final ActivityResultLauncher<Intent> getImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == Activity.RESULT_OK) {
+            Intent data = result.getData();
+            if (data != null && data.getData() != null) {
+                Uri imageUri = data.getData();
+                launchImageCropper(imageUri);
+            }
+        }
+    });
+
+    private final ActivityResultLauncher<CropImageContractOptions> cropImage = registerForActivityResult(new CropImageContract(), result -> {
+        if (result.isSuccessful()) {
+            cropped = BitmapFactory.decodeFile(result.getUriFilePath(requireContext(), true));
+            updateHomeImage(cropped);
+        }
+    });
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        progressBar = new ProgressDialog(requireContext());
-        AndroidUtil.showLoadingDialog(progressBar);
+        progressDialog = new ProgressDialog(requireContext());
+        AndroidUtil.showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_home_list, container, false);
         firebaseManager = new FirebaseManager();
@@ -121,13 +151,13 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
     private void updateUI(List<Home> homeList){
         adapter.setHomeList(homeList);
         adapter.notifyDataSetChanged();
-        AndroidUtil.hideLoadingDialog(progressBar);
+        AndroidUtil.hideLoadingDialog(progressDialog);
     }
 
     @Override
     public void onSetDefaultButtonClick(int position) {
         if (position > 0 && position < homeList.size()) {
-            AndroidUtil.showLoadingDialog(progressBar);
+            AndroidUtil.showLoadingDialog(progressDialog);
             Home selectedHome = homeList.get(position);
             homeList.remove(position);
             homeList.add(0, selectedHome);
@@ -176,28 +206,37 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
         // Set the background color with alpha transparency
         popupView.setBackgroundColor(getResources().getColor(R.color.popup_background, null));
 
+        homeImageView = popupView.findViewById(R.id.home_image);
         TextView titleTextView = popupView.findViewById(R.id.title);
         EditText addressEditText = popupView.findViewById(R.id.address_edit_text);
-        ImageView homeImageView = popupView.findViewById(R.id.home_image);
         Button submitButton = popupView.findViewById(R.id.submitNewAddressBtn);
         ImageView cancelBtn = popupView.findViewById(R.id.cancelBtn);
 
         titleTextView.setText(title);
 
+        homeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage();
+            }
+        });
+
         if (home != null) {
             addressEditText.setText(home.getAddress());
 
-            firebaseManager.retrieveImage(home.getAddress(), new FirebaseManager.OnRetrieveImageListener() {
-                @Override
-                public void onRetrieveImageSuccess(Bitmap bitmap) {
-                    homeImageView.setImageBitmap(bitmap);
-                }
+            if(home.getAddress() != null) {
+                firebaseManager.retrieveImage(home.getAddress(), new FirebaseManager.OnRetrieveImageListener() {
+                    @Override
+                    public void onRetrieveImageSuccess(Bitmap bitmap) {
+                        homeImageView.setImageBitmap(bitmap);
+                    }
 
-                @Override
-                public void onRetrieveImageFailure(String message) {
+                    @Override
+                    public void onRetrieveImageFailure(String message) {
 
-                }
-            });
+                    }
+                });
+            }
         }
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -210,24 +249,31 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidUtil.showLoadingDialog(progressBar);
+                Log.d("submit", "submit button clicked");
+                AndroidUtil.showLoadingDialog(progressDialog);
 
                 String newAddress = addressEditText.getText().toString();
 
-                if (title.equals("Edit Home")) {
-                    // Update existing home
-                    if (home != null) {
-                        home.setAddress(newAddress);
-                        homeList.set(position, home);
-                    }
-                } else {
-                    // Add a new home
-                    Home newHome = new Home(newAddress, "path");
-                    homeList.add(0, newHome);
-                }
+                if (cropped != null && validateInputs(newAddress)) {
+                    // Handle the case when only the avatar is changed
+                    imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
+                    Log.d("submit", "path: " + imagePath);
+                    firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+                        @Override
+                        public void onTaskSuccess(String message) {
+                            AndroidUtil.hideLoadingDialog(progressDialog);
+                            updateHome(title, home, newAddress, imagePath, position);
+                        }
 
-                // Update the user with the modified homeList
-                updateList(user, homeList, "Update Successful");
+                        @Override
+                        public void onTaskFailure(String message) {
+                            AndroidUtil.hideLoadingDialog(progressDialog);
+                            showToast(requireContext(), "Upload Image failed");
+                        }
+                    });
+                } else {
+                    AndroidUtil.hideLoadingDialog(progressDialog);
+                }
 
                 // Dismiss the PopupWindow after updating the homeList
                 popupWindow.dismiss();
@@ -235,9 +281,59 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
         });
 
         popupWindow.showAsDropDown(root, 0, 0);
-
     }
 
+    private void launchImageCropper(Uri uri) {
+        CropImageOptions cropImageOptions = new CropImageOptions();
+        cropImageOptions.imageSourceIncludeGallery = false;
+        cropImageOptions.imageSourceIncludeCamera = true;
+        CropImageContractOptions cropImageContractOptions = new CropImageContractOptions(uri, cropImageOptions);
+        cropImage.launch(cropImageContractOptions);
+    }
+
+    private void selectImage() {
+        getImageFile();
+    }
+
+    private void getImageFile() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        getImage.launch(intent);
+    }
+
+    private String generateUniquePath() {
+        return String.valueOf(System.currentTimeMillis());
+    }
+
+    private void updateHomeImage(Bitmap bitmap){
+        homeImageView.setImageBitmap(bitmap);
+    }
+
+    private boolean validateInputs(String address){
+        if(address.isEmpty()){
+            showToast(requireContext(),"Address can not be empty");
+            return false;
+        }
+        return true;
+    }
+
+    private void updateHome(String title, Home home, String address, String path, int position){
+        if (title.equals("Edit Home")) {
+            // Update existing home
+            if (home != null) {
+                home.setAddress(address);
+                home.setImage(path);
+                homeList.set(position, home);
+            }
+        } else {
+            // Add a new home
+            Home newHome = new Home(address, path);
+            homeList.add(0, newHome);
+        }
+
+        // Update the user with the modified homeList
+        updateList(user, homeList, "Update Successful");
+    }
 
     private void updateList(User user, List<Home> homeList, String successMessage){
         user.setHomes(homeList);
@@ -251,7 +347,7 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
             @Override
             public void onTaskFailure(String message) {
                 AndroidUtil.showToast(getContext(), message);
-                AndroidUtil.hideLoadingDialog(progressBar);
+                AndroidUtil.hideLoadingDialog(progressDialog);
             }
         });
     }

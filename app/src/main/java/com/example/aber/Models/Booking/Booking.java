@@ -30,7 +30,7 @@ public class Booking {
         this.payment = payment;
         this.vehicle = vehicle;
         this.emergencyContact = emergencyContact;
-        this.status = "Matching Driver";
+        this.status = "Pending";
     }
 
     private String generateID() {

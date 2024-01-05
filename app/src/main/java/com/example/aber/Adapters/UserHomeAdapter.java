@@ -69,8 +69,6 @@ public class UserHomeAdapter extends RecyclerView.Adapter<UserHomeAdapter.UserHo
 
 
             setDefaultButton.setOnClickListener(new View.OnClickListener() {
-
-                @SuppressLint("SetTextI18n")
                 @Override
                 public void onClick(View v) {
 

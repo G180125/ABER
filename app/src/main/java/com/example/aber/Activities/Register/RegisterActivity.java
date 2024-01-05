@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import com.example.aber.Activities.Register.Fragment.RegisterProfileFragment;
 import com.example.aber.R;
 import com.example.aber.Activities.Register.Fragment.RegisterAccountFragment;
 
@@ -17,7 +18,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (findViewById(R.id.fragment_container) != null) {
             if (savedInstanceState == null) {
-                RegisterAccountFragment fragment = new RegisterAccountFragment();
+                RegisterProfileFragment fragment = new RegisterProfileFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.add(R.id.fragment_container, fragment);

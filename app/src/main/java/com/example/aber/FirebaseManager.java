@@ -40,6 +40,7 @@ public class FirebaseManager {
     public final String COLLECTION_USERS = "users";
     public final String COLLECTION_DRIVERS = "drivers";
     public final String COLLECTION_CHATS = "Chats";
+    public final String COLLECTION_BOOKINGS = "Bookings";
     public final String COLLECTION_ADMINS = "admins";
     public final String COLLECTION_DRIVER = "drivers";
     public final String DOCUMENTID = "documentID";
@@ -181,6 +182,16 @@ public class FirebaseManager {
                 .setValue(hashMap);
     }
 
+    public void addBooking(String userID, Booking booking){
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("user", userID);
+        hashMap.put("booking", booking);
+
+        this.database.getReference().child(COLLECTION_BOOKINGS)
+                .push()
+                .setValue(hashMap);
+    }
+
     public void readMessage(final String myID, final String userID, OnReadingMessageListener listener){
         List<MyMessage> messageList = new ArrayList<>();
 
@@ -292,6 +303,11 @@ public class FirebaseManager {
 
     public interface OnFetchListener<T> {
         void onFetchSuccess(T object);
+        void onFetchFailure(String message);
+    }
+
+    public interface OnFetchListListener<T>{
+        void onFetchSuccess(List<T> object);
         void onFetchFailure(String message);
     }
 

@@ -101,6 +101,19 @@ public class ConfirmBookingFragment extends Fragment {
             }
         });
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                fragmentTransaction.replace(R.id.fragment_main_container, new MainHomeFragment());
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
         homeCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,7 +204,8 @@ public class ConfirmBookingFragment extends Fragment {
                     public void onTaskSuccess(String message) {
                         AndroidUtil.showToast(requireContext(), "Booking Successfully");
                         AndroidUtil.hideLoadingDialog(progressDialog);
-                        navigateToMatchingDriver(booking);
+                        firebaseManager.addBooking(id, booking);
+                        navigateToBookingSuccess();
                     }
 
                     @Override
@@ -254,16 +268,9 @@ public class ConfirmBookingFragment extends Fragment {
         return String.format("%02d:%02d %s", hour, minute, amPm);
     }
 
-    private void navigateToMatchingDriver(Booking booking){
-        MatchingDriverFragment fragment = new MatchingDriverFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("bookingID", booking.getId());
-        bundle.putString("name", name);
-        bundle.putString("address", address);
-        fragment.setArguments(bundle);
-
+    private void navigateToBookingSuccess(){
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        AndroidUtil.replaceFragment(fragment, fragmentManager, fragmentTransaction, R.id.fragment_main_container);
+        AndroidUtil.replaceFragment(new BookingSuccessFragment(), fragmentManager, fragmentTransaction, R.id.fragment_main_container);
     }
 }
