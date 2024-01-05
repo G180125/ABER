@@ -54,7 +54,7 @@ public class UserVehicleAdapter extends RecyclerView.Adapter<UserVehicleAdapter.
 
     public class UserVehicleViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView plateTextView;
+        TextView plateTextView,defaultTextView;
         CardView cardView;
         Button editButton, deleteButton;
         MaterialButton setDefaultButton;
@@ -91,21 +91,37 @@ public class UserVehicleAdapter extends RecyclerView.Adapter<UserVehicleAdapter.
         }
 
         public void bind(Vehicle vehicle, int position) {
+
+            defaultTextView = itemView.findViewById(R.id.isDefaultTextView);
+            // Check if the list is not empty before accessing elements
+            if (!vehicleList.isEmpty() && defaultTextView != null) {
+                // Set defaultTextView based on position
+                if (position == 0) {
+                    defaultTextView.setText("Default Vehicle");
+                } else {
+                    defaultTextView.setText("");
+                }
+            }
+
             plateTextView.setText(vehicle.getNumberPlate());
 
             FirebaseManager firebaseManager = new FirebaseManager();
-            firebaseManager.retrieveImage(vehicle.getImages().get(0), new FirebaseManager.OnRetrieveImageListener() {
-                @Override
-                public void onRetrieveImageSuccess(Bitmap bitmap) {
-                    imageView.setImageBitmap(bitmap);
-                }
+            // Check if the vehicle has images before retrieving the image
+            if (!vehicle.getImages().isEmpty()) {
+                firebaseManager.retrieveImage(vehicle.getImages().get(0), new FirebaseManager.OnRetrieveImageListener() {
+                    @Override
+                    public void onRetrieveImageSuccess(Bitmap bitmap) {
+                        imageView.setImageBitmap(bitmap);
+                    }
 
-                @Override
-                public void onRetrieveImageFailure(String message) {
-
-                }
-            });
+                    @Override
+                    public void onRetrieveImageFailure(String message) {
+                        // Handle failure if needed
+                    }
+                });
+            }
         }
+
     }
 
     public interface RecyclerViewClickListener  {

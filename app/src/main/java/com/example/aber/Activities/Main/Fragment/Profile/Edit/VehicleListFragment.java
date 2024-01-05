@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -166,13 +167,21 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
         EditText brandEditText = popupView.findViewById(R.id.vehicle_brand_edit_text);
         EditText nameEditText = popupView.findViewById(R.id.vehicle_name_edit_text);
         EditText colorEditText = popupView.findViewById(R.id.vehicle_color_edit_text);
-        Spinner seatCapacitySpinner = root.findViewById(R.id.seat_capacity_spinner);
+        Spinner seatCapacitySpinner = popupView.findViewById(R.id.seat_capacity_spinner);
         EditText plateEditText = popupView.findViewById(R.id.vehicle_number_plate_edit_text);
         ImageView vehicleImageView = popupView.findViewById(R.id.vehicle_image_view);
         Button submitButton = popupView.findViewById(R.id.submitNewVehicleBtn);
         ImageView cancelBtn = popupView.findViewById(R.id.cancelBtn);
 
         titleTextView.setText(title);
+        //Initialize seat capacity spinner
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.seat_capacity_options,
+                android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        seatCapacitySpinner.setAdapter(adapter);
 
         if (vehicle != null) {
             brandEditText.setText(vehicle.getBrand());
@@ -225,15 +234,15 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
                         vehicleList.set(position, vehicle);
                     }
                 } else {
-                    // Add a new home
+
                     Vehicle newVehicle = new Vehicle(brand, name, color, selectedSeatCapacity, plate, new ArrayList<>());
                     vehicleList.add(0, newVehicle);
                 }
 
-                // Update the user with the modified homeList
+
                 updateList(user, vehicleList, "Update Successful");
 
-                // Dismiss the PopupWindow after updating the homeList
+                // Dismiss the PopupWindow after updating
                 popupWindow.dismiss();
             }
         });
