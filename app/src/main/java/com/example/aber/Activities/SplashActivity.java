@@ -3,6 +3,7 @@ package com.example.aber.Activities;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -38,6 +39,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (mAuth.getCurrentUser() != null){
+                    Log.d("USER" , "User :" + mAuth.getCurrentUser().toString() );
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
                     finish();
                 } else {
