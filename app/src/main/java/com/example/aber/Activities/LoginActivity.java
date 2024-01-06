@@ -1,15 +1,25 @@
 package com.example.aber.Activities;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,17 +27,29 @@ import com.example.aber.Activities.Main.MainActivity;
 import com.example.aber.Activities.Register.RegisterActivity;
 import com.example.aber.FirebaseManager;
 import com.example.aber.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+
 
 public class LoginActivity extends AppCompatActivity {
-    private MaterialButton loginButton;
-    private TextInputEditText emailEditText, passwordEditText;
+    private MaterialButton loginButton,sentButton;
+    private TextInputEditText emailEditText, passwordEditText,forgetEmailEditText;
 
     private TextInputLayout emailTextLayout,passwordTextLayout;
     private ProgressDialog progressDialog;
     private FirebaseManager firebaseManager;
+
+    private TextView forgetpassword;
+
+    private ImageView close;
+
+    Dialog dialog;
+
+    private LinearLayout loginBackground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +63,53 @@ public class LoginActivity extends AppCompatActivity {
         emailTextLayout = findViewById(R.id.email_layout_text);
         passwordTextLayout = findViewById(R.id.password_layout_text);
         passwordEditText = findViewById(R.id.password_edit_text);
+        forgetpassword = findViewById(R.id.forget_password_text);
+
+
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_forget);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
+        dialog.setCancelable(false);
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        forgetEmailEditText = dialog.findViewById(R.id.email_forget_edit_text);
+        sentButton = dialog.findViewById(R.id.sent_button);
+        close = dialog.findViewById(R.id.close);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginBackground.setAlpha(1.0F);
+                dialog.hide();
+            }
+        });
+
+//        Window window = dialog.getWindow();
+//       WindowManager.LayoutParams wlp = window.getAttributes();
+//
+//        wlp.gravity = Gravity.BOTTOM;
+//        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//        window.setAttributes(wlp);
+
+        sentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String emailAddress = forgetEmailEditText.getText().toString();
+                Log.d("Forget Password","User : " + emailAddress);
+                auth.sendPasswordResetEmail(emailAddress)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(LoginActivity.this, "Email sent", Toast.LENGTH_SHORT).show();
+                                    Log.d("Forget Password", "Email sent.");
+                                }
+                            }
+                        });
+            }
+        });
+
 
         Intent intent = getIntent();
         if (intent.hasExtra("email") && intent.hasExtra("password")) {
@@ -93,7 +162,28 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        loginBackground = findViewById(R.id.login_background);
+
+    forgetpassword.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            loginBackground.setAlpha(0.2F);
+            dialog.show();
+
+
+
+
+
+        }
+    });
+
     }
+
+
+
+
+
+
 
     private void showLoadingDialog() {
         runOnUiThread(() -> {
