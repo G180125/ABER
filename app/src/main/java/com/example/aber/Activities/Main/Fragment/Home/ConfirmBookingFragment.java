@@ -45,8 +45,13 @@ import com.stripe.android.paymentsheet.PaymentSheetResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class ConfirmBookingFragment extends Fragment {
@@ -250,6 +255,7 @@ public class ConfirmBookingFragment extends Fragment {
             public void onClick(View v) {
                 AndroidUtil.showLoadingDialog(progressDialog);
                 String bookingTime = getTimeFromPicker();
+                String ETA = getETA(bookingTime);
                 Home home = currentUser.getHomes().get(0);
                 Payment payment = new Payment("id", 100000.0, "VND", PaymentStatus.PROCESSING, new Card());
                 SOS sos;
@@ -260,7 +266,7 @@ public class ConfirmBookingFragment extends Fragment {
                 }
                 Vehicle vehicle = currentUser.getVehicles().get(0);
 
-                Booking booking = new Booking(address, home, "ETA", bookingTime, "", "", payment, sos, vehicle);
+                Booking booking = new Booking(address, home, ETA, bookingTime, "", "", payment, sos, vehicle, id, getCurrentDateFormatted("yyyy-MM-dd"));
 
                 if(currentUser.getBookings() != null) {
                     currentUser.getBookings().add(booking);
@@ -337,6 +343,37 @@ public class ConfirmBookingFragment extends Fragment {
             }
         }
         return String.format("%02d:%02d %s", hour, minute, amPm);
+    }
+
+    private String getETA(String bookingTime) {
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+
+        try {
+            // Parse the booking time
+            Date parsedBookingTime = sdf.parse(bookingTime);
+
+            // Add 2 hours to the booking time
+            Calendar calendar = Calendar.getInstance();
+            assert parsedBookingTime != null;
+            calendar.setTime(parsedBookingTime);
+            calendar.add(Calendar.HOUR_OF_DAY, 2);
+
+            // Format the new time as ETA
+            Date etaTime = calendar.getTime();
+            return sdf.format(etaTime);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return ""; // Handle parsing error
+        }
+    }
+
+    private static String getCurrentDateFormatted(String format) {
+        Date currentDate = new Date();
+
+        // Format the date using the provided format
+        SimpleDateFormat formatter = new SimpleDateFormat(format, Locale.getDefault());
+        return formatter.format(currentDate);
     }
 
     private void navigateToBookingSuccess(){
