@@ -5,27 +5,59 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/white"
     android:id="@+id/booking_container"
+    app:cardCornerRadius="30dp"
     app:cardElevation="8dp"
     android:layout_margin="8dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_marginHorizontal="8dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginHorizontal="8dp">
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
 
+
+            <TextView
+
+                android:id="@+id/status"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:padding="8dp"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="Status"
+                android:textColor="@color/red"
+                android:textSize="20sp"/>
+                <TextView
+
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/booking_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:layout_marginLeft="10dp"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:padding="8dp"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="Booking Time"
+                    android:textSize="20sp"/>
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
+
                 <TextView
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="10dp"
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@drawable/ic_current_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="marquee"
@@ -38,8 +70,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="10dp"
+
                     android:id="@+id/pick_up"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -56,8 +87,8 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <TextView
-
-                    android:layout_marginRight="10dp"
+                    android:drawableLeft="@drawable/baseline_location_on_24"
+                    android:drawablePadding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="marquee"
@@ -70,7 +101,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:layout_marginRight="10dp"
+
                     android:id="@+id/destination"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -85,40 +116,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-                <TextView
+                android:orientation="vertical">
 
-                    android:layout_marginRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="marquee"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:padding="8dp"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    android:text="Booking Time: "
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
 
-                <TextView
 
-                    android:layout_marginRight="10dp"
-                    android:id="@+id/booking_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="marquee"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:padding="8dp"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    android:text="Booking Time"
-                    android:textSize="20sp"/>
-            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <TextView
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@drawable/baseline_directions_car_24"
+
                     android:layout_marginRight="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -145,47 +155,23 @@
                     android:text="Vehicle"
                     android:textSize="20sp"/>
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_marginRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="marquee"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:padding="8dp"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    android:text="Status: "
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
 
-                <TextView
-                    android:layout_marginRight="10dp"
-                    android:id="@+id/status"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="marquee"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:padding="8dp"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    android:text="Pending"
-                    android:textSize="20sp"/>
+
+
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="15dp">
                 <Button
                     android:id="@+id/view_button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginRight="8dp"
+                    android:layout_marginLeft="10dp"
                     android:text="View Detail"/>
                 <Button
                     android:id="@+id/cancel_button"
@@ -193,10 +179,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginRight="10dp"
                     android:backgroundTint="@color/light_orange_red"
                     android:text="Cancel"/>
             </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+
 
 </androidx.cardview.widget.CardView>
