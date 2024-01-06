@@ -5,6 +5,7 @@ import static com.example.aber.Utils.AndroidUtil.showLoadingDialog;
 import static com.example.aber.Utils.AndroidUtil.showToast;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,10 +15,12 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.aber.Activities.Main.Fragment.Home.MainHomeFragment;
+import com.example.aber.Activities.Main.Fragment.Profile.HelpActivity;
 import com.example.aber.FirebaseManager;
 import com.example.aber.Models.Booking.Booking;
 import com.example.aber.Models.User.User;
@@ -36,6 +39,7 @@ public class BookingDetailFragment extends Fragment {
     private TextView pickUpTextView, destinationTextView, bookingTimeTextView, statusTextView, brandTextView, vehicleNameTextView, colorTextView, seatTextView, plateTextView, amountTextView, methodTextView, driverNameTextView, driverGenderTextView, licenseNumberTextView, realPickUpTimeTextView;
     private CircleImageView avatar;
     private ImageView backButton, imageVIew;
+    private Button helpButton;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -88,6 +92,7 @@ public class BookingDetailFragment extends Fragment {
         licenseNumberTextView = root.findViewById(R.id.license_number);
         realPickUpTimeTextView = root.findViewById(R.id.real_pick_up_time);
         imageVIew = root.findViewById(R.id.image);
+        helpButton = root.findViewById(R.id.help_button);
 
 
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +105,13 @@ public class BookingDetailFragment extends Fragment {
                 fragmentTransaction.replace(R.id.fragment_main_container, new MainBookingFragment());
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
+            }
+        });
+
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(requireContext(), HelpActivity.class).putExtra("bookingId", bookingID));
             }
         });
 
