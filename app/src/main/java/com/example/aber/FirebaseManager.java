@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.aber.Models.Booking.Booking;
+import com.example.aber.Models.Booking.BookingResponse;
 import com.example.aber.Models.Message.MyMessage;
 import com.example.aber.Models.Staff.Admin;
 import com.example.aber.Models.Staff.Driver;
@@ -41,6 +42,7 @@ public class FirebaseManager {
     public final String COLLECTION_DRIVERS = "drivers";
     public final String COLLECTION_CHATS = "Chats";
     public final String COLLECTION_BOOKINGS = "Bookings";
+    public final String COLLECTION_LOCATIONS = "Locations";
     public final String COLLECTION_ADMINS = "admins";
     public final String COLLECTION_DRIVER = "drivers";
     public final String DOCUMENTID = "documentID";
@@ -190,9 +192,9 @@ public class FirebaseManager {
 
     public void addBooking(String userID, Booking booking){
         HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("user", userID);
+        hashMap.put("userID", userID);
         hashMap.put("booking", booking);
-
+        hashMap.put("driverID", "");
         this.database.getReference().child(COLLECTION_BOOKINGS)
                 .push()
                 .setValue(hashMap);
@@ -225,10 +227,11 @@ public class FirebaseManager {
 
     public void updateCurrentLocation(LatLng latLng, String time, String id){
         HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("id", id);
         hashMap.put("Latlng", latLng);
         hashMap.put("time", time);
 
-        this.database.getReference().child(id)
+        this.database.getReference().child(COLLECTION_LOCATIONS)
                 .push()
                 .setValue(hashMap);
     }
@@ -302,6 +305,39 @@ public class FirebaseManager {
         }).start();
     }
 
+    public void fetchBookings(OnFetchBookingListListener<BookingResponse> listener){
+        List<BookingResponse> bookingResponseList = new ArrayList<>();
+
+        DatabaseReference reference =  this.database.getReference(COLLECTION_BOOKINGS);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                bookingResponseList.clear();
+                for (DataSnapshot s: snapshot.getChildren()){
+                    BookingResponse bookingResponse = s.getValue(BookingResponse.class);
+                    assert bookingResponse != null;
+                    bookingResponse.setId(s.getKey());
+                    if(bookingResponse.getDriverID() == null || bookingResponse.getDriverID().isEmpty()){
+                        bookingResponseList.add(bookingResponse);
+                    }
+                }
+                listener.onDataChanged(bookingResponseList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void cancelBooking(String key, Booking booking) {
+        DatabaseReference bookingRef = this.database.getReference(COLLECTION_BOOKINGS).child(key);
+
+        bookingRef.child("booking").setValue(booking);
+
+    }
+
     public interface OnTaskCompleteListener {
         void onTaskSuccess(String message);
         void onTaskFailure(String message);
@@ -329,6 +365,10 @@ public class FirebaseManager {
 
     public interface OnReadingMessageListener{
         void OnMessageDataChanged(List<MyMessage> messageList);
+    }
+
+    public interface OnFetchBookingListListener<T>{
+        void onDataChanged(List<T> object);
     }
 }
 
