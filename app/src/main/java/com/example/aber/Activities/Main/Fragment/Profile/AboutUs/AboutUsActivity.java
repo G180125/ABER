@@ -1,4 +1,4 @@
-package com.example.aber.Activities.Main.Fragment.AboutUs;
+package com.example.aber.Activities.Main.Fragment.Profile.AboutUs;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;

@@ -55,6 +55,15 @@ dependencies {
     implementation ("com.google.android.libraries.places:places:3.3.0")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("androidx.navigation:navigation-fragment:2.7.5")
+    implementation("androidx.navigation:navigation-ui:2.7.5")
+    implementation("com.github.jd-alexander:library:1.1.0")
+    implementation ("com.stripe:stripe-java:24.0.0")
+    implementation ("com.stripe:stripe-android:20.36.0")
+    implementation ("io.reactivex.rxjava2:rxjava:2.2.21")
+    implementation ("io.reactivex.rxjava2:rxandroid:2.1.1")
+    implementation ("com.github.kittinunf.fuel:fuel:2.3.1")
+    implementation ("com.squareup.retrofit2:adapter-rxjava2:2.3.0")
 
     //Dot progress bar
     implementation ("com.agrawalsuneet.androidlibs:dotsloader:1.4")
@@ -62,6 +71,7 @@ dependencies {
     //View Page
     implementation ("androidx.viewpager2:viewpager2:1.0.0")
     implementation("com.tbuonomo:dotsindicator:5.0")
+
 
 
 }

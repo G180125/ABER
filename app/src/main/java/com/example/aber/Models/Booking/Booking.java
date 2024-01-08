@@ -1,7 +1,9 @@
 package com.example.aber.Models.Booking;
 
+import com.example.aber.Models.Staff.Driver;
 import com.example.aber.Models.User.Home;
 import com.example.aber.Models.User.SOS;
+import com.example.aber.Models.User.User;
 import com.example.aber.Models.User.Vehicle;
 
 public class Booking {
@@ -10,16 +12,19 @@ public class Booking {
     private Home destination;
     private String ETA;
     private String bookingTime;
+    private String bookingDate;
     private String realPickUpTime;
     private String pickUpImage;
     private Payment payment;
     private Vehicle vehicle;
     private SOS emergencyContact;
     private String status;
+    private String userID;
+    private String driverID;
 
     public Booking(){}
 
-    public Booking(String pickUp, Home destination, String ETA, String bookingTime, String realPickUpTime, String pickUpImage, Payment payment, SOS emergencyContact, Vehicle vehicle) {
+    public Booking(String pickUp, Home destination, String ETA, String bookingTime, String realPickUpTime, String pickUpImage, Payment payment, SOS emergencyContact, Vehicle vehicle, String user, String bookingDate) {
         this.id = generateID();
         this.pickUp = pickUp;
         this.destination = destination;
@@ -31,6 +36,9 @@ public class Booking {
         this.vehicle = vehicle;
         this.emergencyContact = emergencyContact;
         this.status = "Pending";
+        this.userID = user;
+        this.driverID = "";
+        this.bookingDate = bookingDate;
     }
 
     private String generateID() {
@@ -129,6 +137,30 @@ public class Booking {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getUser() {
+        return userID;
+    }
+
+    public void setUser(String user) {
+        this.userID = user;
+    }
+
+    public String getDriver() {
+        return driverID;
+    }
+
+    public void setDriver(String driver) {
+        this.driverID = driver;
+    }
+
+    public String getBookingDate() {
+        return bookingDate;
+    }
+
+    public void setBookingDate(String bookingDate) {
+        this.bookingDate = bookingDate;
     }
 
     @Override

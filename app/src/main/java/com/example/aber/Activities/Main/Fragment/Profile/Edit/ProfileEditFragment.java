@@ -197,35 +197,40 @@ public class ProfileEditFragment extends Fragment {
                 isProfileChanged(currentUser, originalUser, new OnProfileChangedListener() {
                     @Override
                     public void onProfileChanged(String message) {
+                        // Handle the case when only the avatar is changed
+                        String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
+                        firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+                            @Override
+                            public void onTaskSuccess(String message) {
+                                currentUser.setAvatar(message);
+                                firebaseManager.updateUser(userID, currentUser, new FirebaseManager.OnTaskCompleteListener() {
+                                    @Override
+                                    public void onTaskSuccess(String message) {
+                                        updateUI(currentUser);
+                                        showToast("Update Successfully");
+                                        hideLoadingDialog();
+                                    }
 
-                        hideLoadingDialog();
-                        showToast(message);
+                                    @Override
+                                    public void onTaskFailure(String message) {
+                                        showToast(message);
+                                        hideLoadingDialog();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onTaskFailure(String message) {
+                                showToast(message);
+                                hideLoadingDialog();
+                            }
+                        });
+
                     }
 
                     @Override
                     public void onProfileNotChanged() {
-                        if (cropped != null) {
-                            // Handle the case when only the avatar is changed
-                            String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
-                            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
-                                @Override
-                                public void onTaskSuccess(String message) {
-                                    currentUser.setAvatar(message);
-                                    showToast(message);
-                                    updateUI(currentUser);
-                                }
 
-                                @Override
-                                public void onTaskFailure(String message) {
-                                    showToast(message);
-                                    hideLoadingDialog();
-                                }
-                            });
-                        } else {
-                            // Handle the case when no data is changed
-                            hideLoadingDialog();
-                            showToast("No Data Changed.");
-                        }
                     }
                 });
             }
@@ -346,31 +351,11 @@ public class ProfileEditFragment extends Fragment {
 //
 //            if (sosChanged) Log.d("ProfileEditFragment", "SOS changed");
 //            if (avatarChanged) Log.d("ProfileEditFragment", "Avatar changed");
-
-            updateUserInFirestore(editedUser, listener);
+            listener.onProfileChanged("");
         } else {
             listener.onProfileNotChanged();
         }
 
-    }
-
-
-    private void updateUserInFirestore(User updatedUser, OnProfileChangedListener listener) {
-        firebaseManager.updateUser(userID, updatedUser, new FirebaseManager.OnTaskCompleteListener() {
-            @Override
-            public void onTaskSuccess(String message) {
-                showToast(message);
-                updateUI(updatedUser);
-                hideLoadingDialog();
-                listener.onProfileChanged(message);
-            }
-
-            @Override
-            public void onTaskFailure(String message) {
-                showToast(message);
-                hideLoadingDialog();
-            }
-        });
     }
 
     public interface OnProfileChangedListener {

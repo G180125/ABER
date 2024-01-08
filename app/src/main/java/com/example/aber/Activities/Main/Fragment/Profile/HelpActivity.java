@@ -5,8 +5,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -56,6 +58,20 @@ public class HelpActivity extends AppCompatActivity {
 
         nameTextView.setText("Admin");
         firstLoad = true;
+
+        Intent intent = getIntent();
+        if (intent.hasExtra("bookingId")) {
+            String bookingId = intent.getStringExtra("bookingId");
+            sendText.setText("Please help, I got problem with booking: " + bookingId);
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    sendButton.performClick();
+                }
+            }, 1);
+
+        }
 
         firebaseManager.readMessage(userID, ADMIN_ID, new FirebaseManager.OnReadingMessageListener() {
                     @Override

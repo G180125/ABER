@@ -11,10 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.aber.Activities.Main.Fragment.Chat.MainChatFragment;
-import com.example.aber.Activities.Main.Fragment.Home.MainHomeFragment;
-import com.example.aber.Activities.Main.Fragment.MainBookingFragment;
-import com.example.aber.Activities.Main.Fragment.Profile.MainProfileFragment;
+import com.example.aber.Activities.Main.Fragment.Booking.MainBookingFragment;
 import com.example.aber.R;
 
 public class BookingSuccessFragment extends Fragment {

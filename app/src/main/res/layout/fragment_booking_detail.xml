@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Activities.Main.Fragment.BookingDetailFragment">
+    tools:context=".Activities.Main.Fragment.Booking.BookingDetailFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -191,16 +191,18 @@
                 android:textSize="26sp"
                 android:textStyle="bold" />
             <ImageView
+                android:id="@+id/vehicle_expand"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_arrow_up"
+                android:src="@drawable/ic_arrow_down"
                 android:translationY="10dp"
                 android:layout_marginRight="8dp"/>
         </LinearLayout>
         <androidx.cardview.widget.CardView
             android:id="@+id/vehicle_card_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -382,16 +384,18 @@
                 android:textSize="26sp"
                 android:textStyle="bold" />
             <ImageView
+                android:id="@+id/payment_expand"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_arrow_up"
+                android:src="@drawable/ic_arrow_down"
                 android:translationY="10dp"
                 android:layout_marginRight="8dp"/>
         </LinearLayout>
         <androidx.cardview.widget.CardView
             android:id="@+id/payment_card_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -480,16 +484,18 @@
                 android:textSize="26sp"
                 android:textStyle="bold" />
             <ImageView
+                android:id="@+id/driver_expand"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_arrow_up"
+                android:src="@drawable/ic_arrow_down"
                 android:translationY="10dp"
                 android:layout_marginRight="8dp"/>
         </LinearLayout>
         <androidx.cardview.widget.CardView
             android:id="@+id/driver_card_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -601,6 +607,38 @@
                         android:text="License Number"
                         android:textSize="20sp"/>
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <TextView
+
+                        android:layout_marginRight="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:padding="8dp"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
+                        android:text="Phone Number: "
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+
+                        android:layout_marginRight="10dp"
+                        android:id="@+id/phone_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:padding="8dp"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
+                        android:text="Phone Number"
+                        android:textSize="20sp"/>
+                </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -619,16 +657,18 @@
                 android:textSize="26sp"
                 android:textStyle="bold" />
             <ImageView
+                android:id="@+id/resource_expand"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_arrow_up"
+                android:src="@drawable/ic_arrow_down"
                 android:translationY="10dp"
                 android:layout_marginRight="8dp"/>
         </LinearLayout>
         <androidx.cardview.widget.CardView
             android:id="@+id/resource_card_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -700,6 +740,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
         <Button
+            android:id="@+id/help_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Help"

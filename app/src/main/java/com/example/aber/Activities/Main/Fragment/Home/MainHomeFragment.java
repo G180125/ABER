@@ -78,6 +78,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     private Marker searchedLocation;
     private Place searchedPlace;
     private LocationRequest mLocationRequest;
+    private String address;
 
     private FloatingActionButton mapTypeButton, currentLocationButton;
 
@@ -230,7 +231,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                 if (lat != 0) {
                     try {
                         List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
-                        String address = addresses.get(0).getAddressLine(0);
+                        address = addresses.get(0).getAddressLine(0);
                         String city = addresses.get(0).getLocality();
                         String state = addresses.get(0).getAdminArea();
                         String country = addresses.get(0).getCountryName();
@@ -256,7 +257,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                 ConfirmBookingFragment fragment = new ConfirmBookingFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("name", marker.getTitle());
-                bundle.putString("address", "Testing address");
+                bundle.putString("address", address);
                 fragment.setArguments(bundle);
 
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -274,7 +275,12 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
                 MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(latLng).title("Test");
+                markerOptions.position(latLng).title("Unknown");
+
+                // Remove the previous selected location
+                if (searchedLocation != null) {
+                    searchedLocation.remove();
+                }
                 searchedLocation = mMap.addMarker(markerOptions);
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
