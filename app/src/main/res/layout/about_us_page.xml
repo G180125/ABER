@@ -7,6 +7,15 @@
     android:orientation="vertical"
     android:background="@color/back_ground_color_title"
     >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        
     <TextView
         android:id="@+id/headingTitle"
         android:layout_width="match_parent"
@@ -29,4 +38,6 @@
         android:layout_margin="15dp"
         android:lineSpacingExtra="6sp"
         />
+    </LinearLayout>
+    </ScrollView>
 </LinearLayout>
