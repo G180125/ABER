@@ -1,5 +1,6 @@
 package com.example.aber.Activities.Register.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,16 +8,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.aber.Activities.LoginActivity;
 import com.example.aber.R;
 
 public class RegisterProfileFragment extends Fragment {
     private Button doneButton;
+    private TextView loginButton;
     private String userID, email, password;
     private EditText nameEditText, phoneNumberEditText, genderSetError;
     private RadioGroup genderRadioGroup;
@@ -32,6 +36,7 @@ public class RegisterProfileFragment extends Fragment {
             email = args.getString("email", "");
             password = args.getString("password","");
         }
+        loginButton = root.findViewById(R.id.login_button);
         genderSetError = root.findViewById(R.id.set_error_edit_text);
         nameEditText = root.findViewById(R.id.name_edit_text);
         phoneNumberEditText = root.findViewById(R.id.phone_number_edit_text);
@@ -48,6 +53,13 @@ public class RegisterProfileFragment extends Fragment {
                 if(validateInputs(name, phoneNumber, selectedGender)){
                     toRegisterHomeFragment(name, phoneNumber, selectedGender);
                 }
+            }
+        });
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(requireContext(), LoginActivity.class));
+                requireActivity().finish();
             }
         });
 

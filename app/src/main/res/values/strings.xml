@@ -21,4 +21,8 @@
     <string name="desc_three">Nguyen Mau Bach - s3926937 \nNguyen Minh Hung - s3924473 \nNguyen Vi Phi Long - s3904632 \nLe Tran Minh Trung - s3927071</string>
     <string name="find_your_email">Find your email</string>
     <string name="sent">Sent</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="next">Next</string>
+    <string name="done">Done</string>
+    <string name="edit">Edit</string>
 </resources>

@@ -23,7 +23,8 @@
                 android:layout_marginRight="8dp"
                 android:text="Profile"
                 android:textSize="22sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -33,11 +34,7 @@
                 android:text="(Required)"
                 android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/login_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Login" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -85,18 +82,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Profile"
-                    android:fontFamily="@font/lobster"
+                    android:fontFamily="@font/queensidesmedium"
                     android:textSize="30sp"
                     android:textStyle="bold"
                     android:textAlignment="center"
-                    android:layout_marginVertical="16dp"/>
+                    android:layout_marginVertical="16dp"
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Please enter your name, gender and phone number. \nYou can edit these in the app later."
                     android:textSize="16sp"
-                    android:layout_marginHorizontal="16dp"/>
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="10dp"
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -106,6 +106,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="10dp"
                     />
 
                 <androidx.cardview.widget.CardView
@@ -113,7 +114,7 @@
                     android:layout_height="wrap_content"
                     app:cardElevation="4dp"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="0dp"
                     app:cardCornerRadius="30dp">
                     <EditText
                         android:id="@+id/name_edit_text"
@@ -122,7 +123,6 @@
                         android:hint="Name"
                         android:background="@drawable/custom_edit_text"
                         android:padding="10dp"
-
                         android:textSize="18sp"/>
                 </androidx.cardview.widget.CardView>
 
@@ -191,7 +191,7 @@
                     android:layout_height="wrap_content"
                     app:cardElevation="4dp"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginBottom="160dp"
+                    android:layout_marginBottom="60dp"
                     app:cardCornerRadius="30dp">
                     <EditText
                         android:id="@+id/phone_number_edit_text"
@@ -210,8 +210,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
-                    android:text="Done"
-                    android:layout_marginBottom="50dp"/>
+                    android:layout_marginBottom="30dp"
+                    android:text="@string/next"
+                    app:backgroundTint="@color/secondary_stroke_blue" />
+
+                <TextView
+                    android:id="@+id/login_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:text="@string/already_have_an_account"
+                    android:layout_marginHorizontal="16dp"
+                    android:textColor="@color/secondary_stroke_blue"
+                    android:textAllCaps="false"
+                    android:gravity="bottom|center"/>
 
             </LinearLayout>
             </ScrollView>
