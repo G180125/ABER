@@ -82,6 +82,9 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             bookingTimeTextView.setText(booking.getBookingTime());
             vehicleTextView.setText(booking.getVehicle().getNumberPlate());
             statusTextView.setText(booking.getStatus());
+
+            destinationTextView.setFocusable(true);
+            pickUpTextView.setFocusable(true);
         }
     }
 

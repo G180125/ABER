@@ -50,8 +50,8 @@ public class ProfileEditFragment extends Fragment {
     private User currentUser, originalUser;
     private FirebaseManager firebaseManager;
     private ProgressDialog progressDialog;
-    private EditText nameEditText, emailEditText, phoneEditText;
-    private TextView addressTextView, vehicleTextView, sosTextView;
+    private EditText nameEditText, phoneEditText;
+    private TextView addressTextView, vehicleTextView, sosTextView, emailTextView;
     private ImageView backImageView, homeImageView, vehicleImageView, sosImageView;
     private RadioButton maleRadioButton, femaleRadiusButton;
     private CircleImageView avatar;
@@ -104,7 +104,7 @@ public class ProfileEditFragment extends Fragment {
         avatar = root.findViewById(R.id.avatar);
         uploadButton = root.findViewById(R.id.upload_button);
         nameEditText = root.findViewById(R.id.name);
-        emailEditText = root.findViewById(R.id.email);
+        emailTextView = root.findViewById(R.id.email);
         maleRadioButton = root.findViewById(R.id.radioButtonMale);
         femaleRadiusButton = root.findViewById(R.id.radioButtonFemale);
         phoneEditText = root.findViewById(R.id.phone);
@@ -287,7 +287,7 @@ public class ProfileEditFragment extends Fragment {
 
 
         nameEditText.setText(user.getName());
-        emailEditText.setText(user.getEmail());
+        emailTextView.setText(user.getEmail());
         setGenderFromRadiusButton(user);
         phoneEditText.setText(user.getPhoneNumber());
         addressTextView.setText(user.getHomes().get(0).getAddress());
@@ -322,11 +322,9 @@ public class ProfileEditFragment extends Fragment {
         User editedUser = originalUser.clone();
 
         editedUser.setName(nameEditText.getText().toString());
-        editedUser.setEmail(emailEditText.getText().toString());
+        editedUser.setEmail(emailTextView.getText().toString());
         editedUser.setGender(getGenderFromRadiusButton());
         editedUser.setPhoneNumber(phoneEditText.getText().toString());
-
-
         List<SOS> newList = new ArrayList<>();
         if (!sosTextView.getText().toString().isEmpty()) {
             SOS newSOS = new SOS(sosTextView.getText().toString(), "");
