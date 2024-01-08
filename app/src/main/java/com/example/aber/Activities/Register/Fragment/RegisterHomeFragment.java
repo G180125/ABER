@@ -24,11 +24,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.canhub.cropper.CropImageContract;
 import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
+import com.example.aber.Activities.LoginActivity;
 import com.example.aber.FirebaseManager;
 import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
@@ -105,6 +107,8 @@ public class RegisterHomeFragment extends Fragment {
                 }
             }
         });
+
+
 
         homeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
