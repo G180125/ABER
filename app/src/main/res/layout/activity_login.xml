@@ -159,7 +159,7 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     app:strokeColor="@color/secondary_stroke_blue"
                     app:cornerRadius="20dp"
-                    android:text="Create new account"
+                    android:text="@string/create_new_account"
                     android:layout_marginHorizontal="16dp"
                     android:textColor="@color/secondary_stroke_blue"
                     android:textAllCaps="false"
