@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -190,54 +192,64 @@ public class ProfileEditFragment extends Fragment {
             }
         });
 
+        // Inside the editButton.setOnClickListener method in ProfileEditFragment
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showLoadingDialog();
-                isProfileChanged(currentUser, originalUser, new OnProfileChangedListener() {
+                isProfileChanged(currentUser,originalUser, new OnProfileChangedListener() {
                     @Override
                     public void onProfileChanged(String message) {
                         // Handle the case when only the avatar is changed
-                        String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
-                        firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
-                            @Override
-                            public void onTaskSuccess(String message) {
-                                currentUser.setAvatar(message);
-                                firebaseManager.updateUser(userID, currentUser, new FirebaseManager.OnTaskCompleteListener() {
-                                    @Override
-                                    public void onTaskSuccess(String message) {
-                                        updateUI(currentUser);
-                                        showToast("Update Successfully");
-                                        hideLoadingDialog();
-                                    }
+                        if (cropped != null) {
+                            String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
+                            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+                                @Override
+                                public void onTaskSuccess(String message) {
+                                    currentUser.setAvatar(message);
+                                    firebaseManager.updateUser(userID, currentUser, new FirebaseManager.OnTaskCompleteListener() {
+                                        @Override
+                                        public void onTaskSuccess(String message) {
+                                            hideLoadingDialog();
+                                        }
 
-                                    @Override
-                                    public void onTaskFailure(String message) {
-                                        showToast(message);
-                                        hideLoadingDialog();
-                                    }
-                                });
-                            }
+                                        @Override
+                                        public void onTaskFailure(String message) {
+                                            showToast(message);
+                                            hideLoadingDialog();
+                                        }
+                                    });
+                                }
 
-                            @Override
-                            public void onTaskFailure(String message) {
-                                showToast(message);
-                                hideLoadingDialog();
-                            }
-                        });
-
+                                @Override
+                                public void onTaskFailure(String message) {
+                                    showToast(message);
+                                    hideLoadingDialog();
+                                }
+                            });
+                        }
                     }
 
                     @Override
                     public void onProfileNotChanged() {
-
+                        // Handle the case when no changes are detected
+                        showToast("No changes detected");
+                        hideLoadingDialog();
                     }
                 });
             }
         });
 
 
+
         return root;
+    }
+
+    private boolean validatePhoneNumber(String phoneNumber) {
+        phoneNumber = phoneNumber.replaceAll("\\s", "");
+
+        // Check if the phone number matches the pattern "0\d{9}" or "84\d{9}"
+        return phoneNumber.matches("0\\d{9}") || phoneNumber.matches("84\\d{9}");
     }
 
     private void launchImageCropper(Uri uri) {
@@ -319,44 +331,86 @@ public class ProfileEditFragment extends Fragment {
     }
 
     private void isProfileChanged(User currentUser, User originalUser, OnProfileChangedListener listener) {
-        User editedUser = originalUser.clone();
+         User editedUser = originalUser.clone();
 
-        editedUser.setName(nameEditText.getText().toString());
-        editedUser.setEmail(emailTextView.getText().toString());
+        // Update the editedUser with the new values
+
+        editedUser.setName(nameEditText.getText().toString().trim());
+
         editedUser.setGender(getGenderFromRadiusButton());
-        editedUser.setPhoneNumber(phoneEditText.getText().toString());
-        List<SOS> newList = new ArrayList<>();
-        if (!sosTextView.getText().toString().isEmpty()) {
-            SOS newSOS = new SOS(sosTextView.getText().toString(), "");
-            newList.add(newSOS);
-        }
-        editedUser.setEmergencyContacts(newList);
 
-        boolean nameChanged = !Objects.equals(originalUser.getName(), editedUser.getName());
-        boolean emailChanged = !Objects.equals(originalUser.getEmail(), editedUser.getEmail());
+
+        String phoneNumber = phoneEditText.getText().toString().trim();
+        if (validatePhoneNumber(phoneNumber)) {
+            editedUser.setPhoneNumber(phoneNumber);
+        } else {
+            // Show an error message or handle the invalid phone number case
+            showToast("Invalid phone number format");
+            phoneEditText.setError("Please enter the correct format before editing!");
+            hideLoadingDialog();
+            return;
+        }
+
+        boolean avatarChanged = cropped != null;
+
+        // Check for changes in individual fields
+        boolean nameChanged = !Objects.equals(originalUser.getName(), nameEditText.getText().toString().trim());
+
         boolean genderChanged = originalUser.getGender() != editedUser.getGender();
         boolean phoneChanged = !Objects.equals(originalUser.getPhoneNumber(), editedUser.getPhoneNumber());
 
-        boolean sosChanged = !Objects.equals(originalUser.getEmergencyContacts(), editedUser.getEmergencyContacts());
-        boolean avatarChanged = cropped != null;
 
-        boolean profileChanged = nameChanged || emailChanged || genderChanged || phoneChanged  || sosChanged || avatarChanged;
 
-        if (profileChanged) {
-            Log.d("ProfileEditFragment", "Changes detected: ");
-//            if (nameChanged) Log.d("ProfileEditFragment", "Name changed");
-//            if (emailChanged) Log.d("ProfileEditFragment", "Email changed");
-//            if (genderChanged) Log.d("ProfileEditFragment", "Gender changed");
-//            if (phoneChanged) Log.d("ProfileEditFragment", "Phone changed");
-//
-//            if (sosChanged) Log.d("ProfileEditFragment", "SOS changed");
-//            if (avatarChanged) Log.d("ProfileEditFragment", "Avatar changed");
-            listener.onProfileChanged("");
+
+        // Update the avatar if it has changed
+        if (avatarChanged) {
+            String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
+            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+                @Override
+                public void onTaskSuccess(String message) {
+                    editedUser.setAvatar(message);
+                    updateUI(editedUser);
+                    showToast("Update Successfully");
+                    hideLoadingDialog();
+                    listener.onProfileChanged("Change successful");
+                }
+
+                @Override
+                public void onTaskFailure(String message) {
+                    showToast(message);
+                    showToast("Upload Image Failure: " + message);
+                    hideLoadingDialog();
+                }
+            });
+        } else if (nameChanged || genderChanged || phoneChanged) {
+            // Update only the fields that have changed
+            firebaseManager.updateUser(userID, editedUser, new FirebaseManager.OnTaskCompleteListener() {
+                @Override
+                public void onTaskSuccess(String message) {
+                    updateUI(editedUser);
+
+                    showToast("Update Successfully");
+                    hideLoadingDialog();
+                    listener.onProfileChanged("Change successful");
+                }
+
+                @Override
+                public void onTaskFailure(String message) {
+                    showToast(message);
+                    showToast("Update User Failure: " + message);
+                    hideLoadingDialog();
+                }
+            });
         } else {
+            // If no changes are detected, notify the listener accordingly
             listener.onProfileNotChanged();
+            showToast("No changes detected");
+            hideLoadingDialog();
         }
-
     }
+
+
+
 
     public interface OnProfileChangedListener {
         void onProfileChanged(String message);
@@ -374,14 +428,19 @@ public class ProfileEditFragment extends Fragment {
     }
 
     private void hideLoadingDialog() {
-        requireActivity().runOnUiThread(() -> {
-            if (progressDialog != null && progressDialog.isShowing()) {
+        new Handler(Looper.getMainLooper()).post(() -> {
+            if (isAdded() && getActivity() != null && !getActivity().isFinishing() && progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
         });
     }
 
-    private void showToast(String message){
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+
+
+
+    private void showToast(String message) {
+        if (isAdded()) {
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        }
     }
 }
