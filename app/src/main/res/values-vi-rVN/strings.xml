@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ABER</string>
+    <!--    <string name="GOOGLE_MAP_API">AIzaSyCYwy04EO7319zgEWLcfu7mxItQdPZM8Dw</string>-->
+    <string name="GOOGLE_MAP_API">AIzaSyAk79eOlfksqlm74wCmRbY_yddK75iZ4dM</string>
+
+    <!-- Login , SignUp    -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email">Email</string>
+    <string name="password">Mật Khẩu</string>
+    <string name="address">Địa chỉ</string>
+    <string name="aber">ABER</string>
+    <string name="login">Đăng nhâp</string>
+    <string name="forgot_your_password">Bạn quên mật khẩu ?</string>
+    <string name="create_new_account">Tạo tài khoản mới </string>
+
+    <!-- Profile edit    -->
+    <string name="logout">Đăng xuất</string>
+    <string name="help">Trợ giúp</string>
+
+
+
+    <!-- Register Page    -->
+    <string name="required">(Bắt Buộc)</string>
+    <string name="optional">(Không Bắt Buộc)</string>
+    <string name="next">Tiếp Theo</string>
+    <string name="done">Xong</string>
+    <string name="already_have_an_account">Bạn Đã Có Tài Khoản?</string>
+    <string name="home">Nhà</string>
+    <string name="profile">Profile</string>
+    <string name="new_account">Tài Khoản Mới</string>
+    <string name="vehicle">Phương Tiện</string>
+    <string name="name_star">Tên (*)</string>
+    <string name="phone_number_star">Số Điện Thoại (*)</string>
+    <string name="name">Tên</string>
+    <string name="gender">Giới Tính:</string>
+    <string name="male">Nam</string>
+    <string name="female">Nữ</string>
+    <string name="phone_number">Số Điện Thoại</string>
+    <string name="address_star">Địa Chỉ (*)</string>
+    <string name="image">Ảnh</string>
+    <string name="brand">Hãng</string>
+    <string name="color">Màu</string>
+    <string name="seat_capacity">Chỗ Ngồi</string>
+    <string name="number_plate">Biển Số Xe</string>
+    <string name="ex_50_k_12345">VD: 50-K 12345</string>
+    <string name="account">Tài Khoản</string>
+    <string name="email_star">Email (*)</string>
+    <string name="password_star">Mật Khẩu (*)</string>
+    <string name="confirm_password">Xác Nhận Mật Khẩu</string>
+    <string name="confirm_password_star">Xác Nhận Mật Khẩu (*)</string>
+    <string name="home_heading">Xin vui lòng nhập thông tin địa chỉ nhà . \nBạn có thể chỉnh sửa thông tin này sau trong ứng dụng.</string>
+    <string name="profile_heading">Xin vui lòng nhập tên, giới tính và số điện thoại . \nBạn có thể chỉnh sửa những thông tin này sau trong ứng dụng.</string>
+    <string name="vehicle_heading">Xin vui lòng nhập thông tin phương tiện . \nBạn có thể chỉnh sửa những thông tin này sau trong ứng dụng.</string>
+    <string name="Sos_heading">Xin vui lòng nhập thông tin liên lạc khẩn cấp. \nBạn có thể chia sẻ vị trí trực tiếp và thông tin tài xế khi kích hoạt tính năng SOS. \nBạn có thể bỏ qua bước này và chỉnh sửa trong ứng dụng sau.</string>
+    <string name="Account_heading">Please enter an unique Email and enter a password to create a new account.</string>
+
+    <!-- Forget Password    -->
+    <string name="find_your_email">Find your email</string>
+
+
+    <!-- About Us Page    -->
+    <string name="heading_one">Lịch Sử</string>
+    <string name="heading_two">Nhiệm Vụ</string>
+    <string name="heading_three">Thành Viên</string>
+    <string name="desc_one">Tuy ý tưởng về một cách an toàn để về nhà sau khi vui chơi đã có từ lâu đời, Aber mới ra đời vào năm 2024 với sứ mệnh rõ ràng: biến việc về nhà sau một đêm tuyệt vời trở nên đơn giản và an toàn như đặt bánh pizza. Tất cả bắt nguồn từ một trải nghiệm cá nhân cho thấy khoảng cách giữa những đêm vui và những lựa chọn có trách nhiệm. Chúng tôi biết rằng phải có một cách tốt hơn là dựa vào sự phán đoán không chắc chắn hoặc đưa bạn bè vào những tình huống khó xử. Và do đó, Aber đã ra đời – một nền tảng kết nối những tài xế kiêm người lái xe tỉnh táo có trách nhiệm với những người sẵn sàng ăn mừng mà không phải lo lắng về việc lái xe về nhà. Kể từ đó, chúng tôi đã phát triển từ một giải pháp địa phương thành một mạng lưới toàn quốc, tất cả đều nhờ vào cộng đồng tuyệt vời của các tài xế và người đi xe luôn coi trọng sự an toàn và niềm vui như nhau. Chúng tôi tự hào không chỉ là một ứng dụng; chúng tôi là một phong trào thúc đẩy một thế giới nơi mọi cuộc vui đều kết thúc hạnh phúc như khi bắt đầu.</string>
+    <string name="desc_two">Hơn cả app, Aber là cộng đồng gắn kết tin cậy, nơi hàng xóm, đồng nghiệp, bạn bè trở thành tài xế an toàn, đưa nhau về trọn vẹn. Khuyến khích chọn lựa trách nhiệm, Aber cùng xây dựng thế giới nơi ăn mừng an lành luôn song hành!</string>
+    <string name="desc_three">Nguyen Mau Bach - s3926937 \nNguyen Minh Hung - s3924473 \nNguyen Vi Phi Long - s3904632 \nLe Tran Minh Trung - s3927071</string>
+    <string name="sent">Sent</string>
+
+    <string name="edit">Edit</string>
+
+
+
+</resources>

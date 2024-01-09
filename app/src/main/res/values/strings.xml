@@ -2,7 +2,8 @@
     <string name="app_name">ABER</string>
     <!--    <string name="GOOGLE_MAP_API">AIzaSyCYwy04EO7319zgEWLcfu7mxItQdPZM8Dw</string>-->
     <string name="GOOGLE_MAP_API">AIzaSyAk79eOlfksqlm74wCmRbY_yddK75iZ4dM</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
+    <!-- Login , SignUp    -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -10,19 +11,60 @@
     <string name="aber">ABER</string>
     <string name="login">Login</string>
     <string name="forgot_your_password">Forget password ?</string>
+    <string name="create_new_account">Create new account</string>
+
+    <!-- Profile edit    -->
+    <string name="logout">Logout</string>
+    <string name="help">Help</string>
+
+    <!-- Register Page    -->
+    <string name="required">(Required)</string>
+    <string name="optional">(Optional)</string>
+    <string name="next">Next</string>
+    <string name="done">Done</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="new_account">New Account</string>
+    <string name="vehicle">Vehicle</string>
+    <string name="name_star">Name (*)</string>
+    <string name="phone_number_star">Phone Number (*)</string>
+    <string name="name">Name</string>
+    <string name="gender">Gender:</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="address_star">Address (*)</string>
+    <string name="image">Image</string>
+    <string name="brand">Brand</string>
+    <string name="color">Color</string>
+    <string name="seat_capacity">Seat Capacity</string>
+    <string name="number_plate">Number Plate</string>
+    <string name="ex_50_k_12345">Ex: 50-K 12345</string>
+    <string name="account">Account</string>
+    <string name="email_star">Email (*)</string>
+    <string name="Account_heading">Please enter an unique Email and enter a password to create a new account.</string>
+    <string name="password_star">Password (*)</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="confirm_password_star">Confirm Password (*)</string>
+    <string name="profile_heading">Please enter your name, gender and phone number. \nYou can edit these in the app later.</string>
+    <string name="home_heading">Please enter your home detail. \nYou can edit this in the app later.</string>
+    <string name="vehicle_heading">Please enter your vehicle detail. \nYou can edit this in the app later.</string>
+    <string name="Sos_heading">Enter an Emergency Contact. \nYou can share your live location and Driver Detail when you initiate the SOS action. \nYou can skip this for now and edit it in the app later.</string>
+
+    <!-- Forget Password    -->
+    <string name="find_your_email">Find your email</string>
 
     <!-- About Us Page    -->
     <string name="heading_one">Our History</string>
     <string name="heading_two">Our Mission</string>
     <string name="heading_three">Our Team</string>
-
     <string name="desc_one">While the idea of a safe way home after celebrating has been around for ages, Aber came about in 2024 with a clear mission: to make getting home after a good night out as simple and safe as ordering a pizza. It all started with a personal experience that highlighted the gap between fun nights and responsible choices. We knew there had to be a better way than relying on shaky judgment or pushing friends into uncomfortable situations. And so, Aber was born – a platform that connects responsible designated drivers with those ready to celebrate without the worry of the drive home. Since then, we\'ve grown from a local solution to a nationwide network, all thanks to the amazing community of drivers and riders who prioritize safety and fun in equal measure. We\'re proud to be more than just an app; we\'re a movement pushing for a world where every celebration ends as happily as it begins.</string>
     <string name="desc_two">At Aber, we\'re more than just an app; we\'re a community built on trust and responsibility. We connect neighbors, colleagues, and friends, creating a network of reliable drivers who ensure everyone reaches home safely. By empowering responsible choices, we foster a world where celebration and care go hand-in-hand.</string>
     <string name="desc_three">Nguyen Mau Bach - s3926937 \nNguyen Minh Hung - s3924473 \nNguyen Vi Phi Long - s3904632 \nLe Tran Minh Trung - s3927071</string>
-    <string name="find_your_email">Find your email</string>
     <string name="sent">Sent</string>
-    <string name="already_have_an_account">Already have an account?</string>
-    <string name="next">Next</string>
-    <string name="done">Done</string>
     <string name="edit">Edit</string>
+
+
+
 </resources>

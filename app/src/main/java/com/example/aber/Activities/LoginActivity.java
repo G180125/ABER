@@ -4,9 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,10 +19,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +39,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Locale;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -49,6 +57,9 @@ public class LoginActivity extends AppCompatActivity {
 
     Dialog dialog;
 
+    private Spinner spinnerLanguage;
+    public static final String[] languages = {"Language","English","Tiếng Việt"};
+
     private LinearLayout loginBackground;
 
     @Override
@@ -64,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordTextLayout = findViewById(R.id.password_layout_text);
         passwordEditText = findViewById(R.id.password_edit_text);
         forgetpassword = findViewById(R.id.forget_password_text);
+        spinnerLanguage = findViewById(R.id.language_spinner);
 
 
         dialog = new Dialog(this);
@@ -84,6 +96,34 @@ public class LoginActivity extends AppCompatActivity {
                 dialog.hide();
             }
         });
+
+//        Language Changer
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,languages);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerLanguage.setAdapter(arrayAdapter);
+        spinnerLanguage.setSelection(0);
+        spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedLang = parent.getItemAtPosition(position).toString();
+                if(selectedLang.equals("English")){
+                    setLocal(LoginActivity.this,"en");
+                    finish();
+                    startActivity(getIntent());
+
+                } else if (selectedLang.equals("Tiếng Việt")){
+                    setLocal(LoginActivity.this,"vi");
+                    finish();
+                    startActivity(getIntent());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
 //        Window window = dialog.getWindow();
 //       WindowManager.LayoutParams wlp = window.getAttributes();
@@ -179,12 +219,16 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    //Set local for language option
+    public void setLocal(Activity activity, String langCode){
+        Locale locale = new Locale(langCode);
+        Resources resources = activity.getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config,resources.getDisplayMetrics());
 
 
-
-
-
-
+    }
     private void showLoadingDialog() {
         runOnUiThread(() -> {
             progressDialog = new ProgressDialog(LoginActivity.this);
