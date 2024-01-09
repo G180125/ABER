@@ -78,9 +78,11 @@
                     android:marqueeRepeatLimit="marquee_forever"
                     android:padding="8dp"
                     android:scrollHorizontally="true"
+                    android:focusable="true"
                     android:singleLine="true"
                     android:text="Pick Up"
-                    android:textSize="20sp"/>
+                    android:textSize="20sp"
+                    android:focusableInTouchMode="true"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -110,6 +112,7 @@
                     android:padding="8dp"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
+                    android:focusable="true"
                     android:text="Destination"
                     android:textSize="20sp"/>
             </LinearLayout>
