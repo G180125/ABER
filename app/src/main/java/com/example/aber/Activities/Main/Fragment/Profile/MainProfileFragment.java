@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.example.aber.Activities.LoginActivity;
 import com.example.aber.Activities.Main.Fragment.AboutUs.AboutUsActivity;
 import com.example.aber.Activities.Main.Fragment.Profile.Edit.ProfileEditFragment;
+import com.example.aber.Activities.Main.Fragment.Profile.Settings.ProfileSettingsFragment;
 import com.example.aber.FirebaseManager;
 import com.example.aber.Models.User.User;
 import com.example.aber.R;
@@ -39,7 +40,7 @@ public class MainProfileFragment extends Fragment {
     private ProgressDialog progressDialog;
     private CircleImageView avatar;
     private TextView nameTextView, emailTextView;
-    private CardView profileCardView, walletCardView, historyCardView, aboutUsCardView, helpCardView, logoutCardView;
+    private CardView profileCardView, walletCardView, settingsCardView, aboutUsCardView, helpCardView, logoutCardView;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -71,7 +72,7 @@ public class MainProfileFragment extends Fragment {
         emailTextView = root.findViewById(R.id.email);
         profileCardView = root.findViewById(R.id.profile);
         walletCardView = root.findViewById(R.id.wallet);
-        historyCardView = root.findViewById(R.id.history);
+        settingsCardView = root.findViewById(R.id.settings);
         aboutUsCardView = root.findViewById(R.id.about_us);
         helpCardView = root.findViewById(R.id.help);
         logoutCardView = root.findViewById(R.id.logout);
@@ -92,10 +93,13 @@ public class MainProfileFragment extends Fragment {
             }
         });
 
-        historyCardView.setOnClickListener(new View.OnClickListener() {
+        settingsCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast(requireContext(),"history card is clicked");
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                replaceFragment(new ProfileSettingsFragment(),fragmentManager,fragmentTransaction,R.id.fragment_main_container);
+                showToast(requireContext(),"settings card is clicked");
             }
         });
 

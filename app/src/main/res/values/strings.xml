@@ -51,9 +51,16 @@
     <string name="home_heading">Please enter your home detail. \nYou can edit this in the app later.</string>
     <string name="vehicle_heading">Please enter your vehicle detail. \nYou can edit this in the app later.</string>
     <string name="Sos_heading">Enter an Emergency Contact. \nYou can share your live location and Driver Detail when you initiate the SOS action. \nYou can skip this for now and edit it in the app later.</string>
+    <string name="settings">Settings</string>
+
+    <!-- Profile Settings    -->
+    <string name="Language">Language</string>
+    <string name="theme">Dark Mode</string>
+
 
     <!-- Forget Password    -->
     <string name="find_your_email">Find your email</string>
+
 
     <!-- About Us Page    -->
     <string name="heading_one">Our History</string>
@@ -64,7 +71,8 @@
     <string name="desc_three">Nguyen Mau Bach - s3926937 \nNguyen Minh Hung - s3924473 \nNguyen Vi Phi Long - s3904632 \nLe Tran Minh Trung - s3927071</string>
     <string name="sent">Sent</string>
     <string name="edit">Edit</string>
-
+    <string name="english">English</string>
+    <string name="Vietnamese">Tiếng Việt</string>
 
 
 </resources>
