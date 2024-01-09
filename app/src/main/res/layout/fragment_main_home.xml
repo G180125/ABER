@@ -18,20 +18,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="16dp">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
+            android:layout_height="41dp"
             android:background="@drawable/rouned_background"
             android:elevation="5dp"
-            >
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <fragment
                 android:id="@+id/autocompleteSupportFragment"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
                 android:layout_width="0dp"
                 android:layout_height="35dp"
-                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
                 android:layout_weight="1"
                 android:backgroundTint="@color/white" />
 

@@ -23,14 +23,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Vehicle"
+                    android:text="@string/vehicle"
                     android:textSize="22sp"
                     android:textStyle="bold"
                     android:layout_marginRight="8dp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="(Required)"
+                    android:text="@string/required"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -75,7 +75,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="16dp"
                         android:fontFamily="@font/queensidesmedium"
-                        android:text="Vehicle"
+                        android:text="@string/vehicle"
                         android:textAlignment="center"
                         android:textSize="30sp"
                         android:textStyle="bold" />
@@ -84,7 +84,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
-                        android:text="Please enter your vehicle detail. \nYou can edit this in the app later."
+                        android:text="@string/vehicle_heading"
                         android:textSize="16sp" />
 
                     <TextView
@@ -92,7 +92,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
                         android:padding="5dp"
-                        android:text="Brand"
+                        android:text="@string/brand"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -109,7 +109,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/custom_edit_text"
-                            android:hint="Brand"
+                            android:hint="@string/brand"
                             android:padding="10dp"
                             android:textSize="18sp" />
                     </androidx.cardview.widget.CardView>
@@ -119,7 +119,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
                         android:padding="5dp"
-                        android:text="Name"
+                        android:text="@string/name"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -136,7 +136,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/custom_edit_text"
-                            android:hint="Name"
+                            android:hint="@string/name"
                             android:padding="10dp"
                             android:textSize="18sp" />
                     </androidx.cardview.widget.CardView>
@@ -146,7 +146,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
                         android:padding="5dp"
-                        android:text="Color"
+                        android:text="@string/color"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -163,7 +163,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/custom_edit_text"
-                            android:hint="Color"
+                            android:hint="@string/color"
                             android:padding="10dp"
                             android:textSize="18sp" />
                     </androidx.cardview.widget.CardView>
@@ -173,7 +173,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
                         android:padding="5dp"
-                        android:text="Seat Capacity"
+                        android:text="@string/seat_capacity"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -190,7 +190,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/custom_edit_text"
-                            android:hint="Seat Capacity"
+                            android:hint="@string/seat_capacity"
                             android:paddingHorizontal="8dp"
                             android:paddingVertical="10dp"
                             android:textSize="18sp" />
@@ -202,7 +202,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
                         android:padding="5dp"
-                        android:text="Number Plate"
+                        android:text="@string/number_plate"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -211,7 +211,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
                         android:padding="5dp"
-                        android:text="Ex: 50-K 12345"
+                        android:text="@string/ex_50_k_12345"
                         android:textSize="16sp"
                         android:textStyle="italic" />
 
@@ -228,7 +228,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/custom_edit_text"
-                            android:hint="Number Plate"
+                            android:hint="@string/number_plate"
                             android:padding="10dp"
                             android:textSize="18sp" />
                     </androidx.cardview.widget.CardView>
@@ -238,7 +238,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
                         android:layout_marginVertical="8dp"
-                        android:text="Image"
+                        android:text="@string/image"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 

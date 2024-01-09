@@ -189,7 +189,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Help"
+                            android:text="@string/help"
                             android:layout_marginLeft="8dp"
                             android:layout_weight="1"/>
                         <ImageView
@@ -215,11 +215,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_logout"
-                            android:tint="@color/quantum_googred"/>
+                            app:tint="@color/quantum_googred" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Logout"
+                            android:text="@string/logout"
                             android:layout_marginLeft="8dp"
                             android:layout_weight="1"
                             android:textColor="@color/quantum_googred"/>

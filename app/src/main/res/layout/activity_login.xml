@@ -10,6 +10,18 @@
     android:background="@color/background_color_blue"
     android:id="@+id/login_background"
     >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        >
+    <Spinner
+        android:id="@+id/language_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    </LinearLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -159,7 +171,7 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     app:strokeColor="@color/secondary_stroke_blue"
                     app:cornerRadius="20dp"
-                    android:text="Create new account"
+                    android:text="@string/create_new_account"
                     android:layout_marginHorizontal="16dp"
                     android:textColor="@color/secondary_stroke_blue"
                     android:textAllCaps="false"
