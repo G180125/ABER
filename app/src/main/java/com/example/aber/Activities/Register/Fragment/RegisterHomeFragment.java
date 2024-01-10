@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -21,6 +23,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,13 +49,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 
 public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final String STORAGE_PATH = "home/";
     private Button doneButton;
-    private String name, phoneNumber, gender;
-    private TextView addressTextView;
+    private double latitude, longitude;
+    private String name, phoneNumber, gender, address;
+    private TextView addressTextView, addressTextView2;
     private ImageView homeImageView;
     private Bitmap cropped;
     private FirebaseManager firebaseManager;
@@ -100,6 +109,7 @@ public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback
         addressTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("map", "button clicked");
                 initPopupWindow();
                 popupWindow.showAsDropDown(root, 0, 0);
             }
@@ -118,7 +128,7 @@ public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback
                         public void onTaskSuccess(String message) {
                             AndroidUtil.hideLoadingDialog(progressDialog);
                             showToast(requireContext(),"Finish Step 2/5");
-                            toRegisterVehicleFragment(address, imagePath);
+                            toRegisterVehicleFragment(imagePath);
                         }
 
                         @Override
@@ -179,35 +189,50 @@ public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback
     }
 
     public void initPopupWindow() {
-        LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.pop_up_map, null);
+        try {
+            LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View popupView = inflater.inflate(R.layout.pop_up_map, null);
 
-        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
-        popupWindow.setTouchable(true);
+            popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+            popupWindow.setTouchable(true);
 
-        popupView.setBackgroundColor(getResources().getColor(R.color.popup_background, null));
+            popupView.setBackgroundColor(getResources().getColor(R.color.popup_background, null));
 
-        SupportMapFragment mapFragment = (SupportMapFragment) requireActivity().getSupportFragmentManager()
-                .findFragmentById(R.id.map1);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
-        }
+            SupportMapFragment mapFragment = (SupportMapFragment) requireActivity().getSupportFragmentManager()
+                    .findFragmentById(R.id.map1);
 
-        TextView addressTextView2 = popupView.findViewById(R.id.address_edit_text);
-        Button selectButton = popupView.findViewById(R.id.select_button);
-        ImageView cancelBtn = popupView.findViewById(R.id.cancelBtn);
-
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
+            if (mapFragment != null) {
+                mapFragment.getMapAsync(this);
             }
-        });
 
-        popupWindow.showAsDropDown(root, 0, 0);
+            addressTextView2 = popupView.findViewById(R.id.address_edit_text);
+            Button selectButton = popupView.findViewById(R.id.select_button);
+            ImageView cancelBtn = popupView.findViewById(R.id.cancelBtn);
+
+            cancelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popupWindow.dismiss();
+                }
+            });
+
+            selectButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(address != null){
+                        addressTextView.setText(address);
+                    popupWindow.dismiss();
+                    } else {
+                        showToast(requireContext(), "You haven't select an address");
+                    }
+                }
+            });
+        } catch (InflateException e) {
+
+        }
     }
 
-    private void toRegisterVehicleFragment(String address, String homeImage){
+    private void toRegisterVehicleFragment(String homeImage){
         RegisterVehicleFragment fragment = new RegisterVehicleFragment();
 
         Bundle bundle = new Bundle();
@@ -215,6 +240,8 @@ public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback
         bundle.putString("phoneNumber", phoneNumber);
         bundle.putString("gender", gender);
         bundle.putString("address", address);
+        bundle.putDouble("latitude", latitude);
+        bundle.putDouble("longitude", longitude);
         bundle.putString("homeImage", homeImage);
         fragment.setArguments(bundle);
 
@@ -271,9 +298,28 @@ public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
 
-                searchedLocation.showInfoWindow();
+                latitude = latLng.latitude;
+                longitude = latLng.longitude;
+                if (latLng != null) {
+                    try {
+                        List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                        address = addresses.get(0).getAddressLine(0);
+                        String city = addresses.get(0).getLocality();
+                        String state = addresses.get(0).getAdminArea();
+                        String country = addresses.get(0).getCountryName();
+                        String postalCode = addresses.get(0).getPostalCode();
+                        String knownName = addresses.get(0).getFeatureName();
+                        String dis = addresses.get(0).getSubAdminArea();
+
+                        addressTextView2.setText(address);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
     }
+
 }

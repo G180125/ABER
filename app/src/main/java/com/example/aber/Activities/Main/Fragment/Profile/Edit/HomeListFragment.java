@@ -348,7 +348,7 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
             }
         } else {
             // Add a new home
-            Home newHome = new Home(address, path);
+            Home newHome = new Home(address, path, 0.0, 0.0);
             homeList.add(0, newHome);
             updateList(user, homeList, "Update Successful");
         }
