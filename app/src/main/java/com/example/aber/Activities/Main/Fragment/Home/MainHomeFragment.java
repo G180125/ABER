@@ -169,7 +169,6 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
 
                     hideLoadingDialog(progressDialog);
 
-                    // TODO: Display the custom info window on top of the marker
                 }
 
                 @Override

@@ -1,5 +1,6 @@
 package com.example.aber.Activities.Main.Fragment.Profile.Edit;
 
+import static com.example.aber.Utils.AndroidUtil.hideLoadingDialog;
 import static com.example.aber.Utils.AndroidUtil.replaceFragment;
 import static com.example.aber.Utils.AndroidUtil.showToast;
 
@@ -53,7 +54,7 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
     private ImageView buttonBack;
     private FirebaseManager firebaseManager;
     private ProgressDialog progressDialog;
-    private String id, previous, name, address, imagePath;
+    private String id, previous, name, address, imagePath, newAddress;
     private User user;
     private List<Home> homeList;
     private UserHomeAdapter adapter;
@@ -82,7 +83,6 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         progressDialog = new ProgressDialog(requireContext());
-        AndroidUtil.showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_home_list, container, false);
         firebaseManager = new FirebaseManager();
@@ -149,6 +149,7 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
 
     @SuppressLint("NotifyDataSetChanged")
     private void updateUI(List<Home> homeList){
+        AndroidUtil.showLoadingDialog(progressDialog);
         adapter.setHomeList(homeList);
         adapter.notifyDataSetChanged();
         AndroidUtil.hideLoadingDialog(progressDialog);
@@ -224,8 +225,8 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
         if (home != null) {
             addressEditText.setText(home.getAddress());
 
-            if(home.getAddress() != null) {
-                firebaseManager.retrieveImage(home.getAddress(), new FirebaseManager.OnRetrieveImageListener() {
+            if(home.getImage() != null) {
+                firebaseManager.retrieveImage(home.getImage(), new FirebaseManager.OnRetrieveImageListener() {
                     @Override
                     public void onRetrieveImageSuccess(Bitmap bitmap) {
                         homeImageView.setImageBitmap(bitmap);
@@ -249,34 +250,35 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("submit", "submit button clicked");
                 AndroidUtil.showLoadingDialog(progressDialog);
 
-                String newAddress = addressEditText.getText().toString();
+                newAddress = addressEditText.getText().toString();
 
-                if (cropped != null && validateInputs(newAddress)) {
-                    // Handle the case when only the avatar is changed
-                    imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
-                    Log.d("submit", "path: " + imagePath);
-                    firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
-                        @Override
-                        public void onTaskSuccess(String message) {
-                            AndroidUtil.hideLoadingDialog(progressDialog);
-                            updateHome(title, home, newAddress, imagePath, position);
-                        }
+               if(cropped != null){
+                   imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
+                   Log.d("update",imagePath);
+               }
 
-                        @Override
-                        public void onTaskFailure(String message) {
-                            AndroidUtil.hideLoadingDialog(progressDialog);
-                            showToast(requireContext(), "Upload Image failed");
-                        }
-                    });
-                } else {
-                    AndroidUtil.hideLoadingDialog(progressDialog);
-                }
+                assert home != null;
+               if(!validateInputs(newAddress)){
+                   newAddress = null;
+               }
 
-                // Dismiss the PopupWindow after updating the homeList
-                popupWindow.dismiss();
+               if(newAddress.equals(home.getAddress())) {
+                   newAddress = null;
+               }
+
+               if(newAddress == null && imagePath == null){
+                   if(title.equals("Edit Home")) {
+                       showToast(requireContext(), "You haven't changed anything");
+                       hideLoadingDialog(progressDialog);
+                   } else {
+                       showToast(requireContext(), "Home must have an address and an image");
+                       hideLoadingDialog(progressDialog);
+                   }
+               } else {
+                   updateHome(title, home, newAddress, imagePath, position);
+               }
             }
         });
 
@@ -321,18 +323,35 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
         if (title.equals("Edit Home")) {
             // Update existing home
             if (home != null) {
-                home.setAddress(address);
-                home.setImage(path);
-                homeList.set(position, home);
+                if(address != null) {
+                    home.setAddress(address);
+                }
+                if(path != null) {
+                    firebaseManager.uploadImage(cropped, path, new FirebaseManager.OnTaskCompleteListener() {
+                        @Override
+                        public void onTaskSuccess(String message) {
+                            home.setImage(path);
+                            homeList.set(position, home);
+                            updateList(user, homeList, "Update Successful");
+                        }
+
+                        @Override
+                        public void onTaskFailure(String message) {
+                            AndroidUtil.hideLoadingDialog(progressDialog);
+                            showToast(requireContext(), "Upload Image failed");
+                        }
+                    });
+                } else {
+                    homeList.set(position, home);
+                    updateList(user, homeList, "Update Successful");
+                }
             }
         } else {
             // Add a new home
             Home newHome = new Home(address, path);
             homeList.add(0, newHome);
+            updateList(user, homeList, "Update Successful");
         }
-
-        // Update the user with the modified homeList
-        updateList(user, homeList, "Update Successful");
     }
 
     private void updateList(User user, List<Home> homeList, String successMessage){
@@ -341,6 +360,9 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
             @Override
             public void onTaskSuccess(String message) {
                 AndroidUtil.showToast(getContext(), successMessage);
+                AndroidUtil.hideLoadingDialog(progressDialog);
+                // Dismiss the PopupWindow after updating
+                popupWindow.dismiss();
                 updateUI(homeList);
             }
 

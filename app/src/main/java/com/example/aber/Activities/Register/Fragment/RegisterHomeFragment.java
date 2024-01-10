@@ -2,18 +2,21 @@ package com.example.aber.Activities.Register.Fragment;
 
 import static com.example.aber.Utils.AndroidUtil.showToast;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.cardview.widget.CardView;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -22,28 +25,41 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.canhub.cropper.CropImageContract;
 import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
-import com.example.aber.Activities.LoginActivity;
+import com.example.aber.Activities.Main.Fragment.Home.ConfirmBookingFragment;
 import com.example.aber.FirebaseManager;
+import com.example.aber.Models.User.Home;
 import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-public class RegisterHomeFragment extends Fragment {
+
+public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback {
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final String STORAGE_PATH = "home/";
     private Button doneButton;
     private String name, phoneNumber, gender;
-    private EditText addressEditText;
+    private TextView addressTextView;
     private ImageView homeImageView;
     private Bitmap cropped;
     private FirebaseManager firebaseManager;
     private ProgressDialog progressDialog;
+    private PopupWindow popupWindow;
+    private GoogleMap mMap;
+    private Marker searchedLocation;
+    private View root;
 
     private final ActivityResultLauncher<Intent> getImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
@@ -67,7 +83,7 @@ public class RegisterHomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         progressDialog = new ProgressDialog(requireContext());
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_register_home, container, false);
+        root = inflater.inflate(R.layout.fragment_register_home, container, false);
         firebaseManager = new FirebaseManager();
 
         Bundle args = getArguments();
@@ -78,15 +94,22 @@ public class RegisterHomeFragment extends Fragment {
         }
 
         doneButton = root.findViewById(R.id.done_button);
-        addressEditText = root.findViewById(R.id.address_edit_text);
+        addressTextView = root.findViewById(R.id.address_edit_text);
         homeImageView = root.findViewById(R.id.home_image);
+
+        addressTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initPopupWindow();
+                popupWindow.showAsDropDown(root, 0, 0);
+            }
+        });
 
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String address = addressEditText.getText().toString();
-                validateInputs(address);
-                if (cropped != null) {
+                String address = addressTextView.getText().toString();
+                if (validateInputs(address) && cropped != null) {
                     AndroidUtil.showLoadingDialog(progressDialog);
                     // Handle the case when only the avatar is changed
                     String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
@@ -148,11 +171,40 @@ public class RegisterHomeFragment extends Fragment {
 
     private boolean validateInputs(String address){
         if(address.isEmpty()){
-            addressEditText.setError("Address cannot be empty");
+            addressTextView.setError("Address cannot be empty");
             showToast(requireContext(),"Address can not be empty");
             return false;
         }
         return true;
+    }
+
+    public void initPopupWindow() {
+        LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.pop_up_map, null);
+
+        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        popupWindow.setTouchable(true);
+
+        popupView.setBackgroundColor(getResources().getColor(R.color.popup_background, null));
+
+        SupportMapFragment mapFragment = (SupportMapFragment) requireActivity().getSupportFragmentManager()
+                .findFragmentById(R.id.map1);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
+
+        TextView addressTextView2 = popupView.findViewById(R.id.address_edit_text);
+        Button selectButton = popupView.findViewById(R.id.select_button);
+        ImageView cancelBtn = popupView.findViewById(R.id.cancelBtn);
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+
+        popupWindow.showAsDropDown(root, 0, 0);
     }
 
     private void toRegisterVehicleFragment(String address, String homeImage){
@@ -177,5 +229,51 @@ public class RegisterHomeFragment extends Fragment {
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        mMap = googleMap;
+
+        if (ActivityCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            // Enable the "My Location" button and display the blue dot on the map
+            mMap.setMyLocationEnabled(true);
+
+            // Set the "My Location" button to be visible
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+            // Your existing code for setting up the map and markers...
+        } else {
+            // If permissions are not granted, request them
+            requestPermissions(new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+            }, LOCATION_PERMISSION_REQUEST_CODE);
+        }
+
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(@NonNull LatLng latLng) {
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng).title("Home");
+
+                // Remove the previous selected location
+                if (searchedLocation != null) {
+                    searchedLocation.remove();
+                }
+                searchedLocation = mMap.addMarker(markerOptions);
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+                searchedLocation.showInfoWindow();
+            }
+        });
     }
 }

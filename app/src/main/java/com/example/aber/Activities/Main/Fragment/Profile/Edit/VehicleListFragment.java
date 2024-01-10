@@ -41,6 +41,7 @@ import com.canhub.cropper.CropImageOptions;
 import com.example.aber.Activities.Main.Fragment.Home.ConfirmBookingFragment;
 import com.example.aber.Adapters.UserVehicleAdapter;
 import com.example.aber.FirebaseManager;
+import com.example.aber.Models.User.Home;
 import com.example.aber.Models.User.User;
 import com.example.aber.Models.User.Vehicle;
 import com.example.aber.R;
@@ -96,7 +97,6 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         progressDialog = new ProgressDialog(requireContext());
-        AndroidUtil.showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
         firebaseManager = new FirebaseManager();
@@ -163,6 +163,7 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
 
     @SuppressLint("NotifyDataSetChanged")
     private void updateUI(List<Vehicle> vehicleList){
+        AndroidUtil.showLoadingDialog(progressDialog);
         adapter.setVehicleList(vehicleList);
         adapter.notifyDataSetChanged();
         AndroidUtil.hideLoadingDialog(progressDialog);
@@ -286,28 +287,51 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
                 String selectedSeatCapacity = seatCapacitySpinner.getSelectedItem().toString();
                 String plate = plateEditText.getText().toString();
 
-                if (cropped != null && validateInputs(brand, name, color, selectedSeatCapacity, plate)) {
-                    // Handle the case when only the avatar is changed
-                    imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
-                    firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
-                        @Override
-                        public void onTaskSuccess(String message) {
-                            AndroidUtil.hideLoadingDialog(progressDialog);
-                            updateVehicle(title, vehicle, brand, name, color, selectedSeatCapacity, plate, imagePath, position);
-                        }
-
-                        @Override
-                        public void onTaskFailure(String message) {
-                            AndroidUtil.hideLoadingDialog(progressDialog);
-                            showToast(requireContext(), "Upload Image failed");
-                        }
-                    });
-                } else {
+                if (!validateInputs(brand, name, color, selectedSeatCapacity, plate) && cropped == null) {
                     AndroidUtil.hideLoadingDialog(progressDialog);
+                } else {
+                    if(isDataChanged(brand, name, color, selectedSeatCapacity, plate, vehicle)){
+                        if (cropped != null) {
+                            // Handle the case when only the avatar is changed
+                            imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
+                            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+                                @Override
+                                public void onTaskSuccess(String message) {
+                                    updateVehicle(title, vehicle, brand, name, color, selectedSeatCapacity, plate, imagePath, position);
+                                }
+
+                                @Override
+                                public void onTaskFailure(String message) {
+                                    AndroidUtil.hideLoadingDialog(progressDialog);
+                                    showToast(requireContext(), "Upload Image failed");
+                                }
+                            });
+                        } else {
+                            updateVehicle(title, vehicle, brand, name, color, selectedSeatCapacity, plate, null, position);
+                        }
+                    } else {
+                        if (cropped != null) {
+                            // Handle the case when only the avatar is changed
+                            imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
+                            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+                                @Override
+                                public void onTaskSuccess(String message) {
+                                    updateVehicle(title, vehicle, brand, name, color, selectedSeatCapacity, plate, imagePath, position);
+                                }
+
+                                @Override
+                                public void onTaskFailure(String message) {
+                                    AndroidUtil.hideLoadingDialog(progressDialog);
+                                    showToast(requireContext(), "Upload Image failed");
+                                }
+                            });
+                        } else {
+                            showToast(requireContext(),"You haven't changed anything");
+                            AndroidUtil.hideLoadingDialog(progressDialog);
+                        }
+                    }
                 }
 
-                // Dismiss the PopupWindow after updating
-                popupWindow.dismiss();
             }
         });
 
@@ -364,6 +388,14 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
         return true;
     }
 
+    private boolean isDataChanged(String brand, String name, String color, String selectedSeatCapacity, String plate, Vehicle vehicle){
+        return !brand.equals(vehicle.getBrand()) ||
+                !name.equals(vehicle.getName()) ||
+                !color.equals(vehicle.getColor()) ||
+                !selectedSeatCapacity.equals(vehicle.getSeatCapacity()) ||
+                !plate.equals(vehicle.getNumberPlate());
+    }
+
     private boolean validatePlate(String plate) {
         String plateRegex = "^[0-9]{2}-[A-Z]\\s[0-9]{5}$";
 
@@ -399,12 +431,13 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
                 vehicle.setColor(color);
                 vehicle.setSeatCapacity(selectedSeatCapacity);
                 vehicle.setNumberPlate(plate);
-                vehicle.getImages().set(0,path);
+                if(path != null) {
+                    vehicle.getImages().set(0, path);
+                }
 
                 vehicleList.set(position, vehicle);
             }
         } else {
-
             Vehicle newVehicle = new Vehicle(brand, name, color, selectedSeatCapacity, plate, new ArrayList<>());
             newVehicle.getImages().add(path);
             vehicleList.add(0, newVehicle);
@@ -421,6 +454,9 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
             @Override
             public void onTaskSuccess(String message) {
                 AndroidUtil.showToast(getContext(), successMessage);
+                AndroidUtil.hideLoadingDialog(progressDialog);
+                // Dismiss the PopupWindow after updating
+                popupWindow.dismiss();
                 updateUI(vehicleList);
             }
 
