@@ -108,6 +108,9 @@ public class BookingDetailFragment extends Fragment {
         driverCardView = root.findViewById(R.id.driver_card_view);
         resourceCardView = root.findViewById(R.id.resource_card_view);
 
+
+        pickUpTextView.setSelected(true);
+        destinationTextView.setSelected(true);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

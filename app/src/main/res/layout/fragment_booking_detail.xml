@@ -40,7 +40,8 @@
             android:textStyle="bold" />
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="20dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,8 +53,9 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
                     <TextView
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginRight="10dp"
+                        android:drawablePadding="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="marquee"
@@ -63,10 +65,11 @@
                         android:singleLine="true"
                         android:text="Pick Up: "
                         android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:drawableLeftCompat="@drawable/ic_current_location" />
 
                     <TextView
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginRight="10dp"
                         android:id="@+id/pick_up"
                         android:layout_width="match_parent"
@@ -86,6 +89,8 @@
                     <TextView
 
                         android:layout_marginRight="10dp"
+                        android:drawablePadding="5dp"
+                        android:drawableLeft="@drawable/baseline_location_on_24"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="marquee"
@@ -118,6 +123,8 @@
 
                         android:layout_marginRight="10dp"
                         android:layout_width="wrap_content"
+                        android:drawableLeft="@drawable/baseline_access_time_filled_24"
+                        android:drawablePadding="5dp"
                         android:layout_height="wrap_content"
                         android:ellipsize="marquee"
                         android:marqueeRepeatLimit="marquee_forever"
@@ -146,7 +153,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
                     <TextView
                         android:layout_marginRight="10dp"
                         android:layout_width="wrap_content"
@@ -171,6 +179,7 @@
                         android:scrollHorizontally="true"
                         android:singleLine="true"
                         android:text="Pending"
+
                         android:textSize="20sp"/>
                 </LinearLayout>
             </LinearLayout>
@@ -182,6 +191,8 @@
             android:orientation="horizontal">
             <TextView
                 android:layout_width="0dp"
+                android:drawablePadding="5dp"
+                android:drawableLeft="@drawable/baseline_directions_car_24"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginHorizontal="8dp"
@@ -376,6 +387,8 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/baseline_credit_card_24"
+                android:drawablePadding="5dp"
                 android:layout_weight="1"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="24dp"
@@ -476,6 +489,8 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableLeft="@drawable/baseline_driver_24"
                 android:layout_weight="1"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="24dp"
@@ -651,6 +666,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginHorizontal="8dp"
+                android:drawableLeft="@drawable/baseline_resources_24"
+                android:drawablePadding="5dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="8dp"
                 android:text="Resource"

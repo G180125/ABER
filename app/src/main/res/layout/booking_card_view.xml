@@ -42,12 +42,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="marquee"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_gravity="top|end"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:padding="8dp"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:text="Booking Time"
+                    android:text=""
                     android:textSize="20sp"/>
             </LinearLayout>
             <LinearLayout
