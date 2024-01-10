@@ -53,6 +53,7 @@ public class RegisterVehicleFragment extends Fragment {
     private Bitmap cropped;
     private FirebaseManager firebaseManager;
     private String vehicleImage;
+    private double latitude, longitude;
 
     private final ActivityResultLauncher<Intent> getImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
@@ -87,6 +88,8 @@ public class RegisterVehicleFragment extends Fragment {
             phoneNumber = args.getString("phoneNumber", "");
             gender = args.getString("gender", "");
             address = args.getString("address", "");
+            latitude = args.getDouble("latitude");
+            longitude = args.getDouble("longitude");
             homeImage = args.getString("homeImage", "");
         }
 
@@ -265,6 +268,8 @@ public class RegisterVehicleFragment extends Fragment {
         bundle.putString("phoneNumber", phoneNumber);
         bundle.putString("gender", gender);
         bundle.putString("address", address);
+        bundle.putDouble("latitude", latitude);
+        bundle.putDouble("longitude", longitude);
         bundle.putString("homeImage", homeImage);
         bundle.putString("brand", brand);
         bundle.putString("vehicleName", vehicleName);

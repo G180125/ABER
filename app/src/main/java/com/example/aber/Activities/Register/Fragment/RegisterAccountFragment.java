@@ -52,6 +52,7 @@ public class RegisterAccountFragment extends Fragment {
     private String name, phoneNumber, gender, address, homeImage, brand, vehicleName, color, seat, plate, vehicleImage, sosName, sosPhone, stripeCusID;
     private StripeServices stripeServices;
     private CompositeDisposable compositeDisposable;
+    private double latitude, longitude;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,6 +70,8 @@ public class RegisterAccountFragment extends Fragment {
             phoneNumber = args.getString("phoneNumber", "");
             gender = args.getString("gender", "");
             address = args.getString("address", "");
+            latitude = args.getDouble("latitude");
+            longitude = args.getDouble("longitude");
             homeImage = args.getString("homeImage", "");
             brand = args.getString("brand", "");
             vehicleName = args.getString("vehicleName", "");
@@ -160,7 +163,7 @@ public class RegisterAccountFragment extends Fragment {
         vehicleImages.add(vehicleImage);
 
         List<Home> homeList = new ArrayList<>();
-        Home home = new Home(address, homeImage);
+        Home home = new Home(address, homeImage, latitude, longitude);
         homeList.add(home);
 
         List<Vehicle> vehicleList = new ArrayList<>();

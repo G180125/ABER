@@ -33,6 +33,7 @@ public class RegisterSOSFragment extends Fragment {
     private String name, phoneNumber, gender, address, homeImage, brand, vehicleName, color, seat, plate, vehicleImage;
     private Button doneButton;
     private EditText sosNameEditText, sosPhoneNumberEditText;
+    private double latitude, longitude;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,6 +47,8 @@ public class RegisterSOSFragment extends Fragment {
             phoneNumber = args.getString("phoneNumber", "");
             gender = args.getString("gender", "");
             address = args.getString("address", "");
+            latitude = args.getDouble("latitude");
+            longitude = args.getDouble("longitude");
             homeImage = args.getString("homeImage", "");
             brand = args.getString("brand", "");
             vehicleName = args.getString("vehicleName", "");
@@ -82,6 +85,8 @@ public class RegisterSOSFragment extends Fragment {
         bundle.putString("phoneNumber", phoneNumber);
         bundle.putString("gender", gender);
         bundle.putString("address", address);
+        bundle.putDouble("latitude", latitude);
+        bundle.putDouble("longitude", longitude);
         bundle.putString("homeImage", homeImage);
         bundle.putString("brand", brand);
         bundle.putString("vehicleName", vehicleName);
