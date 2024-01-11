@@ -198,7 +198,7 @@ public class BookingDetailFragment extends Fragment {
     }
 
     private void updateUI(Booking booking){
-        pickUpTextView.setText(booking.getPickUp());
+        pickUpTextView.setText(booking.getPickUp().getAddress());
         destinationTextView.setText(booking.getDestination().getAddress());
         bookingTimeTextView.setText(booking.getBookingTime());
         statusTextView.setText(booking.getStatus());

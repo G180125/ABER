@@ -8,13 +8,11 @@ import com.example.aber.Models.User.Vehicle;
 
 public class Booking {
     private String id;
-    private String pickUp;
+    private PickUp pickUp;
     private Home destination;
     private String ETA;
     private String bookingTime;
     private String bookingDate;
-    private String realPickUpTime;
-    private String pickUpImage;
     private Payment payment;
     private Vehicle vehicle;
     private SOS emergencyContact;
@@ -24,14 +22,12 @@ public class Booking {
 
     public Booking(){}
 
-    public Booking(String pickUp, Home destination, String ETA, String bookingTime, String realPickUpTime, String pickUpImage, Payment payment, SOS emergencyContact, Vehicle vehicle, String user, String bookingDate) {
+    public Booking(PickUp pickUp, Home destination, String ETA, String bookingTime, Payment payment, SOS emergencyContact, Vehicle vehicle, String user, String bookingDate) {
         this.id = generateID();
         this.pickUp = pickUp;
         this.destination = destination;
         this.ETA = ETA;
         this.bookingTime = bookingTime;
-        this.realPickUpTime = realPickUpTime;
-        this.pickUpImage = pickUpImage;
         this.payment = payment;
         this.vehicle = vehicle;
         this.emergencyContact = emergencyContact;
@@ -44,7 +40,7 @@ public class Booking {
     private String generateID() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-        int length = 12;
+        int length = 16;
 
         StringBuilder idBuilder = new StringBuilder();
 
@@ -59,11 +55,11 @@ public class Booking {
     }
 
     public String getId(){return this.id;}
-    public String getPickUp() {
+    public PickUp getPickUp() {
         return pickUp;
     }
 
-    public void setPickUp(String pickUp) {
+    public void setPickUp(PickUp pickUp) {
         this.pickUp = pickUp;
     }
 
@@ -89,22 +85,6 @@ public class Booking {
 
     public void setBookingTime(String bookingTime) {
         this.bookingTime = bookingTime;
-    }
-
-    public String getRealPickUpTime() {
-        return realPickUpTime;
-    }
-
-    public void setRealPickUpTime(String realPickUpTime) {
-        this.realPickUpTime = realPickUpTime;
-    }
-
-    public String getPickUpImage() {
-        return pickUpImage;
-    }
-
-    public void setPickUpImage(String pickUpImage) {
-        this.pickUpImage = pickUpImage;
     }
 
     public Vehicle getVehicle() {
@@ -161,20 +141,5 @@ public class Booking {
 
     public void setBookingDate(String bookingDate) {
         this.bookingDate = bookingDate;
-    }
-
-    @Override
-    public String toString() {
-        return "Booking{" +
-                "pickUp='" + pickUp + '\'' +
-                ", destination=" + destination +
-                ", ETA='" + ETA + '\'' +
-                ", bookingTime='" + bookingTime + '\'' +
-                ", realPickUpTime='" + realPickUpTime + '\'' +
-                ", pickUpImage='" + pickUpImage + '\'' +
-                ", payment=" + payment +
-                ", vehicle=" + vehicle +
-                ", emergencyContact=" + emergencyContact +
-                '}';
     }
 }

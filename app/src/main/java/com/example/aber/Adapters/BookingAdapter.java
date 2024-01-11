@@ -77,7 +77,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         }
 
         public void bind(Booking booking, int position) {
-            pickUpTextView.setText(booking.getPickUp());
+            pickUpTextView.setText(booking.getPickUp().getAddress());
             destinationTextView.setText(booking.getDestination().getAddress());
             bookingTimeTextView.setText(booking.getBookingTime());
             vehicleTextView.setText(booking.getVehicle().getNumberPlate());

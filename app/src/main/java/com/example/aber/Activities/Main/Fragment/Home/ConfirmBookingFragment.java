@@ -28,6 +28,7 @@ import com.example.aber.Models.Booking.Booking;
 import com.example.aber.Models.Booking.Card;
 import com.example.aber.Models.Booking.Payment;
 import com.example.aber.Models.Booking.PaymentStatus;
+import com.example.aber.Models.Booking.PickUp;
 import com.example.aber.Models.User.Home;
 import com.example.aber.Models.User.SOS;
 import com.example.aber.Models.User.User;
@@ -57,7 +58,7 @@ import java.util.Objects;
 public class ConfirmBookingFragment extends Fragment {
     private FirebaseManager firebaseManager;
     private ProgressDialog progressDialog;
-    private TextView nameTextView, destinationAddressTextView, homeAddressTextView, plateTextview, sosTextView;
+    private TextView nameTextView, destinationAddressTextView, homeAddressTextView, plateTextview, sosTextView, amountTextView;
     private RadioButton bookNowRadioButton;
     private CardView bookingTimeCardView, homeCardView, vehicleCardView, sosCardView, paymentCardView;
     private ImageView backButton;
@@ -66,6 +67,7 @@ public class ConfirmBookingFragment extends Fragment {
     private Button nextButton;
     private boolean check;
     private User currentUser;
+    private double latitude, longitude, distance, amount;
     PaymentSheet paymentSheet;
     String paymentIntentClientSecret;
     PaymentSheet.CustomerConfiguration customerConfig;
@@ -90,6 +92,7 @@ public class ConfirmBookingFragment extends Fragment {
         homeAddressTextView = root.findViewById(R.id.address);
         plateTextview = root.findViewById(R.id.plate);
         sosTextView = root.findViewById(R.id.sos_name);
+        amountTextView = root.findViewById(R.id.amount);
         homeCardView = root.findViewById(R.id.home_card_view);
         vehicleCardView = root.findViewById(R.id.vehicle_card_view);
         sosCardView = root.findViewById(R.id.sos_card_view);
@@ -100,6 +103,8 @@ public class ConfirmBookingFragment extends Fragment {
         if (args != null) {
             name = args.getString("name","");
             address = args.getString("address","");
+            latitude = args.getDouble("latitude");
+            longitude = args.getDouble("longitude");
         }
 
         id = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
@@ -107,8 +112,13 @@ public class ConfirmBookingFragment extends Fragment {
             @Override
             public void onFetchSuccess(User object) {
                 currentUser = object;
-                Log.d("userInfo", currentUser.toString());
-                updateUI(name, address, check, currentUser);
+                double homeLatitude = currentUser.getHomes().get(0).getLatitude();
+                double homeLongitude = currentUser.getHomes().get(0).getLongitude();
+
+                distance = calculateDistance(latitude, longitude, homeLatitude, homeLongitude);
+                amount = distance * 19000; //19000VND per Km
+
+                updateUI(name, address, check, currentUser, (int) amount);
             }
 
             @Override
@@ -208,7 +218,7 @@ public class ConfirmBookingFragment extends Fragment {
                 try {
                     requestData.put("customerId", currentUser.getStripeCusId());
                     requestData.put("action", "paymentIntent");
-                    requestData.put("amount", 10000);
+                    requestData.put("amount", amount);
                     Log.d("Checkout", requestData.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -255,9 +265,10 @@ public class ConfirmBookingFragment extends Fragment {
             public void onClick(View v) {
                 AndroidUtil.showLoadingDialog(progressDialog);
                 String bookingTime = getTimeFromPicker();
-                String ETA = getETA(bookingTime);
+                String ETA = getETA(bookingTime, distance);
                 Home home = currentUser.getHomes().get(0);
-                Payment payment = new Payment("id", 100000.0, "VND", PaymentStatus.PROCESSING, new Card());
+
+                Payment payment = new Payment("id", amount, "VND", PaymentStatus.PROCESSING, new Card());
                 SOS sos;
                 if (!currentUser.getEmergencyContacts().isEmpty()){
                     sos = currentUser.getEmergencyContacts().get(0);
@@ -266,7 +277,9 @@ public class ConfirmBookingFragment extends Fragment {
                 }
                 Vehicle vehicle = currentUser.getVehicles().get(0);
 
-                Booking booking = new Booking(address, home, ETA, bookingTime, "", "", payment, sos, vehicle, id, getCurrentDateFormatted("yyyy-MM-dd"));
+                PickUp pickUp = new PickUp(address, latitude, longitude);
+
+                Booking booking = new Booking(pickUp, home, ETA, bookingTime, payment, sos, vehicle, id, getCurrentDateFormatted("yyyy-MM-dd"));
 
                 if(currentUser.getBookings() != null) {
                     currentUser.getBookings().add(booking);
@@ -297,7 +310,7 @@ public class ConfirmBookingFragment extends Fragment {
         return root;
     }
 
-    private void updateUI(String name, String address, boolean check, User user){
+    private void updateUI(String name, String address, boolean check, User user, int amount){
         nameTextView.setText(name);
         destinationAddressTextView.setText(address);
 
@@ -308,6 +321,8 @@ public class ConfirmBookingFragment extends Fragment {
         if(!user.getEmergencyContacts().isEmpty()) {
             sosTextView.setText(user.getEmergencyContacts().get(0).getName());
         }
+
+        amountTextView.setText(String.valueOf(amount));
 
         AndroidUtil.hideLoadingDialog(progressDialog);
     }
@@ -345,18 +360,19 @@ public class ConfirmBookingFragment extends Fragment {
         return String.format("%02d:%02d %s", hour, minute, amPm);
     }
 
-    private String getETA(String bookingTime) {
+    private String getETA(String bookingTime, double distance) {
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+        int travellingTime = (int) distance + 30;
 
         try {
             // Parse the booking time
             Date parsedBookingTime = sdf.parse(bookingTime);
 
-            // Add 2 hours to the booking time
+            // Calculate ETA based on the distance (assuming distance is in minutes)
             Calendar calendar = Calendar.getInstance();
             assert parsedBookingTime != null;
             calendar.setTime(parsedBookingTime);
-            calendar.add(Calendar.HOUR_OF_DAY, 2);
+            calendar.add(Calendar.MINUTE, travellingTime);
 
             // Format the new time as ETA
             Date etaTime = calendar.getTime();
@@ -367,6 +383,7 @@ public class ConfirmBookingFragment extends Fragment {
             return ""; // Handle parsing error
         }
     }
+
 
     private static String getCurrentDateFormatted(String format) {
         Date currentDate = new Date();
@@ -405,4 +422,20 @@ public class ConfirmBookingFragment extends Fragment {
             Log.d("Checkout", "Completed");
         }
     }
+
+    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        final int R = 6371;
+
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return R * c;
+    }
+
 }

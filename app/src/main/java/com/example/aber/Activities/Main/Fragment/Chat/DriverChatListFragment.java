@@ -47,7 +47,9 @@ public class DriverChatListFragment extends Fragment implements DriverChatAdapte
             public void onFetchSuccess(User object) {
                 user = object;
                 driverList = user.getChattedDriver();
-                updateUI(driverList);
+                if(driverList != null) {
+                    updateUI(driverList);
+                }
                 AndroidUtil.hideLoadingDialog(progressDialog);
             }
 

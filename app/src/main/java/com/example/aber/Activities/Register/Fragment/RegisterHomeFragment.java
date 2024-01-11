@@ -119,6 +119,11 @@ public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 String address = addressTextView.getText().toString();
+                if(cropped == null){
+                    showToast(requireContext(),"YOu have to upload an image of your home");
+                    return;
+                }
+
                 if (validateInputs(address) && cropped != null) {
                     AndroidUtil.showLoadingDialog(progressDialog);
                     // Handle the case when only the avatar is changed
@@ -140,8 +145,6 @@ public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback
                 }
             }
         });
-
-
 
         homeImageView.setOnClickListener(new View.OnClickListener() {
             @Override

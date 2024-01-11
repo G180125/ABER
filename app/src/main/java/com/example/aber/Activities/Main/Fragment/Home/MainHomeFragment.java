@@ -257,6 +257,10 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                 Bundle bundle = new Bundle();
                 bundle.putString("name", marker.getTitle());
                 bundle.putString("address", address);
+
+                LatLng markerPosition = marker.getPosition();
+                bundle.putDouble("latitude", markerPosition.latitude);
+                bundle.putDouble("longitude", markerPosition.longitude);
                 fragment.setArguments(bundle);
 
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
