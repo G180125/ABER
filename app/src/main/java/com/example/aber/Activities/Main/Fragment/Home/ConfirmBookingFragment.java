@@ -69,7 +69,7 @@ public class ConfirmBookingFragment extends Fragment {
     private User currentUser;
     private double latitude, longitude, distance, amount;
     PaymentSheet paymentSheet;
-    String paymentIntentClientSecret;
+    String paymentIntentClientSecret, paymentIntent;
     PaymentSheet.CustomerConfiguration customerConfig;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -218,7 +218,7 @@ public class ConfirmBookingFragment extends Fragment {
                 try {
                     requestData.put("customerId", currentUser.getStripeCusId());
                     requestData.put("action", "paymentIntent");
-                    requestData.put("amount", amount);
+                    requestData.put("amount", (int)amount);
                     Log.d("Checkout", requestData.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -231,11 +231,13 @@ public class ConfirmBookingFragment extends Fragment {
                             public void success(String s) {
                                 try {
                                     final JSONObject result = new JSONObject(s);
+//                                    Log.d("Card used", result.getString("lastFourDigits"));
                                     customerConfig = new PaymentSheet.CustomerConfiguration(
                                             result.getString("customer"),
                                             result.getString("ephemeralKey")
                                     );
                                     paymentIntentClientSecret = result.getString("clientSecret");
+                                    paymentIntent = result.getString("intent");
                                     PaymentConfiguration.init(getActivity().getApplicationContext(), result.getString("publishableKey"));
 
                                     getActivity().runOnUiThread(new Runnable() {
@@ -249,7 +251,9 @@ public class ConfirmBookingFragment extends Fragment {
                                 }
                             }
                             @Override
-                            public void failure(@NonNull FuelError fuelError) { /* handle error */ }
+                            public void failure(@NonNull FuelError fuelError) {
+                                Log.e("Checkout", fuelError.getMessage());
+                            }
                         });
             }
         });
@@ -420,6 +424,32 @@ public class ConfirmBookingFragment extends Fragment {
         } else if (paymentSheetResult instanceof PaymentSheetResult.Completed) {
             // Display for example, an order confirmation screen
             Log.d("Checkout", "Completed");
+            JSONObject requestData = new JSONObject();
+            try {
+                requestData.put("paymentIntentId", paymentIntent);
+                Log.d("Get card", requestData.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Fuel.INSTANCE.post("http://10.0.2.2:4242/get-payment-method", null)
+                    .header("Content-Type", "application/json")
+                    .body(requestData.toString(), Charsets.UTF_8)
+                    .responseString(new Handler<String>() {
+                        @Override
+                        public void success(String s) {
+                            try {
+                                final JSONObject result = new JSONObject(s);
+//                                    Log.d("Card used", result.getString("lastFourDigits"));
+                                Log.d("Get card", result.getString("lastFourDigits"));
+                            } catch (JSONException e) {
+                                Log.e("Checkout", "Error parsing JSON: " + e.getMessage());
+                            }
+                        }
+                        @Override
+                        public void failure(@NonNull FuelError fuelError) {
+                            Log.e("Get Card", fuelError.getMessage());
+                        }
+                    });
         }
     }
 

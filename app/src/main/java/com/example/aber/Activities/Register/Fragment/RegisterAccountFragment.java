@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -186,32 +187,30 @@ public class RegisterAccountFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(customer -> {
                     if (customer.getId() == null) {
-                        System.out.println("Try again");
+                        Log.d("Create customer on Stripe", "Try again");
                     } else {
                         stripeCusID = customer.getId();
-                        System.out.println("===> customerID : " + customer.getId());
+                        Log.d("Create customer on Stripe", "===> customerID : " + customer.getId());
+                        User user = new User(email, name, userGender, phoneNumber, homeList, vehicleList, emergencyContactList, stripeCusID);
+                        firebaseManager.addUser(userID, user, new FirebaseManager.OnTaskCompleteListener() {
+                            @Override
+                            public void onTaskSuccess(String message) {
+                                hideLoadingDialog(progressDialog);
+                                showToast(requireContext(),message);
+                                startActivity(new Intent(requireContext(), LoginActivity.class).putExtra("email", email).putExtra("password", password));
+                                requireActivity().finish();
+                            }
+
+                            @Override
+                            public void onTaskFailure(String message) {
+                                hideLoadingDialog(progressDialog);
+                                showToast(requireContext(),message);
+                            }
+                        });
                     }
                 }, throwable -> {
-                    System.out.println(throwable.getMessage());
+                    Log.d("Error", throwable.getMessage());
                 })
         );
-
-        User user = new User(email, name, userGender, phoneNumber, homeList, vehicleList, emergencyContactList, stripeCusID);
-
-        firebaseManager.addUser(userID, user, new FirebaseManager.OnTaskCompleteListener() {
-            @Override
-            public void onTaskSuccess(String message) {
-                hideLoadingDialog(progressDialog);
-                showToast(requireContext(),message);
-                startActivity(new Intent(requireContext(), LoginActivity.class).putExtra("email", email).putExtra("password", password));
-                requireActivity().finish();
-            }
-
-            @Override
-            public void onTaskFailure(String message) {
-                hideLoadingDialog(progressDialog);
-                showToast(requireContext(),message);
-            }
-        });
     }
 }
