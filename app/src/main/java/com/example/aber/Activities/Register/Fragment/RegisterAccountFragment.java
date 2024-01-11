@@ -171,8 +171,10 @@ public class RegisterAccountFragment extends Fragment {
         vehicleList.add(vehicle);
 
         List<SOS> emergencyContactList = new ArrayList<>();
-        SOS emergencyContacts = new SOS(sosName, sosPhone);
-        emergencyContactList.add(emergencyContacts);
+        if(!sosName.isEmpty() || !sosPhone.isEmpty()) {
+            SOS emergencyContacts = new SOS(sosName, sosPhone);
+            emergencyContactList.add(emergencyContacts);
+        }
 
         Gender userGender = Gender.valueOf(gender);
         String email = emailEditText.getText().toString();

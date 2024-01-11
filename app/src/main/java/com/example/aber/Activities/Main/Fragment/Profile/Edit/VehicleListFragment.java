@@ -287,51 +287,11 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
                 String selectedSeatCapacity = seatCapacitySpinner.getSelectedItem().toString();
                 String plate = plateEditText.getText().toString();
 
-                if (!validateInputs(brand, name, color, selectedSeatCapacity, plate) && cropped == null) {
-                    AndroidUtil.hideLoadingDialog(progressDialog);
+                if(title.equals("Edit Vehicle")){
+                    handeEdit(brand, name, color,selectedSeatCapacity, plate, cropped, vehicle, position);
                 } else {
-                    if(isDataChanged(brand, name, color, selectedSeatCapacity, plate, vehicle)){
-                        if (cropped != null) {
-                            // Handle the case when only the avatar is changed
-                            imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
-                            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
-                                @Override
-                                public void onTaskSuccess(String message) {
-                                    updateVehicle(title, vehicle, brand, name, color, selectedSeatCapacity, plate, imagePath, position);
-                                }
-
-                                @Override
-                                public void onTaskFailure(String message) {
-                                    AndroidUtil.hideLoadingDialog(progressDialog);
-                                    showToast(requireContext(), "Upload Image failed");
-                                }
-                            });
-                        } else {
-                            updateVehicle(title, vehicle, brand, name, color, selectedSeatCapacity, plate, null, position);
-                        }
-                    } else {
-                        if (cropped != null) {
-                            // Handle the case when only the avatar is changed
-                            imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
-                            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
-                                @Override
-                                public void onTaskSuccess(String message) {
-                                    updateVehicle(title, vehicle, brand, name, color, selectedSeatCapacity, plate, imagePath, position);
-                                }
-
-                                @Override
-                                public void onTaskFailure(String message) {
-                                    AndroidUtil.hideLoadingDialog(progressDialog);
-                                    showToast(requireContext(), "Upload Image failed");
-                                }
-                            });
-                        } else {
-                            showToast(requireContext(),"You haven't changed anything");
-                            AndroidUtil.hideLoadingDialog(progressDialog);
-                        }
-                    }
+                    handleAdd(brand, name, color, selectedSeatCapacity, plate, cropped);
                 }
-
             }
         });
 
@@ -382,19 +342,19 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
             showToast(requireContext(),"Vehicle Seat Capacity can not be empty");
             return false;
         }
-        if(!validatePlate(plate)){
-            return false;
-        }
-        return true;
+        return validatePlate(plate);
     }
 
-    private boolean isDataChanged(String brand, String name, String color, String selectedSeatCapacity, String plate, Vehicle vehicle){
+    private boolean isDataChanged(String brand, String name, String color, String selectedSeatCapacity, String plate, Vehicle vehicle, Bitmap cropped) {
+        // Check if any of the details are changed or the image is changed
         return !brand.equals(vehicle.getBrand()) ||
                 !name.equals(vehicle.getName()) ||
                 !color.equals(vehicle.getColor()) ||
                 !selectedSeatCapacity.equals(vehicle.getSeatCapacity()) ||
-                !plate.equals(vehicle.getNumberPlate());
+                !plate.equals(vehicle.getNumberPlate()) ||
+                cropped != null;
     }
+
 
     private boolean validatePlate(String plate) {
         String plateRegex = "^[0-9]{2}-[A-Z]\\s[0-9]{5}$";
@@ -422,30 +382,77 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
         return false;
     }
 
-    private void updateVehicle(String title, Vehicle vehicle, String brand, String name, String color, String selectedSeatCapacity, String plate, String path, int position){
-        if (title.equals("Edit Vehicle")) {
-            // Update existing home
-            if (vehicle != null) {
-                vehicle.setBrand(brand);
-                vehicle.setName(name);
-                vehicle.setColor(color);
-                vehicle.setSeatCapacity(selectedSeatCapacity);
-                vehicle.setNumberPlate(plate);
-                if(path != null) {
-                    vehicle.getImages().set(0, path);
-                }
-
-                vehicleList.set(position, vehicle);
-            }
-        } else {
-            Vehicle newVehicle = new Vehicle(brand, name, color, selectedSeatCapacity, plate, new ArrayList<>());
-            newVehicle.getImages().add(path);
-            vehicleList.add(0, newVehicle);
+    private void handleAdd(String brand, String name, String color, String selectedSeatCapacity, String plate, Bitmap cropped){
+        if(cropped == null){
+            showToast(requireContext(),"You have to upload an image for your vehicle");
+            AndroidUtil.hideLoadingDialog(progressDialog);
+            return;
         }
 
-        // Update the user with the modified vehicleLIst
-        updateList(user, vehicleList, "Update Successful");
+        if(validateInputs(brand, name, color, selectedSeatCapacity, plate)){
+            imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
+            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+                @Override
+                public void onTaskSuccess(String message) {
+                    List<String> images = new ArrayList<>();
+                    images.add(imagePath);
+                    Vehicle vehicle = new Vehicle(brand, name, color, selectedSeatCapacity, plate, images);
+                    vehicleList.add(0,vehicle);
+                    updateList(user, vehicleList, "Add new vehicle successful");
+                }
 
+                @Override
+                public void onTaskFailure(String message) {
+                    AndroidUtil.hideLoadingDialog(progressDialog);
+                    showToast(requireContext(), "Upload Image failed");
+                }
+            });
+        }
+        AndroidUtil.hideLoadingDialog(progressDialog);
+    }
+
+    private void handeEdit(String brand, String name, String color, String selectedSeatCapacity, String plate, Bitmap cropped, Vehicle vehicle, int position){
+        if(!validateInputs(brand, name, color, selectedSeatCapacity, plate)){
+            AndroidUtil.hideLoadingDialog(progressDialog);
+            return;
+        }
+
+        if(!isDataChanged(brand, name, color, selectedSeatCapacity, plate, vehicle, cropped)){
+            showToast(requireContext(),"You haven't changed anything");
+            AndroidUtil.hideLoadingDialog(progressDialog);
+            return;
+        }
+
+        if(cropped != null){
+            imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
+            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+                @Override
+                public void onTaskSuccess(String message) {
+                    vehicle.getImages().set(0, imagePath);
+                    vehicle.setBrand(brand);
+                    vehicle.setName(name);
+                    vehicle.setColor(color);
+                    vehicle.setSeatCapacity(selectedSeatCapacity);
+                    vehicle.setNumberPlate(plate);
+                    vehicleList.set(position, vehicle);
+                    updateList(user, vehicleList, "Update Successful");
+                }
+
+                @Override
+                public void onTaskFailure(String message) {
+                    AndroidUtil.hideLoadingDialog(progressDialog);
+                    showToast(requireContext(), "Upload Image failed");
+                }
+            });
+        } else {
+            vehicle.setBrand(brand);
+            vehicle.setName(name);
+            vehicle.setColor(color);
+            vehicle.setSeatCapacity(selectedSeatCapacity);
+            vehicle.setNumberPlate(plate);
+            vehicleList.set(position, vehicle);
+            updateList(user, vehicleList, "Update Successful");
+        }
     }
 
     private void updateList(User user, List<Vehicle> vehicleList, String successMessage){
