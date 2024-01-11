@@ -59,12 +59,12 @@
         app:cardElevation="4dp"
         android:layout_marginHorizontal="16dp"
         app:cardCornerRadius="30dp">
-        <EditText
-            android:id="@+id/address_edit_text"
+        <TextView
+            android:id="@+id/address_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:hint="Address"
+            android:hint="Click here to select an address"
             android:background="@drawable/custom_edit_text"
             android:padding="10dp"
             android:drawableLeft="@drawable/ic_home"
