@@ -71,11 +71,13 @@ public class ConfirmBookingFragment extends Fragment {
     PaymentSheet paymentSheet;
     String paymentIntentClientSecret, paymentIntent;
     PaymentSheet.CustomerConfiguration customerConfig;
+    private Card usedCard;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         progressDialog = new ProgressDialog(requireContext());
         AndroidUtil.showLoadingDialog(progressDialog);
+        usedCard = new Card();
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_confirm_booking, container, false);
         firebaseManager = new FirebaseManager();
@@ -231,7 +233,6 @@ public class ConfirmBookingFragment extends Fragment {
                             public void success(String s) {
                                 try {
                                     final JSONObject result = new JSONObject(s);
-//                                    Log.d("Card used", result.getString("lastFourDigits"));
                                     customerConfig = new PaymentSheet.CustomerConfiguration(
                                             result.getString("customer"),
                                             result.getString("ephemeralKey")
@@ -272,7 +273,7 @@ public class ConfirmBookingFragment extends Fragment {
                 String ETA = getETA(bookingTime, distance);
                 Home home = currentUser.getHomes().get(0);
 
-                Payment payment = new Payment("id", amount, "VND", PaymentStatus.PROCESSING, new Card());
+                Payment payment = new Payment("id", amount, "VND", PaymentStatus.PROCESSING, usedCard);
                 SOS sos;
                 if (!currentUser.getEmergencyContacts().isEmpty()){
                     sos = currentUser.getEmergencyContacts().get(0);
@@ -427,7 +428,6 @@ public class ConfirmBookingFragment extends Fragment {
             JSONObject requestData = new JSONObject();
             try {
                 requestData.put("paymentIntentId", paymentIntent);
-                Log.d("Get card", requestData.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -439,8 +439,11 @@ public class ConfirmBookingFragment extends Fragment {
                         public void success(String s) {
                             try {
                                 final JSONObject result = new JSONObject(s);
-//                                    Log.d("Card used", result.getString("lastFourDigits"));
-                                Log.d("Get card", result.getString("lastFourDigits"));
+                                usedCard.setBrand(result.getString("brand"));
+                                usedCard.setExpMonth(result.getInt("expireMonth"));
+                                usedCard.setExpYear(result.getInt("expireYear"));
+                                usedCard.setLast4(result.getString("lastFourDigits"));
+                                usedCard.setCountry(result.getString("country"));
                             } catch (JSONException e) {
                                 Log.e("Checkout", "Error parsing JSON: " + e.getMessage());
                             }

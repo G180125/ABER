@@ -207,9 +207,9 @@ public class BookingDetailFragment extends Fragment {
         colorTextView.setText(booking.getVehicle().getColor());
         seatTextView.setText(booking.getVehicle().getSeatCapacity());
         plateTextView.setText(booking.getVehicle().getNumberPlate());
-        String amount = booking.getPayment().getAmount() + " " + booking.getPayment().getCurrency();
+        String amount = booking.getPayment().getAmount().intValue() + " " + booking.getPayment().getCurrency();
         amountTextView.setText(amount);
-        methodTextView.setText("Card");
+        methodTextView.setText("Card **** **** ****" + booking.getPayment().getCard().getLast4());
 
         if(booking.getDriver() != null &&  !booking.getDriver().isEmpty()){
             firebaseManager.getDriverByID(booking.getDriver(), new FirebaseManager.OnFetchListener<Driver>() {
