@@ -115,11 +115,7 @@ public class ChatDetailFragment extends Fragment {
                 if (!message.isEmpty()) {
                     String sender = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
                     firebaseManager.sendMessage(sender, driverId, message);
-                    try {
-                        firebaseManager.sendNotification(message, currentUser.getName(), userId, currentDriver.getFcmToken());
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
+                    firebaseManager.sendNotification(message, currentUser.getName(), userId, currentDriver.getFcmToken());
                 } else {
                     AndroidUtil.showToast(requireContext(),"You haven't typed anything");
                 }
