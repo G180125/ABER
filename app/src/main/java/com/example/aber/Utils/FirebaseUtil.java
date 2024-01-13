@@ -8,13 +8,15 @@ import androidx.annotation.NonNull;
 import com.example.aber.Models.Booking.Booking;
 import com.example.aber.Models.Booking.BookingResponse;
 import com.example.aber.Models.Message.MyMessage;
+import com.example.aber.Models.Notification.Notification;
+import com.example.aber.Models.Notification.NotificationRequest;
 import com.example.aber.Models.Staff.Driver;
 import com.example.aber.Models.User.SOSActiveResponse;
 import com.example.aber.Models.User.User;
+import com.example.aber.Services.Notification.FCMApi;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.common.net.MediaType;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,17 +29,19 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-
-import org.json.JSONObject;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class FirebaseUtil {
@@ -55,7 +59,7 @@ public class FirebaseUtil {
     private StorageReference storageRef;
     private FirebaseDatabase database;
     public FirebaseMessaging messaging;
-
+    private FCMApi fcmApi;
 
     public FirebaseUtil() {
         mAuth = FirebaseAuth.getInstance();
@@ -63,6 +67,13 @@ public class FirebaseUtil {
         storageRef = FirebaseStorage.getInstance().getReference();
         database = FirebaseDatabase.getInstance();
         messaging = FirebaseMessaging.getInstance();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://fcm.googleapis.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        fcmApi = retrofit.create(FCMApi.class);
     }
 
     public void register(final String email, final String password, OnTaskCompleteListener listener) {
@@ -218,22 +229,23 @@ public class FirebaseUtil {
         });
     }
 
-    public void sendNotification(String message){
+    public void sendNotification(String message, String userName, String userId, String fcmToken) {
+        Notification notification = new Notification(userName, message);
+        NotificationRequest notificationRequest = new NotificationRequest(notification, userId, fcmToken);
 
+        Call<Void> call = FCMApi.sendNotification(notificationRequest);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
     }
-
-    public void callApi(JSONObject jsonObject){
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
-        OkHttpClient client = new OkHttpClient();
-        String url = "http://fcm.googleapis.com/fcm/send";
-        String object = jsonObject.toString();
-        RequestBody body = RequestBody.create(JSON, object);
-        Request request = new Request.Builder()
-                .url()
-
-    }
-
 
     public void sendMessage(String sender, String receiver, String message){
         HashMap<String, Object> hashMap = new HashMap<>();

@@ -24,6 +24,8 @@ import com.example.aber.Models.User.User;
 import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,7 +33,7 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatDetailFragment extends Fragment {
-    private String id;
+    private String driverId, userId;
     private User currentUser;
     private Driver currentDriver;
     private FirebaseUtil firebaseManager;
@@ -53,12 +55,24 @@ public class ChatDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.activity_driver_chat, container, false);
         firebaseManager = new FirebaseUtil();
-        currentUser = new User();
-        currentDriver = new Driver();
 
+        userId = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
+        firebaseManager.getUserByID(userId, new FirebaseUtil.OnFetchListener<User>() {
+            @Override
+            public void onFetchSuccess(User object) {
+                currentUser = object;
+            }
+
+            @Override
+            public void onFetchFailure(String message) {
+
+            }
+        });
+
+        currentDriver = new Driver();
         Bundle bundle = getArguments();
         if (bundle != null) {
-            id = bundle.getString("driverID");
+            driverId = bundle.getString("driverID");
         }
         recyclerView = root.findViewById(R.id.recycler_message);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -67,7 +81,7 @@ public class ChatDetailFragment extends Fragment {
         messageAdapter = new MessageAdapter(new ArrayList<>(), null);
         recyclerView.setAdapter(messageAdapter);
 
-        fetchDriver(id);
+        fetchDriver(driverId);
 
         backImageView = root.findViewById(R.id.back);
         avatar = root.findViewById(R.id.avatar);
@@ -76,7 +90,7 @@ public class ChatDetailFragment extends Fragment {
         sendButton = root.findViewById(R.id.send_button);
 
         firebaseManager.readMessage(
-                Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid(), id, new FirebaseUtil.OnReadingMessageListener() {
+                Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid(), driverId, new FirebaseUtil.OnReadingMessageListener() {
                     @Override
                     public void OnMessageDataChanged(List<MyMessage> messageList) {
                         updateMessageList(messageList);
@@ -100,8 +114,12 @@ public class ChatDetailFragment extends Fragment {
                 String message = sendText.getText().toString();
                 if (!message.isEmpty()) {
                     String sender = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
-                    firebaseManager.sendMessage(sender, id, message);
-                    sendNotification(message);
+                    firebaseManager.sendMessage(sender, driverId, message);
+                    try {
+                        firebaseManager.sendNotification(message, currentUser.getName(), userId, currentDriver.getFcmToken());
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
                 } else {
                     AndroidUtil.showToast(requireContext(),"You haven't typed anything");
                 }
