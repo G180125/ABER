@@ -1,6 +1,5 @@
 package com.example.aber.Adapters;
 
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.aber.FirebaseManager;
 import com.example.aber.Models.Booking.Booking;
-import com.example.aber.Models.User.Home;
 import com.example.aber.R;
 
 import java.util.List;

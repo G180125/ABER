@@ -23,7 +23,7 @@ import android.widget.TimePicker;
 import com.example.aber.Activities.Main.Fragment.Profile.Edit.HomeListFragment;
 import com.example.aber.Activities.Main.Fragment.Profile.Edit.SOSListFragment;
 import com.example.aber.Activities.Main.Fragment.Profile.Edit.VehicleListFragment;
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.Models.Booking.Booking;
 import com.example.aber.Models.Booking.Card;
 import com.example.aber.Models.Booking.Payment;
@@ -56,7 +56,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class ConfirmBookingFragment extends Fragment {
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
     private TextView nameTextView, destinationAddressTextView, homeAddressTextView, plateTextview, sosTextView, amountTextView;
     private RadioButton bookNowRadioButton;
@@ -78,8 +78,8 @@ public class ConfirmBookingFragment extends Fragment {
         AndroidUtil.showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_confirm_booking, container, false);
-        firebaseManager = new FirebaseManager();
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
+        firebaseManager = new FirebaseUtil();
         paymentSheet = new PaymentSheet(this, this::onPaymentSheetResult);
         check = true;
 
@@ -108,7 +108,7 @@ public class ConfirmBookingFragment extends Fragment {
         }
 
         id = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
-        firebaseManager.getUserByID(id, new FirebaseManager.OnFetchListener<User>() {
+        firebaseManager.getUserByID(id, new FirebaseUtil.OnFetchListener<User>() {
             @Override
             public void onFetchSuccess(User object) {
                 currentUser = object;
@@ -289,7 +289,7 @@ public class ConfirmBookingFragment extends Fragment {
                     currentUser.setBookings(newBookingList);
                 }
 
-                firebaseManager.updateUser(id, currentUser, new FirebaseManager.OnTaskCompleteListener() {
+                firebaseManager.updateUser(id, currentUser, new FirebaseUtil.OnTaskCompleteListener() {
                     @Override
                     public void onTaskSuccess(String message) {
                         AndroidUtil.showToast(requireContext(), "Booking Successfully");

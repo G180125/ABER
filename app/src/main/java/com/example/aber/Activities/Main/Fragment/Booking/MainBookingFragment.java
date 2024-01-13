@@ -18,9 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.aber.Activities.Main.Fragment.Booking.BookingDetailFragment;
 import com.example.aber.Adapters.BookingAdapter;
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.Models.Booking.Booking;
 import com.example.aber.Models.Booking.BookingResponse;
 import com.example.aber.Models.User.User;
@@ -31,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MainBookingFragment extends Fragment implements BookingAdapter.RecyclerViewClickListener{
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
     private List<Booking> bookingList;
     private BookingAdapter adapter;
@@ -44,10 +43,10 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
         showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_main_booking, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
 
         id = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
-        firebaseManager.getUserByID(id, new FirebaseManager.OnFetchListener<User>() {
+        firebaseManager.getUserByID(id, new FirebaseUtil.OnFetchListener<User>() {
             @Override
             public void onFetchSuccess(User object) {
                 user = object;
@@ -117,7 +116,7 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
 
 
     private void isCancelable(int position, OnCheckCancelCallback callback) {
-        firebaseManager.fetchBookings(new FirebaseManager.OnFetchBookingListListener<BookingResponse>() {
+        firebaseManager.fetchBookings(new FirebaseUtil.OnFetchBookingListListener<BookingResponse>() {
             @Override
             public void onDataChanged(List<BookingResponse> object) {
                 for (BookingResponse bookingResponse : object) {
@@ -148,7 +147,7 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
         Booking booking = bookingList.get(position);
         booking.setStatus("Cancel");
 
-        firebaseManager.fetchBookings(new FirebaseManager.OnFetchBookingListListener<BookingResponse>() {
+        firebaseManager.fetchBookings(new FirebaseUtil.OnFetchBookingListListener<BookingResponse>() {
             @Override
             public void onDataChanged(List<BookingResponse> object) {
                 for(BookingResponse bookingResponse: object){
@@ -166,7 +165,7 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
             }
         }
 
-        firebaseManager.updateUser(id, user, new FirebaseManager.OnTaskCompleteListener() {
+        firebaseManager.updateUser(id, user, new FirebaseUtil.OnTaskCompleteListener() {
             @Override
             public void onTaskSuccess(String message) {
                 showToast(requireContext(),"Cancel Booking Successfully");

@@ -45,6 +45,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation("com.google.firebase:firebase-database:20.3.0")
+    implementation("com.google.firebase:firebase-messaging:23.4.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -65,15 +66,16 @@ dependencies {
     implementation ("com.github.kittinunf.fuel:fuel:2.3.1")
     implementation ("com.squareup.retrofit2:adapter-rxjava2:2.3.0")
 
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
+
     //Dot progress bar
     implementation ("com.agrawalsuneet.androidlibs:dotsloader:1.4")
 
     //View Page
     implementation ("androidx.viewpager2:viewpager2:1.0.0")
     implementation("com.tbuonomo:dotsindicator:5.0")
-
-
-
 }
 
 secrets {

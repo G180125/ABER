@@ -16,9 +16,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.aber.Activities.Main.Fragment.Chat.DriverChatListFragment;
 import com.example.aber.Adapters.MessageAdapter;
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.Models.Message.MyMessage;
 import com.example.aber.Models.Staff.Driver;
 import com.example.aber.Models.User.User;
@@ -35,7 +34,7 @@ public class ChatDetailFragment extends Fragment {
     private String id;
     private User currentUser;
     private Driver currentDriver;
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
     private TextView nameTextView;
     private ImageView backImageView;
@@ -53,7 +52,7 @@ public class ChatDetailFragment extends Fragment {
         AndroidUtil.showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.activity_driver_chat, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
         currentUser = new User();
         currentDriver = new Driver();
 
@@ -77,7 +76,7 @@ public class ChatDetailFragment extends Fragment {
         sendButton = root.findViewById(R.id.send_button);
 
         firebaseManager.readMessage(
-                Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid(), id, new FirebaseManager.OnReadingMessageListener() {
+                Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid(), id, new FirebaseUtil.OnReadingMessageListener() {
                     @Override
                     public void OnMessageDataChanged(List<MyMessage> messageList) {
                         updateMessageList(messageList);
@@ -102,6 +101,7 @@ public class ChatDetailFragment extends Fragment {
                 if (!message.isEmpty()) {
                     String sender = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
                     firebaseManager.sendMessage(sender, id, message);
+                    sendNotification(message);
                 } else {
                     AndroidUtil.showToast(requireContext(),"You haven't typed anything");
                 }
@@ -114,7 +114,7 @@ public class ChatDetailFragment extends Fragment {
     }
 
     private void fetchDriver(String id){
-        firebaseManager.getDriverByID(id, new FirebaseManager.OnFetchListener<Driver>() {
+        firebaseManager.getDriverByID(id, new FirebaseUtil.OnFetchListener<Driver>() {
             @Override
             public void onFetchSuccess(Driver object) {
                 currentDriver = object;
@@ -130,7 +130,7 @@ public class ChatDetailFragment extends Fragment {
     }
 
     private void updateUI(Driver driver) {
-        firebaseManager.retrieveImage(driver.getAvatar(), new FirebaseManager.OnRetrieveImageListener() {
+        firebaseManager.retrieveImage(driver.getAvatar(), new FirebaseUtil.OnRetrieveImageListener() {
             @Override
             public void onRetrieveImageSuccess(Bitmap bitmap) {
                 avatar.setImageBitmap(bitmap);

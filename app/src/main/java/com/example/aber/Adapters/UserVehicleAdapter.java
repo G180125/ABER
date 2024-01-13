@@ -1,6 +1,5 @@
 package com.example.aber.Adapters;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.aber.FirebaseManager;
-import com.example.aber.Models.User.Home;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.Models.User.Vehicle;
 import com.example.aber.R;
 import com.google.android.material.button.MaterialButton;
@@ -105,10 +103,10 @@ public class UserVehicleAdapter extends RecyclerView.Adapter<UserVehicleAdapter.
 
             plateTextView.setText(vehicle.getNumberPlate());
 
-            FirebaseManager firebaseManager = new FirebaseManager();
+            FirebaseUtil firebaseManager = new FirebaseUtil();
             // Check if the vehicle has images before retrieving the image
             if (vehicle.getImages() != null && !vehicle.getImages().isEmpty()) {
-                firebaseManager.retrieveImage(vehicle.getImages().get(0), new FirebaseManager.OnRetrieveImageListener() {
+                firebaseManager.retrieveImage(vehicle.getImages().get(0), new FirebaseUtil.OnRetrieveImageListener() {
                     @Override
                     public void onRetrieveImageSuccess(Bitmap bitmap) {
                         imageView.setImageBitmap(bitmap);
