@@ -13,9 +13,12 @@
     <string name="forgot_your_password">Forget password ?</string>
     <string name="create_new_account">Create new account</string>
 
-    <!-- Profile edit    -->
+    <!-- Main Profile    -->
     <string name="logout">Logout</string>
     <string name="help">Help</string>
+
+    <!-- Profile Edit    -->
+    <string name="upload_avatar">Upload Avatar</string>
 
     <!-- Register Page    -->
     <string name="required">(Required)</string>
@@ -73,6 +76,7 @@
     <string name="edit">Edit</string>
     <string name="english">English</string>
     <string name="Vietnamese">Tiếng Việt</string>
+
 
 
 </resources>

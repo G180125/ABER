@@ -14,11 +14,12 @@
     <string name="forgot_your_password">Bạn quên mật khẩu ?</string>
     <string name="create_new_account">Tạo tài khoản mới </string>
 
-    <!-- Profile edit    -->
+    <!-- Main Profile    -->
     <string name="logout">Đăng xuất</string>
     <string name="help">Trợ giúp</string>
 
-
+    <!--  Profile Edit  -->
+    <string name="upload_avatar">Đăng Ảnh</string>
 
     <!-- Register Page    -->
     <string name="required">(Bắt Buộc)</string>
@@ -76,6 +77,7 @@
     <string name="edit">Edit</string>
     <string name="english">English</string>
     <string name="Vietnamese">Tiếng Việt</string>
+
 
 
 </resources>
