@@ -230,6 +230,31 @@ public class FirebaseUtil {
             });
     }
 
+    public void getBookingsByStatus(String userID, String status, OnFetchBookingListListener<Booking> listener){
+        List<Booking> bookingList = new ArrayList<>();
+        getUserByID(userID, new OnFetchListener<User>() {
+            @Override
+            public void onFetchSuccess(User object) {
+                if(status.equals("All")){
+                    listener.onDataChanged(object.getBookings());
+                } else {
+                    for (Booking booking : object.getBookings()) {
+                        if (booking.getStatus().equals(status)) {
+                            bookingList.add(booking);
+                        }
+                    }
+
+                    listener.onDataChanged(bookingList);
+                }
+            }
+
+            @Override
+            public void onFetchFailure(String message) {
+
+            }
+        });
+    }
+
     public void sendNotification(String message, String userName, String userId, String fcmToken) {
         Log.d("myNotification","Send Noti funtion");
         Notification notification = new Notification(userName, message);
