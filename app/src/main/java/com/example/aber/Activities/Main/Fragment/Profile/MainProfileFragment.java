@@ -40,7 +40,7 @@ public class MainProfileFragment extends Fragment {
     private ProgressDialog progressDialog;
     private CircleImageView avatar;
     private TextView nameTextView, emailTextView;
-    private CardView profileCardView, walletCardView, settingsCardView, aboutUsCardView, helpCardView, logoutCardView;
+    private CardView profileCardView, settingsCardView, aboutUsCardView, helpCardView, logoutCardView;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -71,7 +71,6 @@ public class MainProfileFragment extends Fragment {
         nameTextView = root.findViewById(R.id.name);
         emailTextView = root.findViewById(R.id.email);
         profileCardView = root.findViewById(R.id.profile);
-        walletCardView = root.findViewById(R.id.wallet);
         settingsCardView = root.findViewById(R.id.settings);
         aboutUsCardView = root.findViewById(R.id.about_us);
         helpCardView = root.findViewById(R.id.help);
@@ -86,12 +85,6 @@ public class MainProfileFragment extends Fragment {
             }
         });
 
-        walletCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showToast(requireContext(),"wallet card is clicked");
-            }
-        });
 
         settingsCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,14 +92,12 @@ public class MainProfileFragment extends Fragment {
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 replaceFragment(new ProfileSettingsFragment(),fragmentManager,fragmentTransaction,R.id.fragment_main_container);
-                showToast(requireContext(),"settings card is clicked");
             }
         });
 
         aboutUsCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast(requireContext(),"about us card is clicked");
                 startActivity(new Intent(requireContext(), AboutUsActivity.class));
             }
         });

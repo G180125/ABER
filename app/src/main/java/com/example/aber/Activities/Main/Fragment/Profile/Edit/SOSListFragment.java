@@ -248,4 +248,7 @@ public class SOSListFragment extends Fragment implements UserSOSAdapter.Recycler
             }
         });
     }
+
+    public void newVehicle(View view) {
+    }
 }

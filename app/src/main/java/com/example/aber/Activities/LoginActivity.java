@@ -202,11 +202,6 @@ public class LoginActivity extends AppCompatActivity {
         public void onClick(View v) {
             loginBackground.setAlpha(0.2F);
             dialog.show();
-
-
-
-
-
         }
     });
 
