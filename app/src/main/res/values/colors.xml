@@ -17,6 +17,7 @@
     <color name="right_chat_blue">#405DE6</color>
     <color name="secondary_stroke_blue">#00B6BC</color>
     <color name="primary_color">#00B6BC</color>
+    <color name="red">#FA3737</color>
 
     <!-- About us page color scheme    -->
     <color name="back_ground_color_title">#353f55</color>
