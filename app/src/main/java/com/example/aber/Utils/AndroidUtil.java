@@ -32,4 +32,13 @@ public class AndroidUtil {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+    public static void replaceFragmentWithTags(Fragment fragment, FragmentManager fragmentManager, FragmentTransaction fragmentTransaction, int container, String tag) {
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        fragmentTransaction.replace(container, fragment, tag);
+        fragmentTransaction.addToBackStack(tag);
+        fragmentTransaction.commit();
+    }
+
 }

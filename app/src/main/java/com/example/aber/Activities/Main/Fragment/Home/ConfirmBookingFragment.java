@@ -2,6 +2,7 @@ package com.example.aber.Activities.Main.Fragment.Home;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,14 +12,17 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.aber.Activities.Main.Fragment.Profile.Edit.HomeListFragment;
 import com.example.aber.Activities.Main.Fragment.Profile.Edit.SOSListFragment;
@@ -295,7 +299,9 @@ public class ConfirmBookingFragment extends Fragment {
                         AndroidUtil.showToast(requireContext(), "Booking Successfully");
                         AndroidUtil.hideLoadingDialog(progressDialog);
                         firebaseManager.addBooking(id, booking);
-                        navigateToBookingSuccess();
+                        navigateToMainHomeFragment();
+
+
                     }
 
                     @Override
@@ -393,11 +399,7 @@ public class ConfirmBookingFragment extends Fragment {
         return formatter.format(currentDate);
     }
 
-    private void navigateToBookingSuccess(){
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        AndroidUtil.replaceFragment(new BookingSuccessFragment(), fragmentManager, fragmentTransaction, R.id.fragment_main_container);
-    }
+
 
     private void presentPaymentSheetPayment() {
         final PaymentSheet.Configuration configuration = new PaymentSheet.Configuration.Builder("ABER")
@@ -422,6 +424,39 @@ public class ConfirmBookingFragment extends Fragment {
             Log.d("Checkout", "Completed");
         }
     }
+
+    private void navigateToMainHomeFragment() {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        // Replace the current fragment with MainHomeFragment and set a tag
+        AndroidUtil.replaceFragmentWithTags(new MainHomeFragment(), fragmentManager, fragmentTransaction, R.id.fragment_main_container, "MainHomeFragment");
+
+        // Delay for a short time before calling initPopUpBookingSuccess
+        new android.os.Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Iterate through fragments to find MainHomeFragment
+                List<Fragment> fragments = fragmentManager.getFragments();
+                for (Fragment fragment : fragments) {
+                    if (fragment instanceof MainHomeFragment) {
+                        MainHomeFragment mainHomeFragment = (MainHomeFragment) fragment;
+                        mainHomeFragment.initPopUpBookingSuccess();
+                        // Show the popup window
+                        mainHomeFragment.popupWindow.showAtLocation(mainHomeFragment.getView(), Gravity.CENTER, 0, 0);
+                        break;
+                    }
+                }
+            }
+        }, 500);
+    }
+
+
+
+
+
+
+
 
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         final int R = 6371;
