@@ -8,6 +8,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginVertical="8dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_marginHorizontal="20dp">
+            <Spinner
+                android:id="@+id/booking_status_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_edit_text"
+                android:hint="Seat Capacity"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="10dp"
+                android:textSize="18sp"
+                />
+        </LinearLayout>
+    </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/bookingRecyclerView"
             android:layout_width="match_parent"

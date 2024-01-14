@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,7 @@ public class ChatDetailFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             driverId = bundle.getString("driverID");
+            Log.d("driverId", driverId);
         }
         recyclerView = root.findViewById(R.id.recycler_message);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -114,8 +116,11 @@ public class ChatDetailFragment extends Fragment {
                 String message = sendText.getText().toString();
                 if (!message.isEmpty()) {
                     String sender = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
+                    Log.d("CHATTING","Send MESS");
                     firebaseManager.sendMessage(sender, driverId, message);
+                    Log.d("CHATTING","Send Noti");
                     firebaseManager.sendNotification(message, currentUser.getName(), userId, currentDriver.getFcmToken());
+                    Log.d("CHATTING","Finish Send Noti");
                 } else {
                     AndroidUtil.showToast(requireContext(),"You haven't typed anything");
                 }
@@ -169,3 +174,4 @@ public class ChatDetailFragment extends Fragment {
         recyclerView.scrollToPosition(newMessageList.size() - 1);
     }
 }
+//evSWh-BLRomrUo_SkCgeyl:APA91bGdihQQcG_oCyxuV1uZ7kFSnUWVrlGzcEVLLMnNq23MU1kOan-3Xb1dnSp_0Nld-DAY-OhZsw11i255wSssNWQZQ_59w_DwhkjjTinkxoVmYzae1jd9fKTOM4A1wrmIH4GRusWx

@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.aber.Activities.Main.Fragment.Chat.DriverChatActivity;
 import com.example.aber.Activities.Main.Fragment.Profile.HelpActivity;
 import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.Models.Booking.Booking;
@@ -44,7 +45,7 @@ public class BookingDetailFragment extends Fragment {
     private ImageView backButton, imageVIew, vehicleExpand, paymentExpand, driverExpand, resourceExpand;
     private CardView vehicleCardView, paymentCardView, driverCardView, resourceCardView;
     private boolean[] imageViewClickStates = {false, false, false, false};
-    private Button helpButton;
+    private Button helpButton, chatButton;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,6 +99,7 @@ public class BookingDetailFragment extends Fragment {
         phoneNUmberTextView = root.findViewById(R.id.phone_number);
         realPickUpTimeTextView = root.findViewById(R.id.real_pick_up_time);
         imageVIew = root.findViewById(R.id.image);
+        chatButton = root.findViewById(R.id.chat_button);
         helpButton = root.findViewById(R.id.help_button);
         vehicleExpand = root.findViewById(R.id.vehicle_expand);
         paymentExpand = root.findViewById(R.id.payment_expand);
@@ -181,6 +183,13 @@ public class BookingDetailFragment extends Fragment {
                     resourceExpand.setImageResource(R.drawable.ic_arrow_down);
                     resourceCardView.setVisibility(View.GONE);
                 }
+            }
+        });
+
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(requireContext(), DriverChatActivity.class).putExtra("driverID", booking.getDriver()));
             }
         });
 

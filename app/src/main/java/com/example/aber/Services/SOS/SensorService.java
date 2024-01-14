@@ -41,7 +41,8 @@ public class SensorService extends Service {
     private ShakeDetector mShakeDetector;
     private SOS emergencyContact;
 
-    public SensorService() {
+    public SensorService(SOS emergencyContact) {
+        this.emergencyContact = emergencyContact;
     }
 
     @Override
@@ -57,16 +58,18 @@ public class SensorService extends Service {
         return START_STICKY;
     }
 
+    @SuppressLint("ForegroundServiceType")
     @Override
     public void onCreate() {
 
         super.onCreate();
 
         // start the foreground service
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startMyOwnForeground();
-        else
+        } else {
             startForeground(1, new Notification());
+        }
 
         // ShakeDetector initialization
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -165,6 +168,7 @@ public class SensorService extends Service {
     // a foreground service in a different way. This is due to the newly
     // implemented strict notification rules, which require us to identify
     // our own notification channel in order to view them correctly.
+    @SuppressLint("ForegroundServiceType")
     @RequiresApi(Build.VERSION_CODES.O)
     private void startMyOwnForeground() {
         String NOTIFICATION_CHANNEL_ID = "example.permanence";
