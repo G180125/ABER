@@ -100,7 +100,6 @@ public class RegisterAccountFragment extends Fragment {
                         @Override
                         public void onTaskSuccess(String message) {
                             String userID = message;
-                            addUserToFirebase(userID);
                         }
 
                         @Override
@@ -155,62 +154,5 @@ public class RegisterAccountFragment extends Fragment {
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-    }
-
-    private void addUserToFirebase(String userID){
-        List<String> vehicleImages = new ArrayList<>();
-        vehicleImages.add(vehicleImage);
-
-        List<Home> homeList = new ArrayList<>();
-        Home home = new Home(address, homeImage, latitude, longitude);
-        homeList.add(home);
-
-        List<Vehicle> vehicleList = new ArrayList<>();
-        Vehicle vehicle = new Vehicle(brand, vehicleName, color, seat, plate, vehicleImages);
-        vehicleList.add(vehicle);
-
-        List<SOS> emergencyContactList = new ArrayList<>();
-        if(!sosName.isEmpty() || !sosPhone.isEmpty()) {
-            SOS emergencyContacts = new SOS(sosName, sosPhone);
-            emergencyContactList.add(emergencyContacts);
-        }
-
-        Gender userGender = Gender.valueOf(gender);
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
-
-        compositeDisposable.add(stripeServices.createCustomer(
-                        email)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(customer -> {
-                    if (customer.getId() == null) {
-                        System.out.println("Try again");
-                    } else {
-                        stripeCusID = customer.getId();
-                        System.out.println("===> customerID : " + customer.getId());
-                    }
-                }, throwable -> {
-                    System.out.println(throwable.getMessage());
-                })
-        );
-
-        User user = new User(email, name, userGender, phoneNumber, homeList, vehicleList, emergencyContactList, stripeCusID);
-
-        firebaseManager.addUser(userID, user, new FirebaseUtil.OnTaskCompleteListener() {
-            @Override
-            public void onTaskSuccess(String message) {
-                hideLoadingDialog(progressDialog);
-                showToast(requireContext(),message);
-                startActivity(new Intent(requireContext(), LoginActivity.class).putExtra("email", email).putExtra("password", password));
-                requireActivity().finish();
-            }
-
-            @Override
-            public void onTaskFailure(String message) {
-                hideLoadingDialog(progressDialog);
-                showToast(requireContext(),message);
-            }
-        });
     }
 }
