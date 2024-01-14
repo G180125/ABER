@@ -20,7 +20,21 @@
 
     <!--  Profile Edit  -->
     <string name="upload_avatar">Đăng Ảnh</string>
-
+    <string name="personal_details">Thông Tin Cá Nhân</string>
+    <string name="name_header">Tên:</string>
+    <string name="email_header">Email:</string>
+    <string name="gender_header">Giới Tính:</string>
+    <string name="phone_header">Điện Thoại:</string>
+    <string name="address_header">Địa Chỉ:</string>
+    <string name="default_address">Địa Chỉ Mặc Định</string>
+    <string name="plate_header">Biển Số:</string>
+    <string name="default_vehicle">Xe Mặc định</string>
+    <string name="sos">Liên Hệ Khẩn Cấp</string>
+    <string name="set_as_default">Đặt làm mặc định</string>
+    <string name="delete">Xóa</string>
+    <string name="new_vehicle">+ Xe Mới</string>
+    <string name="new_emergency_contact">+ Liên Hệ Khẩn Cấp Mới</string>
+    <string name="new_home">+ Nhà Mới</string>
     <!-- Register Page    -->
     <string name="required">(Bắt Buộc)</string>
     <string name="optional">(Không Bắt Buộc)</string>
@@ -73,7 +87,7 @@
     <string name="desc_two">Hơn cả app, Aber là cộng đồng gắn kết tin cậy, nơi hàng xóm, đồng nghiệp, bạn bè trở thành tài xế an toàn, đưa nhau về trọn vẹn. Khuyến khích chọn lựa trách nhiệm, Aber cùng xây dựng thế giới nơi ăn mừng an lành luôn song hành!</string>
     <string name="desc_three">Nguyen Mau Bach - s3926937 \nNguyen Minh Hung - s3924473 \nNguyen Vi Phi Long - s3904632 \nLe Tran Minh Trung - s3927071</string>
     <string name="sent">Sent</string>
-
+    <string name="about_us">Về Chúng Tôi</string>
     <string name="edit">Edit</string>
     <string name="english">English</string>
     <string name="Vietnamese">Tiếng Việt</string>

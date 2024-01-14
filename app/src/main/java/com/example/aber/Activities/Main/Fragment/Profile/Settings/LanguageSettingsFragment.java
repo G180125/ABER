@@ -95,8 +95,19 @@ public class LanguageSettingsFragment extends Fragment {
             }
         });
 
+        englishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                english.performClick();
+            }
+        });
 
-
+        vietnameseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vietnamese.performClick();
+            }
+        });
 
         return root;
     }

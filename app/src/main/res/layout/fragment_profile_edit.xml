@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginVertical="8dp"
-                android:text="General"
+                android:text="@string/personal_details"
                 android:textSize="26sp"
                 android:textStyle="bold" />
 
@@ -80,7 +80,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Name: "
+                            android:text="@string/name_header"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -92,7 +92,7 @@
                             android:layout_weight="1"
                             android:background="@drawable/custom_edit_text"
                             android:padding="10dp"
-                            android:text="Name" />
+                            android:text="@string/name" />
 
                     </LinearLayout>
 
@@ -104,7 +104,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Email: "
+                            android:text="@string/email_header"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -131,7 +131,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gender:"
+                            android:text="@string/gender_header"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -146,7 +146,7 @@
                                 android:id="@+id/radioButtonMale"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Male"
+                                android:text="@string/male"
                                 android:textSize="16sp" />
 
                             <RadioButton
@@ -154,7 +154,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
-                                android:text="Female"
+                                android:text="@string/female"
                                 android:textSize="16sp" />
                         </RadioGroup>
 
@@ -168,7 +168,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Phone: "
+                            android:text="@string/phone_header"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -180,7 +180,7 @@
                             android:layout_weight="1"
                             android:background="@drawable/custom_edit_text"
                             android:padding="10dp"
-                            android:text="Phone">
+                            android:text="@string/phone_number">
 
                         </EditText>
                     </LinearLayout>
@@ -192,7 +192,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="24dp"
-                android:text="Home"
+                android:text="@string/home"
                 android:textSize="26sp"
                 android:textStyle="bold" />
             <androidx.cardview.widget.CardView
@@ -218,7 +218,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Address: "
+                        android:text="@string/address_header"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -230,7 +230,7 @@
                         android:layout_weight="1"
                         android:textSize="15sp"
                         android:padding="10dp"
-                        android:text="Default Address">
+                        android:text="@string/default_address">
 
                     </TextView>
 
@@ -249,7 +249,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="24dp"
-                android:text="Vehicle"
+                android:text="@string/vehicle"
                 android:textSize="26sp"
                 android:textStyle="bold" />
             <androidx.cardview.widget.CardView
@@ -275,7 +275,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Plate: "
+                        android:text="@string/plate_header"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -287,7 +287,7 @@
                         android:layout_weight="1"
                         android:textSize="15sp"
                         android:padding="10dp"
-                        android:text="Default Vehicle">
+                        android:text="@string/default_vehicle">
 
                     </TextView>
 
@@ -307,7 +307,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="8dp"
                     android:layout_marginTop="24dp"
-                    android:text="SOS"
+                    android:text="@string/sos"
                     android:textSize="26sp"
                     android:textStyle="bold" />
 
@@ -332,7 +332,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Name: "
+                                android:text="@string/name_header"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
@@ -340,7 +340,7 @@
                                 android:id="@+id/sos_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Name"
+                                android:text="@string/name"
                                 android:padding="10dp"
                                 android:layout_marginLeft="5dp"
                                 android:layout_weight="1">
