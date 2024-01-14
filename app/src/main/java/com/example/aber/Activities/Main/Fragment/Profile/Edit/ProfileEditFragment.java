@@ -32,16 +32,13 @@ import com.canhub.cropper.CropImageContract;
 import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
 import com.example.aber.Activities.Main.Fragment.Profile.MainProfileFragment;
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 
 import com.example.aber.Models.User.Gender;
-import com.example.aber.Models.User.SOS;
 import com.example.aber.Models.User.User;
 import com.example.aber.R;
 import com.google.android.material.button.MaterialButton;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -50,7 +47,7 @@ public class ProfileEditFragment extends Fragment {
     private static final String STORAGE_PATH = "avatar/";
     private String userID;
     private User currentUser, originalUser;
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
     private EditText nameEditText, phoneEditText;
     private TextView addressTextView, vehicleTextView, sosTextView, emailTextView;
@@ -84,10 +81,10 @@ public class ProfileEditFragment extends Fragment {
         showLoadingDialog();
 
         View root =  inflater.inflate(R.layout.fragment_profile_edit, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
 
         userID = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
-        firebaseManager.getUserByID(userID, new FirebaseManager.OnFetchListener<User>() {
+        firebaseManager.getUserByID(userID, new FirebaseUtil.OnFetchListener<User>() {
             @Override
             public void onFetchSuccess(User user) {
                 currentUser = user;
@@ -223,7 +220,7 @@ public class ProfileEditFragment extends Fragment {
                     if (avatarChanged) {
                         // If avatar changed, upload the new image
                         String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
-                        firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+                        firebaseManager.uploadImage(cropped, imagePath, new FirebaseUtil.OnTaskCompleteListener() {
                             @Override
                             public void onTaskSuccess(String message) {
                                 currentUser.setAvatar(message);
@@ -255,7 +252,7 @@ public class ProfileEditFragment extends Fragment {
 
     private void updateCurrentUserInFirestore() {
         Log.d("Set Change final", currentUser.getPhoneNumber());
-        firebaseManager.updateUser(userID, currentUser, new FirebaseManager.OnTaskCompleteListener() {
+        firebaseManager.updateUser(userID, currentUser, new FirebaseUtil.OnTaskCompleteListener() {
             @Override
             public void onTaskSuccess(String message) {
                 showToast("Update Successfully");
@@ -306,7 +303,7 @@ public class ProfileEditFragment extends Fragment {
 
     private void updateUI(User user) {
         if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
-            firebaseManager.retrieveImage(user.getAvatar(), new FirebaseManager.OnRetrieveImageListener() {
+            firebaseManager.retrieveImage(user.getAvatar(), new FirebaseUtil.OnRetrieveImageListener() {
                 @Override
                 public void onRetrieveImageSuccess(Bitmap bitmap) {
                     updateAvatar(bitmap);

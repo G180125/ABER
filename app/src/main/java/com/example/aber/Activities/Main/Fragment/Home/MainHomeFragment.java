@@ -9,7 +9,7 @@ import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,11 +27,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.aber.Adapters.InfoWindowViewHolder;
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 
 import android.Manifest;
 
-import android.widget.Toast;
 import android.widget.PopupMenu;
 
 import com.example.aber.R;
@@ -71,7 +70,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
 
     private FusedLocationProviderClient fusedLocationClient;
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
     private SearchView searchView;
     private LatLng currentLocation;
@@ -89,7 +88,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_main_home, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
 
         // Initialize the SDK
         if (!Places.isInitialized()) {
@@ -300,6 +299,10 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 100);
+        }
+
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.requestLocationUpdates(locationRequest, new LocationCallback() {
@@ -318,7 +321,9 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         } else {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.SEND_SMS,
+                    Manifest.permission.READ_CONTACTS
             }, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }

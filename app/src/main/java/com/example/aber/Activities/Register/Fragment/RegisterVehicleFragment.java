@@ -24,12 +24,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.canhub.cropper.CropImageContract;
 import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.R;
 
 public class RegisterVehicleFragment extends Fragment {
@@ -51,7 +50,7 @@ public class RegisterVehicleFragment extends Fragment {
     private ImageView vehicleImageView;
     private LinearLayout imageUploadSuccessLayout;
     private Bitmap cropped;
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private String vehicleImage;
     private double latitude, longitude;
 
@@ -77,7 +76,7 @@ public class RegisterVehicleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_register_vehicle, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
 
         Bundle args = getArguments();
         if (args != null) {
@@ -161,7 +160,7 @@ public class RegisterVehicleFragment extends Fragment {
         if (cropped != null) {
             // Handle the case when only the avatar is changed
             String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
-            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+            firebaseManager.uploadImage(cropped, imagePath, new FirebaseUtil.OnTaskCompleteListener() {
                 @Override
                 public void onTaskSuccess(String message) {
                     showToast(requireContext(), "Upload Image success");
