@@ -1,6 +1,5 @@
 package com.example.aber.Activities.Main.Fragment.Profile.Edit;
 
-import static com.example.aber.Utils.AndroidUtil.hideLoadingDialog;
 import static com.example.aber.Utils.AndroidUtil.replaceFragment;
 import static com.example.aber.Utils.AndroidUtil.showToast;
 
@@ -30,7 +29,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +43,7 @@ import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
 import com.example.aber.Activities.Main.Fragment.Home.ConfirmBookingFragment;
 import com.example.aber.Adapters.UserHomeAdapter;
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.Models.User.Home;
 import com.example.aber.Models.User.User;
 import com.example.aber.R;
@@ -68,7 +66,7 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final String STORAGE_PATH = "home/";
     private ImageView buttonBack;
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
     private String id, previous, name, address, imagePath, newAddress;
     private User user;
@@ -106,7 +104,7 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
         progressDialog = new ProgressDialog(requireContext());
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_home_list, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
 
         Bundle args = getArguments();
         if (args != null) {
@@ -116,7 +114,7 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
         }
 
         id = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
-        firebaseManager.getUserByID(id, new FirebaseManager.OnFetchListener<User>() {
+        firebaseManager.getUserByID(id, new FirebaseUtil.OnFetchListener<User>() {
             @Override
             public void onFetchSuccess(User object) {
                 user = object;
@@ -256,7 +254,7 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
             addressTextView.setText(home.getAddress());
 
             if(home.getImage() != null) {
-                firebaseManager.retrieveImage(home.getImage(), new FirebaseManager.OnRetrieveImageListener() {
+                firebaseManager.retrieveImage(home.getImage(), new FirebaseUtil.OnRetrieveImageListener() {
                     @Override
                     public void onRetrieveImageSuccess(Bitmap bitmap) {
                         homeImageView.setImageBitmap(bitmap);
@@ -325,7 +323,7 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
 
     private void updateList(User user, List<Home> homeList, String successMessage){
         user.setHomes(homeList);
-        firebaseManager.updateUser(id, user, new FirebaseManager.OnTaskCompleteListener() {
+        firebaseManager.updateUser(id, user, new FirebaseUtil.OnTaskCompleteListener() {
             @Override
             public void onTaskSuccess(String message) {
                 AndroidUtil.showToast(getContext(), successMessage);
@@ -362,7 +360,7 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
         //TODO: Check if thw address and image is selected
         if(isDataSelected(address, cropped)){
             imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
-            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+            firebaseManager.uploadImage(cropped, imagePath, new FirebaseUtil.OnTaskCompleteListener() {
                 @Override
                 public void onTaskSuccess(String message) {
                     Home home = new Home(address, imagePath, latitude, longitude);
@@ -395,7 +393,7 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
 
         if(cropped != null){
             imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
-            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+            firebaseManager.uploadImage(cropped, imagePath, new FirebaseUtil.OnTaskCompleteListener() {
                 @Override
                 public void onTaskSuccess(String message) {
                     home.setImage(imagePath);

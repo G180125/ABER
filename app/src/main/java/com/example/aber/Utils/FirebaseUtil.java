@@ -1,4 +1,4 @@
-package com.example.aber;
+package com.example.aber.Utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,14 +9,15 @@ import androidx.annotation.NonNull;
 import com.example.aber.Models.Booking.Booking;
 import com.example.aber.Models.Booking.BookingResponse;
 import com.example.aber.Models.Message.MyMessage;
-import com.example.aber.Models.Staff.Admin;
+import com.example.aber.Models.Notification.Notification;
+import com.example.aber.Models.Notification.NotificationRequest;
 import com.example.aber.Models.Staff.Driver;
-import com.example.aber.Models.Staff.Staff;
+import com.example.aber.Models.User.SOSActiveResponse;
 import com.example.aber.Models.User.User;
+import com.example.aber.Services.Notification.FCMApi;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,20 +25,27 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-public class FirebaseManager {
+
+public class FirebaseUtil {
     public final String COLLECTION_USERS = "users";
     public final String COLLECTION_DRIVERS = "drivers";
     public final String COLLECTION_CHATS = "Chats";
@@ -45,18 +53,28 @@ public class FirebaseManager {
     public final String COLLECTION_LOCATIONS = "Locations";
     public final String COLLECTION_ADMINS = "admins";
     public final String COLLECTION_DRIVER = "drivers";
+    public final String COLLECTION_SOS_ACTIVE = "SosActive";
     public final String DOCUMENTID = "documentID";
     public FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
     private StorageReference storageRef;
     private FirebaseDatabase database;
+    public FirebaseMessaging messaging;
+    private FCMApi fcmApi;
 
-
-    public FirebaseManager() {
+    public FirebaseUtil() {
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
         storageRef = FirebaseStorage.getInstance().getReference();
         database = FirebaseDatabase.getInstance();
+        messaging = FirebaseMessaging.getInstance();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://fcm.googleapis.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        fcmApi = retrofit.create(FCMApi.class);
     }
 
     public void register(final String email, final String password, OnTaskCompleteListener listener) {
@@ -88,6 +106,17 @@ public class FirebaseManager {
                         }
                     });
         }).start();
+    }
+
+    public void getFCMToken(OnFetchListener<String> listener){
+        this.messaging.getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if(task.isSuccessful()){
+                    listener.onFetchSuccess(task.getResult());
+                }
+            }
+        });
     }
 
     public void addUser(String userID, User user, OnTaskCompleteListener listener){
@@ -177,6 +206,74 @@ public class FirebaseManager {
                         listener.onTaskFailure("Error updating user: " + e.getMessage());
                     });
         }).start();
+    }
+
+    public void isSOSActive(String userID, OnCheckingSOSActiveListener listener){
+            DatabaseReference reference =  this.database.getReference(COLLECTION_SOS_ACTIVE);
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot s: snapshot.getChildren()){
+                        SOSActiveResponse response = s.getValue(SOSActiveResponse.class);
+                        assert response != null;
+                        if(response.getUserID().equals(userID)){
+                            listener.OnDataChanged(response);
+                        }
+                    }
+                    listener.OnDataChanged(null);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+    }
+
+    public void getBookingsByStatus(String userID, String status, OnFetchBookingListListener<Booking> listener){
+        List<Booking> bookingList = new ArrayList<>();
+        getUserByID(userID, new OnFetchListener<User>() {
+            @Override
+            public void onFetchSuccess(User object) {
+                if(status.equals("All")){
+                    listener.onDataChanged(object.getBookings());
+                } else {
+                    for (Booking booking : object.getBookings()) {
+                        if (booking.getStatus().equals(status)) {
+                            bookingList.add(booking);
+                        }
+                    }
+
+                    listener.onDataChanged(bookingList);
+                }
+            }
+
+            @Override
+            public void onFetchFailure(String message) {
+
+            }
+        });
+    }
+
+    public void sendNotification(String message, String userName, String userId, String fcmToken) {
+        Log.d("myNotification","Send Noti funtion");
+        Notification notification = new Notification(userName, message);
+        NotificationRequest notificationRequest = new NotificationRequest(notification, userId, fcmToken);
+
+        Call<Void> call = FCMApi.sendNotification(notificationRequest);
+
+        Log.d(",yNotification","Notification URL: " + call.request().url());
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("myNotification", "Failed to send notification", t);
+            }
+        });
     }
 
     public void sendMessage(String sender, String receiver, String message){
@@ -369,6 +466,10 @@ public class FirebaseManager {
 
     public interface OnFetchBookingListListener<T>{
         void onDataChanged(List<T> object);
+    }
+
+    public interface OnCheckingSOSActiveListener{
+        void OnDataChanged(SOSActiveResponse object);
     }
 }
 

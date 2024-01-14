@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="booking_status_options">
+        <item>All</item>
+        <item>Pending</item>
+        <item>Driver Accepted</item>
+        <item>Picked Up</item>
+        <item>Done</item>
+        <item>Cancel</item>
+    </string-array>
+</resources>

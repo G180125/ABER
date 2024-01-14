@@ -1,31 +1,21 @@
 package com.example.aber.Models.Booking;
 
 public class Card {
-    private String cardNumber;
     private String brand;
     private int expMonth;
     private int expYear;
-    private String cardHolder;
-    private int last4;
+    private String last4;
+    private String country;
 
 
     public Card(){}
 
-    public Card(String cardNumber, String brand, int expMonth, int expYear, String cardHolder, int last4) {
-        this.cardNumber = cardNumber;
+    public Card(String brand, int expMonth, int expYear, String last4, String country) {
         this.brand = brand;
         this.expMonth = expMonth;
         this.expYear = expYear;
-        this.cardHolder = cardHolder;
         this.last4 = last4;
-    }
-
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
+        this.country = country;
     }
 
     public String getBrand() {
@@ -52,19 +42,19 @@ public class Card {
         this.expYear = expYear;
     }
 
-    public String getCardHolder() {
-        return cardHolder;
-    }
-
-    public void setCardHolder(String cardHolder) {
-        this.cardHolder = cardHolder;
-    }
-
-    public int getLast4() {
+    public String getLast4() {
         return last4;
     }
 
-    public void setLast4(int last4) {
+    public void setLast4(String last4) {
         this.last4 = last4;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

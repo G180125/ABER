@@ -21,8 +21,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.aber.Activities.Main.Fragment.Chat.DriverChatActivity;
 import com.example.aber.Activities.Main.Fragment.Profile.HelpActivity;
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.Models.Booking.Booking;
 import com.example.aber.Models.Staff.Driver;
 import com.example.aber.Models.User.Gender;
@@ -34,7 +35,7 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BookingDetailFragment extends Fragment {
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
     private User user;
     private Booking booking;
@@ -44,7 +45,7 @@ public class BookingDetailFragment extends Fragment {
     private ImageView backButton, imageVIew, vehicleExpand, paymentExpand, driverExpand, resourceExpand;
     private CardView vehicleCardView, paymentCardView, driverCardView, resourceCardView;
     private boolean[] imageViewClickStates = {false, false, false, false};
-    private Button helpButton;
+    private Button helpButton, chatButton;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class BookingDetailFragment extends Fragment {
         showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_booking_detail, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
 
         Bundle args = getArguments();
         if (args != null) {
@@ -60,7 +61,7 @@ public class BookingDetailFragment extends Fragment {
         }
 
         String id = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
-        firebaseManager.getUserByID(id, new FirebaseManager.OnFetchListener<User>() {
+        firebaseManager.getUserByID(id, new FirebaseUtil.OnFetchListener<User>() {
             @Override
             public void onFetchSuccess(User object) {
                 user = object;
@@ -98,6 +99,7 @@ public class BookingDetailFragment extends Fragment {
         phoneNUmberTextView = root.findViewById(R.id.phone_number);
         realPickUpTimeTextView = root.findViewById(R.id.real_pick_up_time);
         imageVIew = root.findViewById(R.id.image);
+        chatButton = root.findViewById(R.id.chat_button);
         helpButton = root.findViewById(R.id.help_button);
         vehicleExpand = root.findViewById(R.id.vehicle_expand);
         paymentExpand = root.findViewById(R.id.payment_expand);
@@ -184,6 +186,13 @@ public class BookingDetailFragment extends Fragment {
             }
         });
 
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(requireContext(), DriverChatActivity.class).putExtra("driverID", booking.getDriver()));
+            }
+        });
+
 
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,12 +216,12 @@ public class BookingDetailFragment extends Fragment {
         colorTextView.setText(booking.getVehicle().getColor());
         seatTextView.setText(booking.getVehicle().getSeatCapacity());
         plateTextView.setText(booking.getVehicle().getNumberPlate());
-        String amount = booking.getPayment().getAmount() + " " + booking.getPayment().getCurrency();
+        String amount = booking.getPayment().getAmount().intValue() + " " + booking.getPayment().getCurrency();
         amountTextView.setText(amount);
-        methodTextView.setText("Card");
+        methodTextView.setText("Card **** **** ****" + booking.getPayment().getCard().getLast4());
 
         if(booking.getDriver() != null &&  !booking.getDriver().isEmpty()){
-            firebaseManager.getDriverByID(booking.getDriver(), new FirebaseManager.OnFetchListener<Driver>() {
+            firebaseManager.getDriverByID(booking.getDriver(), new FirebaseUtil.OnFetchListener<Driver>() {
                 @Override
                 public void onFetchSuccess(Driver object) {
                     driverNameTextView.setText(object.getName());
@@ -220,7 +229,7 @@ public class BookingDetailFragment extends Fragment {
                     licenseNumberTextView.setText(object.getLicenseNumber());
                     phoneNUmberTextView.setText(object.getPhone());
 
-                    firebaseManager.retrieveImage(object.getAvatar(), new FirebaseManager.OnRetrieveImageListener() {
+                    firebaseManager.retrieveImage(object.getAvatar(), new FirebaseUtil.OnRetrieveImageListener() {
                         @Override
                         public void onRetrieveImageSuccess(Bitmap bitmap) {
                             avatar.setImageBitmap(bitmap);

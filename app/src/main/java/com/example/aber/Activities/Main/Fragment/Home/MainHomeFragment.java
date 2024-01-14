@@ -6,10 +6,7 @@ import static com.example.aber.Utils.AndroidUtil.showToast;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -34,9 +31,6 @@ import com.example.aber.FirebaseManager;
 
 import android.Manifest;
 
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.Toast;
 import android.widget.PopupMenu;
 
@@ -75,7 +69,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     private static final String API_KEY = "AIzaSyAk79eOlfksqlm74wCmRbY_yddK75iZ4dM";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private GoogleMap mMap;
-      PopupWindow popupWindow;
+
     private FusedLocationProviderClient fusedLocationClient;
     private FirebaseManager firebaseManager;
     private ProgressDialog progressDialog;
@@ -370,44 +364,5 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         LatLng latestLocation = firebaseManager.getLatestLocation(userId);
 
         return latestLocation == null || !latestLocation.equals(newLocation);
-    }
-
-    public void initPopUpBookingSuccess() {
-        LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.pop_up_booking_success, null);
-
-        // Initialize the PopupWindow
-        popupWindow = new PopupWindow(
-                popupView,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-        );
-        popupWindow.setTouchable(true);
-        // Set focusable to true to receive touch events outside the PopupWindow
-        popupWindow.setFocusable(true);
-
-        // Set background drawable to allow touch events outside the PopupWindow
-        popupView.setBackgroundColor(getResources().getColor(R.color.popup_background, null));
-
-        // Set up UI elements and event listeners within the popupView
-        Button viewBookingButton = popupView.findViewById(R.id.view_booking_button);
-        ImageView cancelBtn = popupView.findViewById(R.id.cancelBtn);
-        viewBookingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
-
-
-        // Show the PopupWindow
-        popupWindow.showAtLocation(requireView(), Gravity.CENTER, 0, 0);
-
     }
 }

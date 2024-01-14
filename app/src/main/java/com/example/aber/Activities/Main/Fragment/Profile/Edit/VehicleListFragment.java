@@ -23,7 +23,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +39,7 @@ import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
 import com.example.aber.Activities.Main.Fragment.Home.ConfirmBookingFragment;
 import com.example.aber.Adapters.UserVehicleAdapter;
-import com.example.aber.FirebaseManager;
-import com.example.aber.Models.User.Home;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.Models.User.User;
 import com.example.aber.Models.User.Vehicle;
 import com.example.aber.R;
@@ -66,7 +64,7 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
     };
     private static final String STORAGE_PATH = "vehicle/";
     private ImageView buttonBack;
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
     private String id, previous, name, address, imagePath;
     private User user;
@@ -99,7 +97,7 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
         progressDialog = new ProgressDialog(requireContext());
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
 
         Bundle args = getArguments();
         if (args != null) {
@@ -109,7 +107,7 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
         }
 
         id = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
-        firebaseManager.getUserByID(id, new FirebaseManager.OnFetchListener<User>() {
+        firebaseManager.getUserByID(id, new FirebaseUtil.OnFetchListener<User>() {
             @Override
             public void onFetchSuccess(User object) {
                 user = object;
@@ -249,7 +247,7 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
 
             int selectionIndex = seatCapacitySpinnerValues.indexOf(String.valueOf(vehicle.getSeatCapacity()));
             seatCapacitySpinner.setSelection(selectionIndex);
-            firebaseManager.retrieveImage(vehicle.getImages().get(0), new FirebaseManager.OnRetrieveImageListener() {
+            firebaseManager.retrieveImage(vehicle.getImages().get(0), new FirebaseUtil.OnRetrieveImageListener() {
                 @Override
                 public void onRetrieveImageSuccess(Bitmap bitmap) {
                     vehicleImageView.setImageBitmap(bitmap);
@@ -391,7 +389,7 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
 
         if(validateInputs(brand, name, color, selectedSeatCapacity, plate)){
             imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
-            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+            firebaseManager.uploadImage(cropped, imagePath, new FirebaseUtil.OnTaskCompleteListener() {
                 @Override
                 public void onTaskSuccess(String message) {
                     List<String> images = new ArrayList<>();
@@ -425,7 +423,7 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
 
         if(cropped != null){
             imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
-            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+            firebaseManager.uploadImage(cropped, imagePath, new FirebaseUtil.OnTaskCompleteListener() {
                 @Override
                 public void onTaskSuccess(String message) {
                     vehicle.getImages().set(0, imagePath);
@@ -457,7 +455,7 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
 
     private void updateList(User user, List<Vehicle> vehicleList, String successMessage){
         user.setVehicles(vehicleList);
-        firebaseManager.updateUser(id, user, new FirebaseManager.OnTaskCompleteListener() {
+        firebaseManager.updateUser(id, user, new FirebaseUtil.OnTaskCompleteListener() {
             @Override
             public void onTaskSuccess(String message) {
                 AndroidUtil.showToast(getContext(), successMessage);

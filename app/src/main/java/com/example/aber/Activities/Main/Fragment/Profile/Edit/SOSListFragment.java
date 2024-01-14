@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -19,33 +18,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.aber.Activities.Main.Fragment.Home.ConfirmBookingFragment;
 import com.example.aber.Adapters.UserSOSAdapter;
-import com.example.aber.Adapters.UserVehicleAdapter;
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.Models.User.SOS;
 import com.example.aber.Models.User.User;
-import com.example.aber.Models.User.Vehicle;
 import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 
 public class SOSListFragment extends Fragment implements UserSOSAdapter.RecyclerViewClickListener{
     private ImageView buttonBack;
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private ProgressDialog progressBar;
     private String id, previous, name, address;
     private User user;
@@ -62,7 +56,7 @@ public class SOSListFragment extends Fragment implements UserSOSAdapter.Recycler
         AndroidUtil.showLoadingDialog(progressBar);
         // Inflate the layout for this fragment
         root =  inflater.inflate(R.layout.fragment_sos_list, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
 
         Bundle args = getArguments();
         if (args != null) {
@@ -72,7 +66,7 @@ public class SOSListFragment extends Fragment implements UserSOSAdapter.Recycler
         }
 
         id = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
-        firebaseManager.getUserByID(id, new FirebaseManager.OnFetchListener<User>() {
+        firebaseManager.getUserByID(id, new FirebaseUtil.OnFetchListener<User>() {
             @Override
             public void onFetchSuccess(User object) {
                 user = object;
@@ -240,7 +234,7 @@ public class SOSListFragment extends Fragment implements UserSOSAdapter.Recycler
 
     private void updateList(User user, List<SOS> sosList, String successMessage){
         user.setEmergencyContacts(sosList);
-        firebaseManager.updateUser(id, user, new FirebaseManager.OnTaskCompleteListener() {
+        firebaseManager.updateUser(id, user, new FirebaseUtil.OnTaskCompleteListener() {
             @Override
             public void onTaskSuccess(String message) {
                 AndroidUtil.showToast(getContext(), successMessage);

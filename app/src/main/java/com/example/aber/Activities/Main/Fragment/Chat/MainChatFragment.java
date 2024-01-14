@@ -9,18 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.R;
 
 public class MainChatFragment extends Fragment {
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_main_chat, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
         DriverChatListFragment fragment = new DriverChatListFragment();
 
         getParentFragmentManager().beginTransaction()

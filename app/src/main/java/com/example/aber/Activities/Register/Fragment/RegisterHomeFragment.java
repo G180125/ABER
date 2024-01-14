@@ -36,9 +36,7 @@ import android.widget.TextView;
 import com.canhub.cropper.CropImageContract;
 import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
-import com.example.aber.Activities.Main.Fragment.Home.ConfirmBookingFragment;
-import com.example.aber.FirebaseManager;
-import com.example.aber.Models.User.Home;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -63,7 +61,7 @@ public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback
     private TextView addressTextView, addressTextView2;
     private ImageView homeImageView;
     private Bitmap cropped;
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
     private PopupWindow popupWindow;
     private GoogleMap mMap;
@@ -93,7 +91,7 @@ public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback
         progressDialog = new ProgressDialog(requireContext());
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_register_home, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
 
         Bundle args = getArguments();
         if (args != null) {
@@ -128,7 +126,7 @@ public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback
                     AndroidUtil.showLoadingDialog(progressDialog);
                     // Handle the case when only the avatar is changed
                     String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
-                    firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+                    firebaseManager.uploadImage(cropped, imagePath, new FirebaseUtil.OnTaskCompleteListener() {
                         @Override
                         public void onTaskSuccess(String message) {
                             AndroidUtil.hideLoadingDialog(progressDialog);

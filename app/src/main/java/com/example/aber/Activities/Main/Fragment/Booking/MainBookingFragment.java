@@ -14,13 +14,16 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
-import com.example.aber.Activities.Main.Fragment.Booking.BookingDetailFragment;
 import com.example.aber.Adapters.BookingAdapter;
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.Models.Booking.Booking;
 import com.example.aber.Models.Booking.BookingResponse;
 import com.example.aber.Models.User.User;
@@ -31,12 +34,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class MainBookingFragment extends Fragment implements BookingAdapter.RecyclerViewClickListener{
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
     private List<Booking> bookingList;
     private BookingAdapter adapter;
     private User user;
-    private String id;
+    private String userID;
+    private Spinner bookingStatusSpinner;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,10 +48,10 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
         showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_main_booking, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
 
-        id = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
-        firebaseManager.getUserByID(id, new FirebaseManager.OnFetchListener<User>() {
+        userID = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
+        firebaseManager.getUserByID(userID, new FirebaseUtil.OnFetchListener<User>() {
             @Override
             public void onFetchSuccess(User object) {
                 user = object;
@@ -66,10 +70,44 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
             }
         });
 
-            RecyclerView recyclerView = root.findViewById(R.id.bookingRecyclerView);
-            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-            adapter = new BookingAdapter(new ArrayList<>(),this);
-            recyclerView.setAdapter(adapter);
+        RecyclerView recyclerView = root.findViewById(R.id.bookingRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        adapter = new BookingAdapter(new ArrayList<>(),this);
+        recyclerView.setAdapter(adapter);
+
+        bookingStatusSpinner = root.findViewById(R.id.booking_status_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.booking_status_options,
+                android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        bookingStatusSpinner.setAdapter(adapter);
+
+        bookingStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                showLoadingDialog(progressDialog);
+                String status = parent.getItemAtPosition(position).toString();
+                Log.d("status", status);
+                firebaseManager.getBookingsByStatus(userID, status, new FirebaseUtil.OnFetchBookingListListener<Booking>() {
+                    @Override
+                    public void onDataChanged(List<Booking> object) {
+                        if (object == null) {
+                            bookingList = new ArrayList<>();
+                        } else {
+                            bookingList = object;
+                        }
+                        updateUI(bookingList);
+                    }
+                });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         return root;
     }
@@ -115,27 +153,19 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
         });
     }
 
-
     private void isCancelable(int position, OnCheckCancelCallback callback) {
-        firebaseManager.fetchBookings(new FirebaseManager.OnFetchBookingListListener<BookingResponse>() {
-            @Override
-            public void onDataChanged(List<BookingResponse> object) {
-                for (BookingResponse bookingResponse : object) {
-                    if (bookingList.get(position).getId().equals(bookingResponse.getBooking().getId())) {
-                        if (bookingResponse.getBooking().getStatus().equals("Driver Accept")) {
-                            callback.onCheckCancel("Driver Already Accept The Booking");
-                            return;
-                        }
 
-                        if(bookingResponse.getBooking().getStatus().equals("Cancel")){
-                            callback.onCheckCancel("This booking is already canceled");
-                            return;
-                        }
-                    }
-                }
-                callback.onCheckCancel("OK");
-            }
-        });
+        Booking booking = bookingList.get(position);
+        if(booking.getStatus().equals("Cancel")){
+            callback.onCheckCancel("This booking is already canceled");
+            return;
+        }
+        if (!booking.getStatus().equals("Pending")) {
+            callback.onCheckCancel("Driver Already Accept The Booking");
+            return;
+        }
+
+        callback.onCheckCancel("OK");
     }
 
     // Define a callback interface
@@ -148,7 +178,7 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
         Booking booking = bookingList.get(position);
         booking.setStatus("Cancel");
 
-        firebaseManager.fetchBookings(new FirebaseManager.OnFetchBookingListListener<BookingResponse>() {
+        firebaseManager.fetchBookings(new FirebaseUtil.OnFetchBookingListListener<BookingResponse>() {
             @Override
             public void onDataChanged(List<BookingResponse> object) {
                 for(BookingResponse bookingResponse: object){
@@ -166,7 +196,7 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
             }
         }
 
-        firebaseManager.updateUser(id, user, new FirebaseManager.OnTaskCompleteListener() {
+        firebaseManager.updateUser(userID, user, new FirebaseUtil.OnTaskCompleteListener() {
             @Override
             public void onTaskSuccess(String message) {
                 showToast(requireContext(),"Cancel Booking Successfully");
