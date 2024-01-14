@@ -24,12 +24,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.canhub.cropper.CropImageContract;
 import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.R;
 
 public class RegisterVehicleFragment extends Fragment {
@@ -51,8 +50,9 @@ public class RegisterVehicleFragment extends Fragment {
     private ImageView vehicleImageView;
     private LinearLayout imageUploadSuccessLayout;
     private Bitmap cropped;
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private String vehicleImage;
+    private double latitude, longitude;
 
     private final ActivityResultLauncher<Intent> getImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
@@ -76,7 +76,7 @@ public class RegisterVehicleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_register_vehicle, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
 
         Bundle args = getArguments();
         if (args != null) {
@@ -87,6 +87,8 @@ public class RegisterVehicleFragment extends Fragment {
             phoneNumber = args.getString("phoneNumber", "");
             gender = args.getString("gender", "");
             address = args.getString("address", "");
+            latitude = args.getDouble("latitude");
+            longitude = args.getDouble("longitude");
             homeImage = args.getString("homeImage", "");
         }
 
@@ -158,7 +160,7 @@ public class RegisterVehicleFragment extends Fragment {
         if (cropped != null) {
             // Handle the case when only the avatar is changed
             String imagePath = STORAGE_PATH + generateUniquePath() + ".jpg";
-            firebaseManager.uploadImage(cropped, imagePath, new FirebaseManager.OnTaskCompleteListener() {
+            firebaseManager.uploadImage(cropped, imagePath, new FirebaseUtil.OnTaskCompleteListener() {
                 @Override
                 public void onTaskSuccess(String message) {
                     showToast(requireContext(), "Upload Image success");
@@ -265,6 +267,8 @@ public class RegisterVehicleFragment extends Fragment {
         bundle.putString("phoneNumber", phoneNumber);
         bundle.putString("gender", gender);
         bundle.putString("address", address);
+        bundle.putDouble("latitude", latitude);
+        bundle.putDouble("longitude", longitude);
         bundle.putString("homeImage", homeImage);
         bundle.putString("brand", brand);
         bundle.putString("vehicleName", vehicleName);

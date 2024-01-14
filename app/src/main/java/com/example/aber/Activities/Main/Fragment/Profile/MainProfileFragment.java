@@ -22,10 +22,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.aber.Activities.LoginActivity;
-import com.example.aber.Activities.Main.Fragment.AboutUs.AboutUsActivity;
+import com.example.aber.Activities.Main.Fragment.Profile.AboutUs.AboutUsActivity;
 import com.example.aber.Activities.Main.Fragment.Profile.Edit.ProfileEditFragment;
 import com.example.aber.Activities.Main.Fragment.Profile.Settings.ProfileSettingsFragment;
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.Models.User.User;
 import com.example.aber.R;
 
@@ -34,7 +34,7 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainProfileFragment extends Fragment {
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private User currentUser;
     private String userID;
     private ProgressDialog progressDialog;
@@ -50,10 +50,10 @@ public class MainProfileFragment extends Fragment {
         showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_main_profile, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
 
         userID = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
-        firebaseManager.getUserByID(userID, new FirebaseManager.OnFetchListener<User>() {
+        firebaseManager.getUserByID(userID, new FirebaseUtil.OnFetchListener<User>() {
             @Override
             public void onFetchSuccess(User user) {
                 currentUser = user;
@@ -136,7 +136,7 @@ public class MainProfileFragment extends Fragment {
 
     private void updateUI(User user){
         if(!user.getAvatar().isEmpty()){
-            firebaseManager.retrieveImage(user.getAvatar(), new FirebaseManager.OnRetrieveImageListener() {
+            firebaseManager.retrieveImage(user.getAvatar(), new FirebaseUtil.OnRetrieveImageListener() {
                 @Override
                 public void onRetrieveImageSuccess(Bitmap bitmap) {
                     updateAvatar(bitmap);

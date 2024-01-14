@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.aber.Adapters.DriverChatAdapter;
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.Models.Staff.Driver;
 import com.example.aber.Models.User.User;
 import com.example.aber.R;
@@ -26,7 +26,7 @@ import java.util.List;
 
 public class DriverChatListFragment extends Fragment implements DriverChatAdapter.RecyclerViewClickListener {
     private DriverChatAdapter adapter;
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
     private List<Driver> driverList, filteredList;
     private SearchView searchView;
@@ -39,15 +39,17 @@ public class DriverChatListFragment extends Fragment implements DriverChatAdapte
         AndroidUtil.showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_driver_chat_list, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
 
         id = firebaseManager.mAuth.getCurrentUser().getUid();
-        firebaseManager.getUserByID(id, new FirebaseManager.OnFetchListener<User>() {
+        firebaseManager.getUserByID(id, new FirebaseUtil.OnFetchListener<User>() {
             @Override
             public void onFetchSuccess(User object) {
                 user = object;
                 driverList = user.getChattedDriver();
-                updateUI(driverList);
+                if(driverList != null) {
+                    updateUI(driverList);
+                }
                 AndroidUtil.hideLoadingDialog(progressDialog);
             }
 

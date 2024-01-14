@@ -2,8 +2,6 @@ package com.example.aber.Activities.Register.Fragment;
 
 import static com.example.aber.Utils.AndroidUtil.showToast;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,24 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.aber.Activities.LoginActivity;
-import com.example.aber.FirebaseManager;
-import com.example.aber.Models.User.Gender;
-import com.example.aber.Models.User.Home;
-import com.example.aber.Models.User.SOS;
-import com.example.aber.Models.User.User;
-import com.example.aber.Models.User.Vehicle;
 import com.example.aber.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RegisterSOSFragment extends Fragment {
     private String name, phoneNumber, gender, address, homeImage, brand, vehicleName, color, seat, plate, vehicleImage;
     private Button doneButton;
     private EditText sosNameEditText, sosPhoneNumberEditText;
+    private double latitude, longitude;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,6 +34,8 @@ public class RegisterSOSFragment extends Fragment {
             phoneNumber = args.getString("phoneNumber", "");
             gender = args.getString("gender", "");
             address = args.getString("address", "");
+            latitude = args.getDouble("latitude");
+            longitude = args.getDouble("longitude");
             homeImage = args.getString("homeImage", "");
             brand = args.getString("brand", "");
             vehicleName = args.getString("vehicleName", "");
@@ -82,6 +72,8 @@ public class RegisterSOSFragment extends Fragment {
         bundle.putString("phoneNumber", phoneNumber);
         bundle.putString("gender", gender);
         bundle.putString("address", address);
+        bundle.putDouble("latitude", latitude);
+        bundle.putDouble("longitude", longitude);
         bundle.putString("homeImage", homeImage);
         bundle.putString("brand", brand);
         bundle.putString("vehicleName", vehicleName);

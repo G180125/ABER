@@ -22,6 +22,7 @@ public class User {
     private List<Booking> bookings;
     private String stripeCusId;
     private List<Driver>  chattedDriver;
+    private String fcmToken;
 
     public User(){};
 
@@ -37,12 +38,11 @@ public class User {
         this.bookings = new ArrayList<>();
         this.stripeCusId = stripeCusId;
         this.chattedDriver = new ArrayList<>();
-
+        this.fcmToken = "";
     }
 
     @NonNull
     public User clone() {
-
         User newUser = new User();
         newUser.setName(this.getName());
         newUser.setEmail(this.getEmail());
@@ -141,6 +141,14 @@ public class User {
 
     public void setChattedDriver(List<Driver> chattedDriver) {
         this.chattedDriver = chattedDriver;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 
     @Override

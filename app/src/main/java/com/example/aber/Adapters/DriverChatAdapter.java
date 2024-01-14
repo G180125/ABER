@@ -10,9 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.Models.Staff.Driver;
-import com.example.aber.Models.User.User;
 import com.example.aber.R;
 
 import java.util.List;
@@ -22,12 +21,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class DriverChatAdapter extends RecyclerView.Adapter<DriverChatAdapter.DriverViewHolder>{
     private List<Driver> driverList;
     private DriverChatAdapter.RecyclerViewClickListener mListener;
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
 
     public DriverChatAdapter(List<Driver> driverList, DriverChatAdapter.RecyclerViewClickListener listener){
         this.driverList = driverList;
         this.mListener = listener;
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
     }
 
     public void setDriverList(List<Driver> driverList) {
@@ -44,7 +43,7 @@ public class DriverChatAdapter extends RecyclerView.Adapter<DriverChatAdapter.Dr
     @Override
     public void onBindViewHolder(@NonNull DriverViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Driver driver = driverList.get(position);
-        firebaseManager.retrieveImage(driver.getAvatar(), new FirebaseManager.OnRetrieveImageListener() {
+        firebaseManager.retrieveImage(driver.getAvatar(), new FirebaseUtil.OnRetrieveImageListener() {
             @Override
             public void onRetrieveImageSuccess(Bitmap bitmap) {
                 holder.bind(driver, position, bitmap);

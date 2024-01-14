@@ -1,42 +1,46 @@
 package com.example.aber.Models.Booking;
 
+import com.example.aber.Models.Staff.Driver;
 import com.example.aber.Models.User.Home;
 import com.example.aber.Models.User.SOS;
+import com.example.aber.Models.User.User;
 import com.example.aber.Models.User.Vehicle;
 
 public class Booking {
     private String id;
-    private String pickUp;
+    private PickUp pickUp;
     private Home destination;
     private String ETA;
     private String bookingTime;
-    private String realPickUpTime;
-    private String pickUpImage;
+    private String bookingDate;
     private Payment payment;
     private Vehicle vehicle;
     private SOS emergencyContact;
     private String status;
+    private String userID;
+    private String driverID;
 
     public Booking(){}
 
-    public Booking(String pickUp, Home destination, String ETA, String bookingTime, String realPickUpTime, String pickUpImage, Payment payment, SOS emergencyContact, Vehicle vehicle) {
+    public Booking(PickUp pickUp, Home destination, String ETA, String bookingTime, Payment payment, SOS emergencyContact, Vehicle vehicle, String user, String bookingDate) {
         this.id = generateID();
         this.pickUp = pickUp;
         this.destination = destination;
         this.ETA = ETA;
         this.bookingTime = bookingTime;
-        this.realPickUpTime = realPickUpTime;
-        this.pickUpImage = pickUpImage;
         this.payment = payment;
         this.vehicle = vehicle;
         this.emergencyContact = emergencyContact;
         this.status = "Pending";
+        this.userID = user;
+        this.driverID = "";
+        this.bookingDate = bookingDate;
     }
 
     private String generateID() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-        int length = 12;
+        int length = 16;
 
         StringBuilder idBuilder = new StringBuilder();
 
@@ -51,11 +55,11 @@ public class Booking {
     }
 
     public String getId(){return this.id;}
-    public String getPickUp() {
+    public PickUp getPickUp() {
         return pickUp;
     }
 
-    public void setPickUp(String pickUp) {
+    public void setPickUp(PickUp pickUp) {
         this.pickUp = pickUp;
     }
 
@@ -81,22 +85,6 @@ public class Booking {
 
     public void setBookingTime(String bookingTime) {
         this.bookingTime = bookingTime;
-    }
-
-    public String getRealPickUpTime() {
-        return realPickUpTime;
-    }
-
-    public void setRealPickUpTime(String realPickUpTime) {
-        this.realPickUpTime = realPickUpTime;
-    }
-
-    public String getPickUpImage() {
-        return pickUpImage;
-    }
-
-    public void setPickUpImage(String pickUpImage) {
-        this.pickUpImage = pickUpImage;
     }
 
     public Vehicle getVehicle() {
@@ -131,18 +119,27 @@ public class Booking {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "Booking{" +
-                "pickUp='" + pickUp + '\'' +
-                ", destination=" + destination +
-                ", ETA='" + ETA + '\'' +
-                ", bookingTime='" + bookingTime + '\'' +
-                ", realPickUpTime='" + realPickUpTime + '\'' +
-                ", pickUpImage='" + pickUpImage + '\'' +
-                ", payment=" + payment +
-                ", vehicle=" + vehicle +
-                ", emergencyContact=" + emergencyContact +
-                '}';
+    public String getUser() {
+        return userID;
+    }
+
+    public void setUser(String user) {
+        this.userID = user;
+    }
+
+    public String getDriver() {
+        return driverID;
+    }
+
+    public void setDriver(String driver) {
+        this.driverID = driver;
+    }
+
+    public String getBookingDate() {
+        return bookingDate;
+    }
+
+    public void setBookingDate(String bookingDate) {
+        this.bookingDate = bookingDate;
     }
 }

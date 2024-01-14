@@ -9,7 +9,7 @@ import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,11 +27,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.aber.Adapters.InfoWindowViewHolder;
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 
 import android.Manifest;
 
-import android.widget.Toast;
 import android.widget.PopupMenu;
 
 import com.example.aber.R;
@@ -71,13 +70,14 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
 
     private FusedLocationProviderClient fusedLocationClient;
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
     private SearchView searchView;
     private LatLng currentLocation;
     private Marker searchedLocation;
     private Place searchedPlace;
     private LocationRequest mLocationRequest;
+    private String address;
 
     private FloatingActionButton mapTypeButton, currentLocationButton;
 
@@ -88,7 +88,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_main_home, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
 
         // Initialize the SDK
         if (!Places.isInitialized()) {
@@ -168,7 +168,6 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
 
                     hideLoadingDialog(progressDialog);
 
-                    // TODO: Display the custom info window on top of the marker
                 }
 
                 @Override
@@ -230,7 +229,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                 if (lat != 0) {
                     try {
                         List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
-                        String address = addresses.get(0).getAddressLine(0);
+                        address = addresses.get(0).getAddressLine(0);
                         String city = addresses.get(0).getLocality();
                         String state = addresses.get(0).getAdminArea();
                         String country = addresses.get(0).getCountryName();
@@ -256,7 +255,11 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                 ConfirmBookingFragment fragment = new ConfirmBookingFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("name", marker.getTitle());
-                bundle.putString("address", "Testing address");
+                bundle.putString("address", address);
+
+                LatLng markerPosition = marker.getPosition();
+                bundle.putDouble("latitude", markerPosition.latitude);
+                bundle.putDouble("longitude", markerPosition.longitude);
                 fragment.setArguments(bundle);
 
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -274,7 +277,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
                 MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(latLng).title("Test");
+                markerOptions.position(latLng).title("Unknown");
 
                 // Remove the previous selected location
                 if (searchedLocation != null) {
@@ -296,6 +299,10 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 100);
+        }
+
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.requestLocationUpdates(locationRequest, new LocationCallback() {
@@ -314,7 +321,9 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         } else {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.SEND_SMS,
+                    Manifest.permission.READ_CONTACTS
             }, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }

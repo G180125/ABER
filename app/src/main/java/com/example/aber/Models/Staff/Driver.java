@@ -22,6 +22,8 @@ public class Driver extends Staff{
     private String status;
     private List<Booking> bookings;
     private List<User> chattedUser;
+    private List<Schedule> scheduleList;
+    private String fcmToken;
 
     public Driver(){};
 
@@ -41,6 +43,8 @@ public class Driver extends Staff{
         this.status = "Register Pending";
         this.bookings = new ArrayList<>();
         this.chattedUser = new ArrayList<>();
+        this.scheduleList = new ArrayList<>();
+        this.fcmToken = "";
     }
 
     public String getName() {
@@ -152,5 +156,21 @@ public class Driver extends Staff{
 
     public void setChattedUser(List<User> chattedUser) {
         this.chattedUser = chattedUser;
+    }
+
+    public List<Schedule> getScheduleList() {
+        return scheduleList;
+    }
+
+    public void setScheduleList(List<Schedule> scheduleList) {
+        this.scheduleList = scheduleList;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }

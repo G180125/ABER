@@ -1,6 +1,5 @@
 package com.example.aber.Adapters;
 
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.aber.FirebaseManager;
+import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.Models.User.Home;
 import com.example.aber.R;
 import com.google.android.material.button.MaterialButton;
@@ -103,8 +102,8 @@ public class UserHomeAdapter extends RecyclerView.Adapter<UserHomeAdapter.UserHo
 
             addressTextView.setSelected(true);
 
-            FirebaseManager firebaseManager = new FirebaseManager();
-            firebaseManager.retrieveImage(home.getImage(), new FirebaseManager.OnRetrieveImageListener() {
+            FirebaseUtil firebaseManager = new FirebaseUtil();
+            firebaseManager.retrieveImage(home.getImage(), new FirebaseUtil.OnRetrieveImageListener() {
                 @Override
                 public void onRetrieveImageSuccess(Bitmap bitmap) {
                     imageView.setImageBitmap(bitmap);
