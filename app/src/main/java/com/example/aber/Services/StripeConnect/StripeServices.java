@@ -1,4 +1,4 @@
-package com.example.aber.StripeConnect;
+package com.example.aber.Services.StripeConnect;
 
 import com.example.aber.Models.User.Customer;
 import io.reactivex.Observable;

@@ -2,6 +2,7 @@ package com.example.aber.Utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -208,32 +209,35 @@ public class FirebaseUtil {
     }
 
     public void isSOSActive(String userID, OnCheckingSOSActiveListener listener){
-        DatabaseReference reference =  this.database.getReference(COLLECTION_SOS_ACTIVE);
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot s: snapshot.getChildren()){
-                    SOSActiveResponse response = s.getValue(SOSActiveResponse.class);
-                    assert response != null;
-                    if(response.getUserID().equals(userID)){
-                        listener.OnDataChanged(response);
+            DatabaseReference reference =  this.database.getReference(COLLECTION_SOS_ACTIVE);
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot s: snapshot.getChildren()){
+                        SOSActiveResponse response = s.getValue(SOSActiveResponse.class);
+                        assert response != null;
+                        if(response.getUserID().equals(userID)){
+                            listener.OnDataChanged(response);
+                        }
                     }
+                    listener.OnDataChanged(null);
                 }
-                listener.OnDataChanged(null);
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
     }
 
     public void sendNotification(String message, String userName, String userId, String fcmToken) {
+        Log.d("myNotification","Send Noti funtion");
         Notification notification = new Notification(userName, message);
         NotificationRequest notificationRequest = new NotificationRequest(notification, userId, fcmToken);
 
         Call<Void> call = FCMApi.sendNotification(notificationRequest);
+
+        Log.d(",yNotification","Notification URL: " + call.request().url());
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -242,7 +246,7 @@ public class FirebaseUtil {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-
+                Log.e("myNotification", "Failed to send notification", t);
             }
         });
     }

@@ -20,6 +20,7 @@ import com.example.aber.Activities.Main.Fragment.Booking.MainBookingFragment;
 import com.example.aber.Activities.Main.Fragment.Home.MainHomeFragment;
 import com.example.aber.Activities.Main.Fragment.Chat.MainChatFragment;
 import com.example.aber.Activities.Main.Fragment.Profile.MainProfileFragment;
+import com.example.aber.Models.User.SOS;
 import com.example.aber.Models.User.SOSActiveResponse;
 import com.example.aber.Models.User.User;
 import com.example.aber.R;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private MeowBottomNavigation bottomNavigation;
     private FirebaseUtil firebaseManager;
     private String token, userId;
+    private User currentUer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,18 +65,19 @@ public class MainActivity extends AppCompatActivity {
         firebaseManager.getUserByID(userId, new FirebaseUtil.OnFetchListener<User>() {
             @Override
             public void onFetchSuccess(User object) {
+                currentUer = object;
                 object.setFcmToken(token);
-//                firebaseManager.updateUser(userId, object, new FirebaseUtil.OnTaskCompleteListener() {
-//                    @Override
-//                    public void onTaskSuccess(String message) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onTaskFailure(String message) {
-//
-//                    }
-//                });
+                firebaseManager.updateUser(userId, object, new FirebaseUtil.OnTaskCompleteListener() {
+                    @Override
+                    public void onTaskSuccess(String message) {
+
+                    }
+
+                    @Override
+                    public void onTaskFailure(String message) {
+
+                    }
+                });
             }
 
             @Override
@@ -138,13 +141,13 @@ public class MainActivity extends AppCompatActivity {
             public void OnDataChanged(SOSActiveResponse object) {
                 if(object != null){
                     // start the service
-                    SensorService sensorService = new SensorService();
+                    SensorService sensorService = new SensorService(object.getEmergencyContact());
                     Intent intent = new Intent(MainActivity.this, sensorService.getClass());
                     if (!isMyServiceRunning(sensorService.getClass())) {
                         startService(intent);
                     }
                 } else {
-                    SensorService sensorService = new SensorService();
+                    SensorService sensorService = new SensorService(new SOS());
                     Intent intent = new Intent(MainActivity.this, sensorService.getClass());
                     if (isMyServiceRunning(sensorService.getClass())) {
                         stopService(intent);

@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.aber.Activities.LoginActivity;
 import com.example.aber.Models.User.Gender;
@@ -27,8 +26,8 @@ import com.example.aber.Models.User.SOS;
 import com.example.aber.Models.User.User;
 import com.example.aber.Models.User.Vehicle;
 import com.example.aber.R;
-import com.example.aber.StripeConnect.StripeClient;
-import com.example.aber.StripeConnect.StripeServices;
+import com.example.aber.Services.StripeConnect.StripeClient;
+import com.example.aber.Services.StripeConnect.StripeServices;
 import com.example.aber.Utils.FirebaseUtil;
 
 import java.util.ArrayList;

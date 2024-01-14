@@ -311,7 +311,6 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                     if (locationResult.getLastLocation() != null) {
                         currentLocation = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
 
-//                        mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location"));
                         focusOnLocation(currentLocation);
 
                         fusedLocationClient.removeLocationUpdates(this);
