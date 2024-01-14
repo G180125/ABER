@@ -193,7 +193,8 @@ public class RegisterAccountFragment extends Fragment {
                         stripeCusID = customer.getId();
                         Log.d("Create customer on Stripe", "===> customerID : " + customer.getId());
                         User user = new User(email, name, userGender, phoneNumber, homeList, vehicleList, emergencyContactList, stripeCusID);
-                        firebaseManager.addUser(userID, user, new FirebaseUtil.OnTaskCompleteListener() {
+
+                        firebaseManager.addUser(userID, user, new FirebaseUtil.OnTaskCompleteListener(){
                             @Override
                             public void onTaskSuccess(String message) {
                                 hideLoadingDialog(progressDialog);
