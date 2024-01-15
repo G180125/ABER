@@ -11,12 +11,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_back_arrow"
-            android:layout_margin="8dp"/>
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:id="@+id/back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_back_arrow"/>
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Language"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="@font/instagramsansregular"
+                    />
+
+            </LinearLayout>
+
+
+        </androidx.appcompat.widget.Toolbar>
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -39,16 +63,28 @@
                 </LinearLayout>
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:outlineProvider="none">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
                     <TextView
                         android:id="@+id/english"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:text="@string/english"
                         android:drawablePadding="10dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginBottom="30dp"
                          />
+                    <RadioButton
+                        android:id="@+id/english_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                         />
+                    </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
                 <LinearLayout
@@ -59,15 +95,27 @@
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:id="@+id/vietnamese"
+                    android:layout_height="wrap_content"
+                    android:outlineProvider="none">
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/Vietnamese"
-                        android:drawablePadding="10dp"
-                        android:layout_marginStart="10dp"
-                         />
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/vietnamese"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="@string/Vietnamese"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginBottom="30dp"
+                            />
+                        <RadioButton
+                            android:id="@+id/vietnamese_radio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            />
+                    </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
         </ScrollView>

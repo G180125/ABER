@@ -3,10 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/shadow_background">
+    >
 <androidx.cardview.widget.CardView android:id="@+id/user_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:outlineProvider="none"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout

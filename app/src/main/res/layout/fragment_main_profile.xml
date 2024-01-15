@@ -66,37 +66,6 @@
                 android:layout_marginTop="32dp"
                 >
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/wallet"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="3dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginVertical="8dp"
-                        android:layout_marginHorizontal="16dp">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_wallet"
-                            app:tint="@color/light_dark_black"
-                             />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Wallet"
-                            android:layout_marginLeft="8dp"
-                            android:layout_weight="1"/>
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_chevron_right"
-                            android:background="@android:color/transparent" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
                     android:id="@+id/settings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -155,7 +124,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="About Us"
+                            android:text="@string/about_us"
                             android:layout_marginLeft="8dp"
                             android:layout_weight="1"/>
                         <ImageView

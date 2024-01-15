@@ -1,5 +1,7 @@
 package com.example.aber.Activities.Main.Fragment.Profile.Settings;
 
+import static com.example.aber.Utils.AndroidUtil.replaceFragment;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.res.Configuration;
@@ -10,11 +12,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +34,12 @@ public class LanguageSettingsFragment extends Fragment {
 
     private ProgressDialog progressDialog;
 
+    private Handler handler;
+
+    private TextView name;
+
+    private RadioButton englishButton,vietnameseButton;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,7 +49,14 @@ public class LanguageSettingsFragment extends Fragment {
 
         english = root.findViewById(R.id.english);
         vietnamese = root.findViewById(R.id.vietnamese);
+        englishButton = root.findViewById(R.id.english_radio);
+        vietnameseButton = root.findViewById(R.id.vietnamese_radio);
         buttonBack = root.findViewById(R.id.back);
+        name = root.findViewById(R.id.name);
+
+        handler = new Handler();
+
+        checkLocale();
 
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,8 +75,11 @@ public class LanguageSettingsFragment extends Fragment {
         english.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLoadingDialog();
+
                 setLocal("en");
+                name.setText("Language");
+                englishButton.setChecked(true);
+                vietnameseButton.setChecked(false);
 
             }
         });
@@ -67,14 +87,27 @@ public class LanguageSettingsFragment extends Fragment {
         vietnamese.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLoadingDialog();
-                setLocal("vi");
 
+                setLocal("vi");
+                name.setText("Ngôn Ngữ");
+                englishButton.setChecked(false);
+                vietnameseButton.setChecked(true);
             }
         });
 
+        englishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                english.performClick();
+            }
+        });
 
-
+        vietnameseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vietnamese.performClick();
+            }
+        });
 
         return root;
     }
@@ -87,11 +120,13 @@ public class LanguageSettingsFragment extends Fragment {
             Configuration config = resources.getConfiguration();
             config.setLocale(locale);
             resources.updateConfiguration(config,resources.getDisplayMetrics());
-            hideLoadingDialog();
+
+
         } else {
             Log.d("Language","There is no activity");
             Toast.makeText(requireContext(), "No Activity", Toast.LENGTH_SHORT).show();
-            hideLoadingDialog();
+
+
         }
     }
 
@@ -101,6 +136,7 @@ public class LanguageSettingsFragment extends Fragment {
             progressDialog.setMessage("Loading...");
             progressDialog.setCancelable(false);
             progressDialog.show();
+
         });
     }
 
@@ -110,5 +146,20 @@ public class LanguageSettingsFragment extends Fragment {
                 progressDialog.dismiss();
             }
         });
+    }
+
+    private void checkLocale(){
+        Locale currentLocale = Locale.getDefault();
+        String currentLanguageCode = currentLocale.getLanguage();
+
+        if (currentLanguageCode.equals("en")) {
+            englishButton.setChecked(true);
+            vietnameseButton.setChecked(false);
+
+        } else if (currentLanguageCode.equals("vi")) {
+            englishButton.setChecked(false);
+            vietnameseButton.setChecked(true);
+
+        }
     }
 }

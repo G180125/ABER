@@ -17,7 +17,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_x_24"
                 android:layout_marginHorizontal="10dp"
-
+                android:layout_gravity="end"
                 />
 
             <TextView

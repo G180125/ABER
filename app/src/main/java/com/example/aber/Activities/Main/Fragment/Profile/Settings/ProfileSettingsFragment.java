@@ -54,7 +54,6 @@ public class ProfileSettingsFragment extends Fragment {
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 replaceFragment(new LanguageSettingsFragment(),fragmentManager,fragmentTransaction,R.id.fragment_main_container);
-                Toast.makeText(requireContext(), "Language have been clicked", Toast.LENGTH_SHORT).show();
             }
         });
 

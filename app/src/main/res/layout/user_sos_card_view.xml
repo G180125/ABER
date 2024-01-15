@@ -48,7 +48,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
                 android:padding="5dp"
-
+                android:layout_marginBottom="10dp"
                 android:textSize="18sp"
                 android:textColor="@color/light_orange_red"
                 >
@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
 
-                    android:text="Set as default"
+                    android:text="@string/set_as_default"
                     >
 
                 </com.google.android.material.button.MaterialButton>
@@ -89,17 +89,18 @@
                         android:id="@+id/edit_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Edit"
+                        android:text="@string/edit"
                         android:padding="10dp"
                         android:layout_weight="1"
                         android:layout_marginRight="8dp"
+                        android:layout_marginTop="8dp"
                         android:backgroundTint="@color/quantum_googgreen"/>
                     <Button
                         android:id="@+id/delete_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Delete"
-
+                        android:text="@string/delete"
+                        android:layout_marginTop="8dp"
                         android:layout_weight="1"
                         android:layout_marginLeft="8dp"
                         android:backgroundTint="@color/light_orange_red"/>
