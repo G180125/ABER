@@ -13,11 +13,26 @@
     <string name="forgot_your_password">Forget password ?</string>
     <string name="create_new_account">Create new account</string>
 
-
-    <!-- Profile edit    -->
+    <!-- Main Profile    -->
     <string name="logout">Logout</string>
     <string name="help">Help</string>
-
+    <!-- Profile Edit    -->
+    <string name="upload_avatar">Upload Avatar</string>
+    <string name="personal_details">Personal Details</string>
+    <string name="name_header">Name: </string>
+    <string name="email_header">Email:</string>
+    <string name="gender_header">Gender:</string>
+    <string name="phone_header">Phone:</string>
+    <string name="address_header">Address:</string>
+    <string name="default_address">Default Address</string>
+    <string name="plate_header">Plate:</string>
+    <string name="default_vehicle">Default Vehicle</string>
+    <string name="sos">Emergency Contacts</string>
+    <string name="set_as_default">Set as default</string>
+    <string name="delete">Delete</string>
+    <string name="new_vehicle">+ New Vehicle</string>
+    <string name="new_emergency_contact">+ New Emergency Contact</string>
+    <string name="new_home">+ New Home</string>
     <!-- Register Page    -->
     <string name="required">(Required)</string>
     <string name="optional">(Optional)</string>
@@ -53,16 +68,11 @@
     <string name="vehicle_heading">Please enter your vehicle detail. \nYou can edit this in the app later.</string>
     <string name="Sos_heading">Enter an Emergency Contact. \nYou can share your live location and Driver Detail when you initiate the SOS action. \nYou can skip this for now and edit it in the app later.</string>
     <string name="settings">Settings</string>
-
     <!-- Profile Settings    -->
     <string name="Language">Language</string>
     <string name="theme">Dark Mode</string>
-
-
     <!-- Forget Password    -->
     <string name="find_your_email">Find your email</string>
-
-
     <!-- About Us Page    -->
     <string name="heading_one">Our History</string>
     <string name="heading_two">Our Mission</string>
@@ -74,6 +84,8 @@
     <string name="edit">Edit</string>
     <string name="english">English</string>
     <string name="Vietnamese">Tiếng Việt</string>
+    <string name="about_us">About Us</string>
+
 
 
 </resources>

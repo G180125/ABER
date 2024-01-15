@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.Main.Fragment.Profile.HelpActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white_smoke">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -16,7 +17,7 @@
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background_color_blue">
+                android:background="@color/primary_color">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
