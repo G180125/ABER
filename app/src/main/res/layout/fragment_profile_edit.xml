@@ -48,10 +48,12 @@
                 android:textSize="26sp"
                 android:textStyle="bold" />
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/white"
                 android:layout_marginHorizontal="8dp"
+                app:cardCornerRadius="20dp"
                 android:elevation="4dp">
 
                 <LinearLayout
@@ -62,7 +64,8 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -150,7 +153,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp">
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -172,7 +176,16 @@
                         </EditText>
                     </LinearLayout>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/edit_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/edit"
+                android:layout_marginHorizontal="18dp"
+                android:layout_marginTop="20dp"
+                />
 
             <TextView
                 android:layout_width="match_parent"
@@ -182,10 +195,11 @@
                 android:text="Home"
                 android:textSize="26sp"
                 android:textStyle="bold" />
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/defaultAddressCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/white"
                 android:layout_marginHorizontal="8dp"
                 app:cardElevation="4dp"
                 >
@@ -229,7 +243,7 @@
                         android:src="@drawable/ic_chevron_right" />
                 </LinearLayout>
             </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:layout_width="match_parent"
@@ -239,9 +253,10 @@
                 android:text="Vehicle"
                 android:textSize="26sp"
                 android:textStyle="bold" />
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/defaultVehicleCardView"
                 android:layout_width="match_parent"
+                app:cardBackgroundColor="@color/white"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 app:cardElevation="4dp"
@@ -287,7 +302,7 @@
                     android:src="@drawable/ic_chevron_right" />
             </LinearLayout>
         </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
         <TextView
                     android:layout_width="match_parent"
@@ -298,13 +313,14 @@
                     android:textSize="26sp"
                     android:textStyle="bold" />
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/defaultSOSCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/white"
                     app:cardElevation="4dp"
                     android:layout_marginHorizontal="8dp"
-                    android:layout_marginBottom="30dp">
+                    android:layout_marginBottom="50dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -341,16 +357,9 @@
                                 android:src="@drawable/ic_chevron_right" />
                         </LinearLayout>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/edit_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/edit"
-                    android:layout_marginHorizontal="8dp"
-                    android:layout_marginBottom="40dp"
-                    />
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

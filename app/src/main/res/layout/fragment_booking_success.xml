@@ -47,6 +47,7 @@
                 android:text="Booking Successful"
                 android:textSize="32sp"
                 android:padding="5dp"
+                android:fontFamily="@font/instagramsansregular"
                 android:textStyle="bold"
                 android:gravity="center_horizontal"
                 />

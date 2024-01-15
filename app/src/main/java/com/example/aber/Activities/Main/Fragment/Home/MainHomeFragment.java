@@ -6,6 +6,7 @@ import static com.example.aber.Utils.AndroidUtil.showToast;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -26,16 +27,22 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.aber.Activities.Main.Fragment.Booking.BookingDetailFragment;
+import com.example.aber.Activities.Main.Fragment.Booking.MainBookingFragment;
 import com.example.aber.Adapters.InfoWindowViewHolder;
-import com.example.aber.FirebaseManager;
+
 
 import android.Manifest;
 
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 import android.widget.PopupMenu;
 
 import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
+import com.example.aber.Utils.FirebaseUtil;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -68,10 +75,11 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
 
     private static final String API_KEY = "AIzaSyAk79eOlfksqlm74wCmRbY_yddK75iZ4dM";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    public PopupWindow popupWindow;
     private GoogleMap mMap;
 
     private FusedLocationProviderClient fusedLocationClient;
-    private FirebaseManager firebaseManager;
+    private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
     private SearchView searchView;
     private LatLng currentLocation;
@@ -89,7 +97,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_main_home, container, false);
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseUtil();
 
         // Initialize the SDK
         if (!Places.isInitialized()) {
@@ -364,5 +372,49 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         LatLng latestLocation = firebaseManager.getLatestLocation(userId);
 
         return latestLocation == null || !latestLocation.equals(newLocation);
+    }
+
+    public void initPopUpBookingSuccess() {
+        LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.pop_up_booking_success, null);
+
+        // Initialize the PopupWindow
+        popupWindow = new PopupWindow(
+                popupView,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        );
+        popupWindow.setTouchable(true);
+        // Set focusable to true to receive touch events outside the PopupWindow
+        popupWindow.setFocusable(true);
+
+        // Set background drawable to allow touch events outside the PopupWindow
+        popupView.setBackgroundColor(getResources().getColor(R.color.popup_background, null));
+
+        // Set up UI elements and event listeners within the popupView
+        Button viewBookingButton = popupView.findViewById(R.id.view_booking_button);
+        ImageView cancelBtn = popupView.findViewById(R.id.cancelBtn);
+        viewBookingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+
+                AndroidUtil.replaceFragment(new MainBookingFragment(), fragmentManager, fragmentTransaction, R.id.fragment_main_container);
+            }
+        });
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+
+
+        // Show the PopupWindow
+        popupWindow.showAtLocation(requireView(), Gravity.CENTER, 0, 0);
+
     }
 }

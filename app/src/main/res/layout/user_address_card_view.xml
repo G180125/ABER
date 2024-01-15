@@ -1,34 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:strokeColor="@color/black"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/white"
     android:id="@+id/address_list_container"
     app:cardCornerRadius="20dp"
     android:backgroundTint="@color/light_pink"
     app:cardElevation="8dp"
-    android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    >
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="170dp"
+            android:layout_height="180dp"
+            android:layout_margin="5dp"
+            >
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="163dp"
+                app:cardBackgroundColor="@color/white"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                app:strokeColor="@color/black"
+                app:cardCornerRadius="20dp"
+
+               >
+
 
             <ImageView
                 android:id="@+id/dishImageView"
-                android:layout_width="150dp"
-                android:scaleType="centerCrop"
-                android:layout_margin="8dp"
-                android:layout_height="200dp"
+                android:layout_width="163dp"
+                android:layout_gravity="center"
+                android:layout_height="match_parent"
                 />
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="200dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_vertical">
@@ -70,6 +86,7 @@
                 android:id="@+id/setDefaultBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
                 android:layout_marginBottom="5dp"
                 android:text="Set as default"
                 >
@@ -86,8 +103,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="Edit"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:layout_marginRight="8dp"
+
                     android:backgroundTint="@color/quantum_googgreen"/>
                 <Button
                     android:id="@+id/delete_button"
@@ -95,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:text="Delete"
                     android:layout_weight="1"
-                    android:layout_marginLeft="8dp"
+
                     android:backgroundTint="@color/light_orange_red"/>
             </LinearLayout>
             </LinearLayout>
@@ -104,4 +122,4 @@
         </LinearLayout>
 
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

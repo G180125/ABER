@@ -7,6 +7,7 @@ import static com.example.aber.Utils.AndroidUtil.showToast;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -189,9 +190,16 @@ public class BookingDetailFragment extends Fragment {
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(requireContext(), DriverChatActivity.class).putExtra("driverID", booking.getDriver()));
+                String driverId = booking.getDriver();
+                if (driverId != null && !driverId.isEmpty()) {
+                    startActivity(new Intent(requireContext(), DriverChatActivity.class).putExtra("driverID", driverId));
+                } else {
+                    // Handle the case where driverId is null or empty
+                    showToast(requireContext(), "Driver information not available");
+                }
             }
         });
+
 
 
         helpButton.setOnClickListener(new View.OnClickListener() {
@@ -207,6 +215,19 @@ public class BookingDetailFragment extends Fragment {
     }
 
     private void updateUI(Booking booking){
+        if(Objects.equals(booking.getStatus(), "Cancel")){
+            // Color red for cancel status
+            statusTextView.setTextColor(Color.parseColor("#FA3737"));
+        } else if(Objects.equals(booking.getStatus(), "Picked Up")){
+            //Color orange for pick up status
+            statusTextView.setTextColor(Color.parseColor("#EC5109"));
+        } else if(Objects.equals(booking.getStatus(), "Pending")){
+            //Color yellow for Pending
+            statusTextView.setTextColor(Color.parseColor("#FFC107"));
+        } else if(Objects.equals(booking.getStatus(), "Done") || Objects.equals(booking.getStatus(), "Driver Accepted")){
+            statusTextView.setTextColor(Color.parseColor("##4CAF50"));
+        }
+
         pickUpTextView.setText(booking.getPickUp().getAddress());
         destinationTextView.setText(booking.getDestination().getAddress());
         bookingTimeTextView.setText(booking.getBookingTime());
