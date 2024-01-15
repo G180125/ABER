@@ -18,6 +18,11 @@
     <color name="secondary_stroke_blue">#00B6BC</color>
     <color name="primary_color">#00B6BC</color>
     <color name="red">#FA3737</color>
+    <color name="orange">#EC5109</color>
+    <color name="light_pink">#F8F1F1</color>
+    <color name="yellow">#FFC107</color>
+    <color name="green">#4CAF50</color>
+
 
     <!-- About us page color scheme    -->
     <color name="back_ground_color_title">#353f55</color>

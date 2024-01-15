@@ -18,7 +18,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Booking"
+            android:text="Booking Detail"
+            android:fontFamily="@font/instagramsansregular"
             android:textSize="32sp"
             android:textStyle="bold"
             android:gravity="center_horizontal"/>
@@ -29,7 +30,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="25dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,10 +40,13 @@
             android:text="General"
             android:textSize="26sp"
             android:textStyle="bold" />
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
+            app:cardBackgroundColor="@color/white"
+            app:strokeColor="@color/black"
+            android:layout_margin="5dp"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="20dp">
+            >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -165,6 +170,8 @@
                         android:scrollHorizontally="true"
                         android:singleLine="true"
                         android:text="Status: "
+                        android:drawableLeft="@drawable/baseline_done_outline_24"
+                        android:drawablePadding="5dp"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -183,7 +190,7 @@
                         android:textSize="20sp"/>
                 </LinearLayout>
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -209,9 +216,12 @@
                 android:translationY="10dp"
                 android:layout_marginRight="8dp"/>
         </LinearLayout>
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/vehicle_card_view"
             android:layout_width="match_parent"
+            app:cardBackgroundColor="@color/white"
+            app:strokeColor="@color/black"
+            android:layout_margin="5dp"
             android:layout_height="wrap_content"
             android:visibility="gone">
             <LinearLayout
@@ -378,7 +388,7 @@
                         android:textSize="20sp"/>
                 </LinearLayout>
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -404,10 +414,13 @@
                 android:translationY="10dp"
                 android:layout_marginRight="8dp"/>
         </LinearLayout>
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/payment_card_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            app:cardBackgroundColor="@color/white"
+            app:strokeColor="@color/black"
             android:visibility="gone">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -480,7 +493,7 @@
                 </LinearLayout>
 
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -506,10 +519,13 @@
                 android:translationY="10dp"
                 android:layout_marginRight="8dp"/>
         </LinearLayout>
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/driver_card_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/white"
+            app:strokeColor="@color/black"
+            android:layout_margin="5dp"
             android:visibility="visible">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -523,6 +539,7 @@
                     android:gravity="center_horizontal">
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/avatar"
+                        android:layout_marginTop="20dp"
                         android:layout_width="120dp"
                         android:layout_height="120dp"
                         android:src="@drawable/ic_profile_avatar"/>
@@ -556,7 +573,7 @@
                         android:padding="8dp"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:text="Name"
+                        android:text="N/A"
                         android:textSize="20sp"/>
                 </LinearLayout>
                 <LinearLayout
@@ -587,7 +604,7 @@
                         android:padding="8dp"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:text="Gender"
+                        android:text="N/A"
                         android:textSize="20sp"/>
                 </LinearLayout>
                 <LinearLayout
@@ -619,7 +636,7 @@
                         android:padding="8dp"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:text="License Number"
+                        android:text="N/A"
                         android:textSize="20sp"/>
                 </LinearLayout>
                 <LinearLayout
@@ -651,7 +668,7 @@
                         android:padding="8dp"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:text="Phone Number"
+                        android:text="N/A"
                         android:textSize="20sp"/>
 
                 </LinearLayout>
@@ -660,9 +677,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Chat"
+                    android:layout_marginBottom="14dp"
                     android:layout_marginTop="8dp"/>
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -688,10 +706,13 @@
                 android:translationY="10dp"
                 android:layout_marginRight="8dp"/>
         </LinearLayout>
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/resource_card_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/white"
+            app:strokeColor="@color/black"
+            android:layout_margin="5dp"
             android:visibility="gone">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -734,7 +755,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginBottom="8dp">
                     <TextView
 
                         android:layout_marginRight="10dp"
@@ -762,14 +784,14 @@
                         android:src="@drawable/ic_image"/>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
         <Button
             android:id="@+id/help_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Help"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="50dp"
             android:layout_marginHorizontal="8dp"/>
     </LinearLayout>
     </ScrollView>

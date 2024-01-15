@@ -21,15 +21,9 @@ public class BookingSuccessFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_booking_success, container, false);
-        Button backButton = root.findViewById(R.id.back_button);
+
         Button bookingBUtton = root.findViewById(R.id.booking_button);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment(new MainHomeFragment());
-            }
-        });
 
         bookingBUtton.setOnClickListener(new View.OnClickListener() {
             @Override
