@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -36,14 +37,19 @@ import java.util.Objects;
 public class MainBookingFragment extends Fragment implements BookingAdapter.RecyclerViewClickListener{
     private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
+    private boolean isSpinnerTouched = false;
+
     private List<Booking> bookingList;
     private BookingAdapter adapter;
     private User user;
     private String userID;
     private Spinner bookingStatusSpinner;
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         progressDialog = new ProgressDialog(requireContext());
         showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
@@ -72,7 +78,7 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
 
         RecyclerView recyclerView = root.findViewById(R.id.bookingRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new BookingAdapter(new ArrayList<>(),this);
+        adapter = new BookingAdapter(new ArrayList<>(), this);
         recyclerView.setAdapter(adapter);
 
         bookingStatusSpinner = root.findViewById(R.id.booking_status_spinner);
@@ -80,8 +86,16 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
                 requireContext(),
                 R.array.booking_status_options,
                 android.R.layout.simple_spinner_item
+
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        int verticalOffsetPixels = getResources().getDimensionPixelOffset(R.dimen.dropdown_offset); // Set your desired offset
+
+
+
+        bookingStatusSpinner.setBackgroundResource(R.drawable.bg_spinner_up);
+        bookingStatusSpinner.setDropDownVerticalOffset(verticalOffsetPixels);
         bookingStatusSpinner.setAdapter(adapter);
 
         bookingStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -90,6 +104,9 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
                 showLoadingDialog(progressDialog);
                 String status = parent.getItemAtPosition(position).toString();
                 Log.d("status", status);
+                isSpinnerTouched = false;
+                bookingStatusSpinner.setBackgroundResource(R.drawable.bg_spinner_up);
+
                 firebaseManager.getBookingsByStatus(userID, status, new FirebaseUtil.OnFetchBookingListListener<Booking>() {
                     @Override
                     public void onDataChanged(List<Booking> object) {
@@ -109,6 +126,12 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
             }
         });
 
+        bookingStatusSpinner.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                bookingStatusSpinner.setBackgroundResource(R.drawable.bg_spinner);
+            }
+            return false;
+        });
         return root;
     }
 
