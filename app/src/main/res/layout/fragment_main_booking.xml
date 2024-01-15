@@ -20,12 +20,12 @@
             android:layout_marginHorizontal="20dp">
             <Spinner
                 android:id="@+id/booking_status_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/custom_edit_text"
+                android:layout_width="180dp"
+                android:layout_height="40dp"
+                android:popupBackground="@drawable/custom_edit_text"
+                android:background="@drawable/bg_spinner_up"
                 android:hint="Seat Capacity"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="10dp"
+
                 android:textSize="18sp"
                 />
         </LinearLayout>

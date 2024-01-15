@@ -91,7 +91,11 @@
     <string name="edit">Edit</string>
     <string name="english">English</string>
     <string name="Vietnamese">Tiếng Việt</string>
-
+    <string name="view_booking">View Booking</string>
+    <string name="your_booking_is_successfully_placed_nyou_can_now_view_the_booking_status_in_the_app">Your booking is successfully placed. \nYou can now view the booking status in the app.</string>
+    <string name="booking_successful">Booking Successful</string>
+    <string name="select_an_address">Select An Address</string>
+    <string name="booking">Booking</string>
 
 
 </resources>
