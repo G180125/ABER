@@ -49,8 +49,6 @@ public class RegisterProfileFragment extends Fragment {
             public void onClick(View v) {
                 String name = nameEditText.getText().toString();
                 String phoneNumber = phoneNumberEditText.getText().toString();
-                Toast.makeText(requireContext(), "Phone Number : " + phoneNumber, Toast.LENGTH_SHORT).show();
-                Log.d("Phone Number " , "Phone Number " + phoneNumber);
                 String selectedGender = getSelectedGender();
 
                 if(validateInputs(name, phoneNumber, selectedGender)){
@@ -121,7 +119,7 @@ public class RegisterProfileFragment extends Fragment {
             if (phoneNumber.matches("\\d{9}")) {
                 return true;
             }
-            if (phoneNumber.matches("84\\d{9}")) {
+            if (phoneNumber.matches("^\\+?84\\d{9}$")) {
                 return true;
             }
         }

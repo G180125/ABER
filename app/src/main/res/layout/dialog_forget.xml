@@ -45,7 +45,7 @@
                     android:gravity="top"
                     android:hint="@string/email"
                     android:drawableLeft="@drawable/baseline_email_24"
-                    android:background="@drawable/custom_edit_text"
+                    android:background="@drawable/edittext_background"
                     android:padding="10dp"
                     android:drawablePadding="5dp"
                     android:textSize="18sp"
