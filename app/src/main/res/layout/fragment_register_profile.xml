@@ -95,38 +95,35 @@
                     android:text="@string/profile_heading"
                     android:textSize="16sp"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginBottom="15dp"
                     />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/name_star"
-                    android:padding="5dp"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="10dp"
-                    />
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardElevation="4dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginBottom="0dp"
-                    app:cardCornerRadius="30dp">
-                    <EditText
-                        android:id="@+id/name_edit_text"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyOutlinedTextInputLayout"
                         android:hint="@string/name"
-                        android:drawableStart="@drawable/ic_name24"
-                        android:drawablePadding="5dp"
-                        android:background="@drawable/custom_edit_text"
-                        android:padding="10dp"
-                        android:textSize="18sp"/>
-                </androidx.cardview.widget.CardView>
+                        android:layout_marginHorizontal="16dp"
+                        >
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/name_edit_text"
+                            android:text=""
+                            android:textColor="@color/black"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+<!--                    <EditText-->
+<!--                        android:id="@+id/name_edit_text"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:hint="@string/name"-->
+<!--                        android:drawableStart="@drawable/ic_name24"-->
+<!--                        android:drawablePadding="5dp"-->
+<!--                        android:background="@drawable/edittext_background"-->
+<!--                        android:padding="10dp"-->
+<!--                        android:textSize="18sp"/>-->
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -181,34 +178,51 @@
                     </EditText>
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/phone_number_star"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginHorizontal="16dp"
-                    android:padding="5dp"
-                   />
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/phone_number_star"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:layout_marginHorizontal="16dp"-->
+<!--                    android:padding="5dp"-->
+<!--                   />-->
 
-                <androidx.cardview.widget.CardView
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:cardElevation="4dp"-->
+<!--                    android:layout_marginHorizontal="16dp"-->
+<!--                    android:layout_marginBottom="60dp"-->
+<!--                    app:cardCornerRadius="30dp">-->
+
+<!--                    <EditText-->
+<!--                        android:id="@+id/phone_number_edit_text"-->
+<!--                        android:layout_width="376dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:background="@drawable/edittext_background"-->
+<!--                        android:drawableStart="@drawable/baseline_local_phone_24"-->
+<!--                        android:drawablePadding="5dp"-->
+<!--                        android:hint="@string/phone_number"-->
+<!--                        android:padding="10dp"-->
+<!--                        android:textSize="18sp" />-->
+<!--                </androidx.cardview.widget.CardView>-->
+                <com.fredporciuncula.phonemoji.PhonemojiTextInputLayout
+                    style="@style/MyOutlinedTextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardElevation="4dp"
+                    android:hint="@string/phone_number"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginBottom="60dp"
-                    app:cardCornerRadius="30dp">
-                    <EditText
-                        android:id="@+id/phone_number_edit_text"
+                    android:layout_marginBottom="30dp"
+                    >
+
+                    <com.fredporciuncula.phonemoji.PhonemojiTextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/phone_number"
-                        android:drawableStart="@drawable/baseline_local_phone_24"
-                        android:drawablePadding="5dp"
-                        android:background="@drawable/custom_edit_text"
-                        android:padding="10dp"
-                        android:textSize="18sp"/>
-                </androidx.cardview.widget.CardView>
+                        android:layout_height="match_parent"
+                        android:id="@+id/phone_number_edit_text"
+                        />
+
+                </com.fredporciuncula.phonemoji.PhonemojiTextInputLayout>
 
                 <Button
                     android:id="@+id/done_button"

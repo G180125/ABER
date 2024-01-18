@@ -2,6 +2,7 @@ package com.example.aber.Activities.Register.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,8 @@ public class RegisterProfileFragment extends Fragment {
             public void onClick(View v) {
                 String name = nameEditText.getText().toString();
                 String phoneNumber = phoneNumberEditText.getText().toString();
+                Toast.makeText(requireContext(), "Phone Number : " + phoneNumber, Toast.LENGTH_SHORT).show();
+                Log.d("Phone Number " , "Phone Number " + phoneNumber);
                 String selectedGender = getSelectedGender();
 
                 if(validateInputs(name, phoneNumber, selectedGender)){
@@ -114,14 +117,25 @@ public class RegisterProfileFragment extends Fragment {
 
     private boolean validatePhoneNumber(String phoneNumber) {
         phoneNumber = phoneNumber.replaceAll("\\s", "");
-
-        if (phoneNumber.matches("0\\d{9}")) {
-            return true;
+        if (phoneNumber !=null){
+            if (phoneNumber.matches("\\d{9}")) {
+                return true;
+            }
+            if (phoneNumber.matches("84\\d{9}")) {
+                return true;
+            }
         }
 
-        if (phoneNumber.matches("84\\d{9}")) {
-            return true;
-        }
+//        if (phoneNumber.matches("\\d{9}")) {
+//            return true;
+//        }
+//
+////        if (phoneNumber.matches("84\\d{9}")) {
+////            return true;
+////        }
+//        if (phoneNumber.matches("^\\+?84\\d{9}$")) {
+//            return true;
+//        }
 
         return false;
     }

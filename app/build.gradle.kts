@@ -66,6 +66,7 @@ dependencies {
     implementation ("com.github.kittinunf.fuel:fuel:2.3.1")
     implementation ("com.squareup.retrofit2:adapter-rxjava2:2.3.0")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.fredporciuncula:phonemoji:1.5.2")
 
 
     //Dot progress bar

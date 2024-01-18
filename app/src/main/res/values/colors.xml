@@ -23,8 +23,11 @@
     <color name="yellow">#FFC107</color>
     <color name="green">#4CAF50</color>
     <color name="pale_light_blue">#EFF9FA</color>
+    <color name="focused_color">#00B6BC</color>
+    <color name="unfocused_color">#FF000000</color>
 
 
     <!-- About us page color scheme    -->
     <color name="back_ground_color_title">#353f55</color>
+
 </resources>

@@ -125,7 +125,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="32dp"
+                android:layout_marginVertical="24dp"
                 android:text="@string/login"
                 app:backgroundTint="@color/secondary_stroke_blue"
                 />
@@ -135,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_horizontal"
-                android:layout_marginTop="-20dp">
+                >
                 <TextView
                     android:id="@+id/forget_password_text"
                     android:layout_width="wrap_content"
@@ -165,6 +165,27 @@
                     android:textColor="@color/secondary_stroke_blue"
                     android:textAllCaps="false"
                     android:onClick="onClickRegister"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="-5dp"
+                android:layout_marginBottom="10dp"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/or_continue_with"
+                    android:gravity="center"
+                    android:paddingBottom="5dp"/>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_google_sign_in"
+                    android:padding="5dp"
+                    android:paddingBottom="10dp"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
