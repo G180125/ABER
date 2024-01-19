@@ -39,7 +39,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-    implementation("com.google.firebase:firebase-auth:22.3.0")
+    implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("com.google.firebase:firebase-firestore:24.10.0")
     implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
@@ -68,6 +68,7 @@ dependencies {
     implementation ("com.squareup.retrofit2:adapter-rxjava2:2.3.0")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.fredporciuncula:phonemoji:1.5.2")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 
 
     //Dot progress bar
