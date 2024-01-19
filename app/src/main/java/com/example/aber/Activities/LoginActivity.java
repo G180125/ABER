@@ -1,6 +1,7 @@
 package com.example.aber.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -24,15 +25,29 @@ import android.widget.Toast;
 
 import com.example.aber.Activities.Main.MainActivity;
 import com.example.aber.Activities.Register.RegisterActivity;
+import com.example.aber.Models.User.User;
 import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthCredential;
+import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.util.HashMap;
 import java.util.Locale;
 
 
@@ -46,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextView forgetpassword;
 
-    private ImageView close;
+    private ImageView close, signInWIthGG;
 
     Dialog dialog;
 
@@ -54,6 +69,8 @@ public class LoginActivity extends AppCompatActivity {
     public static final String[] languages = {"Language","English","Tiếng Việt"};
 
     private LinearLayout loginBackground;
+    private GoogleSignInClient mGoogleSignInClient;
+    private int RC_SIGN_IN =20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.password_edit_text);
         forgetpassword = findViewById(R.id.forget_password_text);
         spinnerLanguage = findViewById(R.id.language_spinner);
+        signInWIthGG = findViewById(R.id.sign_in_with_google);
 
 
         dialog = new Dialog(this);
@@ -153,6 +171,19 @@ public class LoginActivity extends AppCompatActivity {
             passwordEditText.setText(password);
         }
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("513621792867-j2a11qun5tcd27qp8nb43ipml5is7k2d.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        signInWIthGG.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                googleSignIn();
+            }
+        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,7 +235,6 @@ public class LoginActivity extends AppCompatActivity {
             dialog.show();
         }
     });
-
     }
 
     //Set local for language option
@@ -241,5 +271,71 @@ public class LoginActivity extends AppCompatActivity {
     public void onClickRegister(View view) {
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
         finish();
+    }
+
+    private void googleSignIn(){
+        Intent intent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(intent, RC_SIGN_IN);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("GG", "GG");
+        if(requestCode == RC_SIGN_IN){
+            Log.d("GG", "GG1");
+//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+
+//            try{
+//                GoogleSignInAccount account = task.getResult(ApiException.class);
+//                firebaseAuth(account.getIdToken());
+//                Log.d("GG", "account.getIdToken()");
+//            } catch (Exception e){
+//                e.printStackTrace();
+//            }
+
+
+            GoogleSignIn.getSignedInAccountFromIntent(data).addOnCompleteListener(task -> {
+                if (!task.isSuccessful()){
+                    task.getException().printStackTrace();
+                    return;
+                }
+
+                Log.d("GG", "Google Sign-In success");
+                firebaseAuth(task.getResult().getIdToken());
+            });
+        }
+    }
+
+    private void firebaseAuth(String idToken) {
+        Log.d("GG", "GG2");
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        firebaseManager.mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            FirebaseUser firebaseUser = firebaseManager.mAuth.getCurrentUser();
+
+                            User user = new User();
+                            assert firebaseUser != null;
+                            user.setName(firebaseUser.getDisplayName());
+                            user.setEmail(firebaseUser.getEmail());
+                            user.setPhoneNumber(firebaseUser.getPhoneNumber());
+
+                            firebaseManager.addUser(firebaseUser.getUid(), user, new FirebaseUtil.OnTaskCompleteListener() {
+                                @Override
+                                public void onTaskSuccess(String message) {
+
+                                }
+
+                                @Override
+                                public void onTaskFailure(String message) {
+
+                                }
+                            });
+                        }
+                    }
+                });
     }
 }
