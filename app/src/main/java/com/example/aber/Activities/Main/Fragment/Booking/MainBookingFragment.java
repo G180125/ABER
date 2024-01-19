@@ -38,7 +38,6 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
     private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
     private boolean isSpinnerTouched = false;
-
     private List<Booking> bookingList;
     private BookingAdapter adapter;
     private User user;
