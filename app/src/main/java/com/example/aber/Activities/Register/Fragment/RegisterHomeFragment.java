@@ -36,6 +36,7 @@ import android.widget.TextView;
 import com.canhub.cropper.CropImageContract;
 import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
+import com.example.aber.Activities.Main.Fragment.Profile.Settings.ProfileSettingsFragment;
 import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
@@ -47,6 +48,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -59,7 +61,7 @@ public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback
     private double latitude, longitude;
     private String name, phoneNumber, gender, address;
     private TextView addressTextView, addressTextView2;
-    private ImageView homeImageView;
+    private ImageView homeImageView,backButton;
     private Bitmap cropped;
     private FirebaseUtil firebaseManager;
     private ProgressDialog progressDialog;
@@ -93,6 +95,10 @@ public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback
         root = inflater.inflate(R.layout.fragment_register_home, container, false);
         firebaseManager = new FirebaseUtil();
 
+        if (savedInstanceState != null) {
+            addressTextView.setText(savedInstanceState.getString("address"));
+        }
+
         Bundle args = getArguments();
         if (args != null) {
             name = args.getString("name", "");
@@ -103,6 +109,13 @@ public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback
         doneButton = root.findViewById(R.id.done_button);
         addressTextView = root.findViewById(R.id.address_edit_text);
         homeImageView = root.findViewById(R.id.home_image);
+        backButton = root.findViewById(R.id.button_back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
 
         addressTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,6 +157,8 @@ public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback
             }
         });
 
+
+
         homeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,6 +167,12 @@ public class RegisterHomeFragment extends Fragment implements OnMapReadyCallback
         });
 
         return root;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("address",addressTextView.getText().toString());
     }
 
     private void launchImageCropper(Uri uri) {

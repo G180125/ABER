@@ -110,7 +110,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/name_edit_text"
-                            android:text=""
                             android:textColor="@color/black"/>
                     </com.google.android.material.textfield.TextInputLayout>
 <!--                    <EditText-->

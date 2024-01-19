@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.aber.Activities.LoginActivity;
 import com.example.aber.Models.User.Gender;
@@ -52,6 +53,7 @@ public class RegisterAccountFragment extends Fragment {
     private String name, phoneNumber, gender, address, homeImage, brand, vehicleName, color, seat, plate, vehicleImage, sosName, sosPhone, stripeCusID;
     private StripeServices stripeServices;
     private CompositeDisposable compositeDisposable;
+    private ImageView buttonBack;
     private double latitude, longitude;
 
     @Override
@@ -88,7 +90,13 @@ public class RegisterAccountFragment extends Fragment {
         emailEditText = root.findViewById(R.id.email_edit_text);
         passwordEditText = root.findViewById(R.id.password_edit_text);
         confirmPasswordEditText = root.findViewById(R.id.confirm_password_edit_text);
-
+        buttonBack = root.findViewById(R.id.button_back);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
