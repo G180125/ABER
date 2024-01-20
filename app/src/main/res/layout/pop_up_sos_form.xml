@@ -71,22 +71,20 @@
                                 android:layout_marginHorizontal="16dp"
                                 />
 
-                            <androidx.cardview.widget.CardView
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:cardElevation="4dp"
+                                style="@style/MyOutlinedTextInputLayout"
+                                android:hint="@string/name"
                                 android:layout_marginHorizontal="16dp"
-                                android:layout_marginBottom="16dp"
-                                app:cardCornerRadius="30dp">
-                                <EditText
+                                >
+
+                                <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/name_edit_text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Name"
-                                    android:background="@drawable/custom_edit_text"
-                                    android:padding="10dp"
-                                    android:textSize="18sp"/>
-                            </androidx.cardview.widget.CardView>
+                                    android:textColor="@color/black" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -97,22 +95,21 @@
                                 android:layout_marginHorizontal="16dp"
                                 android:padding="5dp"/>
 
-                            <androidx.cardview.widget.CardView
+                            <com.fredporciuncula.phonemoji.PhonemojiTextInputLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:cardElevation="4dp"
+                                style="@style/MyOutlinedTextInputLayout"
+                                android:hint="@string/phone_number"
                                 android:layout_marginHorizontal="16dp"
-                                android:layout_marginBottom="16dp"
-                                app:cardCornerRadius="30dp">
-                                <EditText
-                                    android:id="@+id/phone_edit_text"
+
+                                >
+                                <com.fredporciuncula.phonemoji.PhonemojiTextInputEditText
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Phone"
-                                    android:background="@drawable/custom_edit_text"
-                                    android:padding="10dp"
-                                    android:textSize="18sp"/>
-                            </androidx.cardview.widget.CardView>
+                                    android:id="@+id/phone_edit_text"
+                                    android:layout_marginBottom="20dp"
+                                    android:textColor="@color/black"/>
+                            </com.fredporciuncula.phonemoji.PhonemojiTextInputLayout>
 
                             <Button
                                 android:id="@+id/submitNewSOSBtn"

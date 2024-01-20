@@ -8,7 +8,7 @@
     app:strokeColor="@color/light_black"
     app:cardElevation="8dp"
     android:backgroundTint="@color/light_pink"
-    app:cardCornerRadius="20dp"
+    app:cardCornerRadius="10dp"
     android:layout_margin="8dp">
 
     <LinearLayout
@@ -80,6 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
+                    app:cornerRadius="10dp"
                     android:layout_marginRight="5dp"
                     android:text="@string/set_as_default"
                     >
@@ -90,15 +91,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/edit_button"
+                    app:cornerRadius="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/edit"
                     android:padding="5dp"
                     android:layout_marginRight="5dp"
                     android:backgroundTint="@color/quantum_googgreen"/>
-                <Button
+                <com.google.android.material.button.MaterialButton
+                    app:cornerRadius="10dp"
                     android:id="@+id/delete_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

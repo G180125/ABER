@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="20dp"
-        app:cardCornerRadius="30dp"
+        app:cardCornerRadius="25dp"
         android:layout_marginHorizontal="20dp"
         android:padding="16dp"
         >
@@ -74,81 +74,92 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/brand"
+                            android:text="Brand"
+                            android:layout_marginTop="25dp"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:padding="5dp"
                             android:layout_marginHorizontal="16dp"
                             />
 
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:cardElevation="4dp"
-                            android:layout_marginHorizontal="16dp"
-                            android:layout_marginBottom="16dp"
-                            app:cardCornerRadius="30dp">
-                            <EditText
-                                android:id="@+id/vehicle_brand_edit_text"
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/MyOutlinedTextInputLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/brand"
-                                android:background="@drawable/custom_edit_text"
-                                android:padding="10dp"
-                                android:textSize="18sp"/>
-                        </androidx.cardview.widget.CardView>
+
+
+                                android:layout_marginHorizontal="16dp"
+
+                                >
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/vehicle_brand_edit_text"
+                                    />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/name"
+                            android:text="Name"
+                            android:layout_marginTop="10dp"
                             android:textSize="16sp"
                             android:textStyle="bold"
+                            android:padding="5dp"
                             android:layout_marginHorizontal="16dp"
-                            android:padding="5dp"/>
-
-                        <androidx.cardview.widget.CardView
+                            />
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/MyOutlinedTextInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:cardElevation="4dp"
+                            android:hint="@string/name"
+
                             android:layout_marginHorizontal="16dp"
-                            android:layout_marginBottom="16dp"
-                            app:cardCornerRadius="30dp">
-                            <EditText
+
+                            >
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:id="@+id/vehicle_name_edit_text"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/name"
-                                android:background="@drawable/custom_edit_text"
-                                android:padding="10dp"
-                                android:textSize="18sp"/>
-                        </androidx.cardview.widget.CardView>
+                                />
+
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/color"
+                            android:text="Color"
+                            android:layout_marginTop="10dp"
                             android:textSize="16sp"
                             android:textStyle="bold"
+                            android:padding="5dp"
                             android:layout_marginHorizontal="16dp"
-                            android:padding="5dp"/>
+                            />
 
-                        <androidx.cardview.widget.CardView
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/MyOutlinedTextInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:cardElevation="4dp"
+                            android:hint="@string/color"
+
                             android:layout_marginHorizontal="16dp"
-                            android:layout_marginBottom="16dp"
-                            app:cardCornerRadius="30dp">
-                            <EditText
-                                android:id="@+id/vehicle_color_edit_text"
+                            android:layout_marginBottom="30dp"
+                            >
+
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/color"
-                                android:background="@drawable/custom_edit_text"
-                                android:padding="10dp"
-                                android:textSize="18sp"/>
-                        </androidx.cardview.widget.CardView>
+                                android:layout_height="match_parent"
+                                android:id="@+id/vehicle_color_edit_text"
+                                />
+
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -159,24 +170,27 @@
                             android:layout_marginHorizontal="16dp"
                             android:padding="5dp"/>
 
-                        <androidx.cardview.widget.CardView
+                        <com.google.android.material.card.MaterialCardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:cardElevation="4dp"
                             android:layout_marginHorizontal="16dp"
                             android:layout_marginBottom="16dp"
-                            app:cardCornerRadius="30dp">
+                            app:cardCornerRadius="5dp"
+                            app:strokeColor="@color/black"
+                            android:backgroundTint="@color/white"
+                            >
 
                             <Spinner
                                 android:id="@+id/seat_capacity_spinner"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/seat_capacity"
-                                android:background="@drawable/custom_edit_text"
                                 android:textSize="18sp"
                                 android:paddingHorizontal="8dp"
+                                android:padding="15dp"
                                 android:paddingVertical="10dp"/>
-                        </androidx.cardview.widget.CardView>
+                        </com.google.android.material.card.MaterialCardView>
 
 
                         <TextView
@@ -197,22 +211,22 @@
                             android:layout_marginHorizontal="16dp"
                             android:padding="5dp"/>
 
-                        <androidx.cardview.widget.CardView
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/MyOutlinedTextInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:cardElevation="4dp"
+                            android:hint="@string/number_plate"
                             android:layout_marginHorizontal="16dp"
-                            android:layout_marginBottom="16dp"
-                            app:cardCornerRadius="30dp">
-                            <EditText
-                                android:id="@+id/vehicle_number_plate_edit_text"
+                            android:layout_marginBottom="30dp"
+                            >
+
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/number_plate"
-                                android:background="@drawable/custom_edit_text"
-                                android:padding="10dp"
-                                android:textSize="18sp"/>
-                        </androidx.cardview.widget.CardView>
+                                android:layout_height="match_parent"
+                                android:id="@+id/vehicle_number_plate_edit_text"
+                                />
+
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:layout_width="match_parent"
