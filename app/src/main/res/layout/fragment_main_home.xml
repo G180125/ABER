@@ -19,23 +19,38 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="16dp">
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="41dp"
-            android:background="@drawable/rouned_background"
-            android:elevation="5dp"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
-
-            <fragment
-                android:id="@+id/autocompleteSupportFragment"
-                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="35dp"
+                android:layout_height="41dp"
+                android:background="@drawable/rouned_background"
+                android:elevation="5dp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/white" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <fragment
+                    android:id="@+id/autocompleteSupportFragment"
+                    android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white" />
+
+            </LinearLayout>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/notification_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_notifications_24"
+                android:backgroundTint="@color/white"
+                android:layout_gravity="center|right"
+                app:fabCustomSize="45dp"
+                />
         </LinearLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -47,7 +62,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="10dp"
             android:layout_marginBottom="470dp"
             android:src="@drawable/ic_current_location"
             android:backgroundTint="@color/white"
@@ -60,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="10dp"
+
             android:layout_marginBottom="350dp"
             android:src="@drawable/ic_map_type"
             android:backgroundTint="@color/white"

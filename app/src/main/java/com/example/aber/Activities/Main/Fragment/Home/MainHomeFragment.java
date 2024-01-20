@@ -40,6 +40,7 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 import android.widget.PopupMenu;
 
+import com.example.aber.NotificationListFragment;
 import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
 import com.example.aber.Utils.FirebaseUtil;
@@ -88,7 +89,7 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     private LocationRequest mLocationRequest;
     private String address;
 
-    private FloatingActionButton mapTypeButton, currentLocationButton;
+    private FloatingActionButton mapTypeButton, currentLocationButton, notificationButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -138,6 +139,16 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                     return false;
                 });
                 popupMenu.show();
+            }
+        });
+
+        notificationButton = root.findViewById(R.id.notification_button);
+        notificationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                AndroidUtil.replaceFragment(new NotificationListFragment(), fragmentManager, fragmentTransaction, R.id.fragment_main_container);
             }
         });
 

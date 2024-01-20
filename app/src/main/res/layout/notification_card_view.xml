@@ -20,7 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="8dp">
+            android:padding="8dp"
+            android:gravity="end">
 
             <TextView
 
@@ -29,8 +30,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
-                android:layout_marginLeft="40dp"
-                android:layout_gravity="top|end"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:padding="8dp"
                 android:scrollHorizontally="true"
@@ -60,7 +59,6 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:padding="8dp"
             android:scrollHorizontally="true"
-            android:singleLine="true"
             android:focusable="true"
             android:text="Body"
             android:textSize="20sp"

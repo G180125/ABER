@@ -17,9 +17,12 @@ import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
     private List<InAppNotification> notificationList;
+    private RecyclerViewClickListener mListener;
 
-    public NotificationAdapter(List<InAppNotification> notificationList) {
+
+    public NotificationAdapter(List<InAppNotification> notificationList, RecyclerViewClickListener listener) {
         this.notificationList = notificationList;
+        this.mListener = listener;
     }
 
     public void setNotificationList(List<InAppNotification> notificationList) {
@@ -53,6 +56,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             notificationDate = itemView.findViewById(R.id.date);
             notificationTitle = itemView.findViewById(R.id.title);
             notificationBody = itemView.findViewById(R.id.body);
+
+            layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onNotificationClick(getAdapterPosition());
+                }
+            });
         }
 
         public void bind(InAppNotification notification, int position){
@@ -66,5 +76,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 layout.setBackgroundColor(Color.parseColor("#48CEDC"));
             }
         }
+    }
+
+    public interface RecyclerViewClickListener  {
+        void onNotificationClick(int position);
     }
 }
