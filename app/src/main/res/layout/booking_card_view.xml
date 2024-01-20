@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/white"
     android:id="@+id/booking_container"
-    app:cardCornerRadius="30dp"
+    app:strokeColor="@color/light_black"
+    app:cardCornerRadius="20dp"
     app:cardElevation="8dp"
     android:layout_margin="8dp">
 
@@ -190,4 +191,4 @@
             </LinearLayout>
 
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

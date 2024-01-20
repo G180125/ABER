@@ -73,7 +73,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             if(notification.getIsRead()){
                 layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
             } else {
-                layout.setBackgroundColor(Color.parseColor("#48CEDC"));
+                layout.setBackgroundColor(Color.parseColor("#BBECED"));
             }
         }
     }

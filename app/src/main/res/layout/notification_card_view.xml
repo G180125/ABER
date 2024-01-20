@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/white"
     android:id="@+id/booking_container"
-    app:cardCornerRadius="30dp"
+    app:cardCornerRadius="15dp"
     app:cardElevation="8dp"
     android:layout_margin="8dp">
 
@@ -16,27 +16,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:gravity="end">
-
-            <TextView
-
-                android:layout_marginRight="10dp"
-                android:id="@+id/date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="marquee"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:padding="8dp"
-                android:scrollHorizontally="true"
-                android:singleLine="true"
-                android:text=""
-                android:textSize="20sp"/>
-        </LinearLayout>
         <TextView
             android:id="@+id/title"
             android:drawablePadding="5dp"
@@ -44,12 +23,35 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
-            android:padding="8dp"
+            android:padding="5dp"
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:text="Title"
-            android:textSize="20sp"
+            android:layout_marginLeft="5dp"
+            android:textSize="23sp"
             android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+
+            >
+
+            <TextView
+                android:layout_marginRight="10dp"
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:layout_marginLeft="5dp"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:padding="4dp"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text=""
+                android:textSize="20sp"/>
+        </LinearLayout>
+
         <TextView
 
             android:id="@+id/body"
@@ -57,11 +59,11 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
-            android:padding="8dp"
+            android:padding="6dp"
             android:scrollHorizontally="true"
             android:focusable="true"
             android:text="Body"
-            android:textSize="20sp"
+            android:textSize="17sp"
             android:layout_marginBottom="16dp"/>
 
     </LinearLayout>

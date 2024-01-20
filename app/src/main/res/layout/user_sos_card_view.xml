@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:backgroundTint="@color/light_pink"
+    app:strokeColor="@color/light_black"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/white"
     android:id="@+id/sos_list_container"
-    app:cardCornerRadius="20dp"
+    app:cardCornerRadius="10dp"
     app:cardElevation="8dp"
     android:padding="50dp"
     android:layout_margin="8dp">
@@ -74,6 +76,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:cornerRadius="10dp"
                     android:layout_marginBottom="5dp"
 
                     android:text="@string/set_as_default"
@@ -85,21 +88,23 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginBottom="5dp">
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/edit_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        app:cornerRadius="10dp"
                         android:text="@string/edit"
                         android:padding="10dp"
                         android:layout_weight="1"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="8dp"
                         android:backgroundTint="@color/quantum_googgreen"/>
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/delete_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/delete"
+                        app:cornerRadius="10dp"
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
                         android:layout_marginLeft="8dp"
@@ -112,4 +117,4 @@
     </LinearLayout>
 
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>
