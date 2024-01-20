@@ -51,6 +51,14 @@
                 android:layout_gravity="center|right"
                 app:fabCustomSize="45dp"
                 />
+            <TextView
+                android:id="@+id/notification_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:background="@drawable/baseline_circle_24" />
         </LinearLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

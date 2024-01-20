@@ -37,9 +37,11 @@ import android.Manifest;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.PopupMenu;
 
+import com.example.aber.Models.Notification.InAppNotification;
 import com.example.aber.NotificationListFragment;
 import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
@@ -69,6 +71,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -88,7 +91,8 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     private Place searchedPlace;
     private LocationRequest mLocationRequest;
     private String address;
-
+    private int count;
+    private TextView notificationCountTextView;
     private FloatingActionButton mapTypeButton, currentLocationButton, notificationButton;
 
     @Override
@@ -99,6 +103,8 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_main_home, container, false);
         firebaseManager = new FirebaseUtil();
+
+        String id = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
 
         // Initialize the SDK
         if (!Places.isInitialized()) {
@@ -111,6 +117,25 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 focusOnLocation(currentLocation);
+            }
+        });
+
+        notificationCountTextView = root.findViewById(R.id.notification_count);
+        firebaseManager.fetchNotifications(id, new FirebaseUtil.OnFetchListListener<InAppNotification>() {
+            @Override
+            public void onFetchSuccess(List<InAppNotification> object) {
+                count = 0;
+                for(InAppNotification inAppNotification : object){
+                    if(!inAppNotification.getIsRead()){
+                        count++;
+                    }
+                }
+                updateUI(count);
+            }
+
+            @Override
+            public void onFetchFailure(String message) {
+
             }
         });
 
@@ -201,6 +226,10 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         }
 
         return root;
+    }
+
+    public void updateUI(int count){
+        notificationCountTextView.setText(String.valueOf(count));
     }
 
     @Override
