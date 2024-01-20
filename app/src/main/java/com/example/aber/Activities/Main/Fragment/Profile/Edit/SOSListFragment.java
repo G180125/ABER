@@ -1,6 +1,7 @@
 package com.example.aber.Activities.Main.Fragment.Profile.Edit;
 
 import static com.example.aber.Utils.AndroidUtil.replaceFragment;
+import static com.example.aber.Utils.AndroidUtil.showToast;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -45,7 +46,7 @@ public class SOSListFragment extends Fragment implements UserSOSAdapter.Recycler
     private User user;
     private List<SOS> sosList;
     private UserSOSAdapter adapter;
-    private PopupWindow popupWindow;
+    private PopupWindow popupWindow, confirmPopupWindow;
     private Button addButton;
     private View root;
 
@@ -111,7 +112,7 @@ public class SOSListFragment extends Fragment implements UserSOSAdapter.Recycler
             @Override
             public void onClick(View v) {
                 initPopupWindow(null, "Enter Additional SOS", 0);
-                popupWindow.showAsDropDown(root, 0, 0);
+                    popupWindow.showAsDropDown(root, 0, 0);
             }
         });
 
@@ -154,21 +155,47 @@ public class SOSListFragment extends Fragment implements UserSOSAdapter.Recycler
 
     @Override
     public void onDeleteButtonClicked(int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Confirm Delete")
-                .setMessage("Are you sure you want to delete this vehicle?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        sosList.remove(position);
-                        updateList(user, sosList, "Delete Home Successful");
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // User clicked No, do nothing
-                    }
-                })
-                .show();
+        initConfirmPopupWindow("Confirm Delete", "Are you sure you want to delete this sos?", position);
+    }
+
+    public void initConfirmPopupWindow(String title, String detail, int position) {
+        LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.pop_up_confirm_dialog, null);
+
+        confirmPopupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        confirmPopupWindow.setTouchable(true);
+        // Set the background color with alpha transparency
+        popupView.setBackgroundColor(getResources().getColor(R.color.popup_background, null));
+
+        TextView titleTextVIew = popupView.findViewById(R.id.title);
+        TextView detailTextView = popupView.findViewById(R.id.detail_text_view);
+        Button confirmButton = popupView.findViewById(R.id.confirm_button);
+        Button cancelBtn = popupView.findViewById(R.id.cancel_button);
+
+        titleTextVIew.setText(title);
+        detailTextView.setText(detail);
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmPopupWindow.dismiss();
+            }
+        });
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(position != 0) {
+                    sosList.remove(position);
+                    updateList(user, sosList, "Delete Home Successful");
+                    confirmPopupWindow.dismiss();
+                } else {
+                    showToast( requireContext(),"Your SOS cannot be empty");
+                }
+            }
+        });
+
+        confirmPopupWindow.showAsDropDown(root, 0, 0);
     }
 
     public void initPopupWindow(SOS sos, String title, int position) {

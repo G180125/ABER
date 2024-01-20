@@ -70,7 +70,7 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
     private User user;
     private List<Vehicle> vehicleList;
     private UserVehicleAdapter adapter;
-    private PopupWindow popupWindow;
+    private PopupWindow popupWindow, confirmPopupWindow;
     private Button addButton;
     private View root;
     private Bitmap cropped;
@@ -190,21 +190,47 @@ public class VehicleListFragment extends Fragment implements UserVehicleAdapter.
 
     @Override
     public void onDeleteButtonClicked(int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Confirm Delete")
-                .setMessage("Are you sure you want to delete this vehicle?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        vehicleList.remove(position);
-                        updateList(user, vehicleList, "Delete Home Successful");
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // User clicked No, do nothing
-                    }
-                })
-                .show();
+        initConfirmPopupWindow("Confirm Delete", "Are you sure you want to delete this vehicle?", position);
+    }
+
+    public void initConfirmPopupWindow(String title, String detail, int position) {
+        LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.pop_up_confirm_dialog, null);
+
+        confirmPopupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        confirmPopupWindow.setTouchable(true);
+        // Set the background color with alpha transparency
+        popupView.setBackgroundColor(getResources().getColor(R.color.popup_background, null));
+
+        TextView titleTextVIew = popupView.findViewById(R.id.title);
+        TextView detailTextView = popupView.findViewById(R.id.detail_text_view);
+        Button confirmButton = popupView.findViewById(R.id.confirm_button);
+        Button cancelBtn = popupView.findViewById(R.id.cancel_button);
+
+        titleTextVIew.setText(title);
+        detailTextView.setText(detail);
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmPopupWindow.dismiss();
+            }
+        });
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(position != 0) {
+                    vehicleList.remove(position);
+                    updateList(user, vehicleList, "Delete Home Successful");
+                    confirmPopupWindow.dismiss();
+                } else {
+                    showToast( requireContext(),"Your Vehicle cannot be empty");
+                }
+            }
+        });
+
+        confirmPopupWindow.showAsDropDown(root, 0, 0);
     }
 
     public void initPopupWindow(Vehicle vehicle, String title, int position) {

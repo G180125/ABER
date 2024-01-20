@@ -6,6 +6,7 @@ import static com.example.aber.Utils.AndroidUtil.showToast;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -21,7 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.aber.Adapters.BookingAdapter;
 import com.example.aber.Utils.FirebaseUtil;
@@ -43,6 +48,9 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
     private User user;
     private String userID;
     private Spinner bookingStatusSpinner;
+    private PopupWindow popupWindow;
+    private View root;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,7 +60,7 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
         progressDialog = new ProgressDialog(requireContext());
         showLoadingDialog(progressDialog);
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_main_booking, container, false);
+        root = inflater.inflate(R.layout.fragment_main_booking, container, false);
         firebaseManager = new FirebaseUtil();
 
         userID = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
@@ -165,7 +173,8 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
             public void onCheckCancel(String message) {
                 if (isAdded()) {
                     if (message.equals("OK")) {
-                        cancelBooking(position);
+                        initPopupWindow("Cancel Booking", "Are you sure you want to cancel this booking?", position);
+                        hideLoadingDialog(progressDialog);
                     } else {
                         showToast(requireContext(), message);
                         hideLoadingDialog(progressDialog);
@@ -223,6 +232,7 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
             public void onTaskSuccess(String message) {
                 showToast(requireContext(),"Cancel Booking Successfully");
                 updateUI(user.getBookings());
+                popupWindow.dismiss();
                 hideLoadingDialog(progressDialog);
             }
 
@@ -232,5 +242,39 @@ public class MainBookingFragment extends Fragment implements BookingAdapter.Recy
                 hideLoadingDialog(progressDialog);
             }
         });
+    }
+
+    public void initPopupWindow(String title, String detail, int position) {
+        LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.pop_up_confirm_dialog, null);
+
+        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        popupWindow.setTouchable(true);
+        // Set the background color with alpha transparency
+        popupView.setBackgroundColor(getResources().getColor(R.color.popup_background, null));
+
+        TextView titleTextVIew = popupView.findViewById(R.id.title);
+        TextView detailTextView = popupView.findViewById(R.id.detail_text_view);
+        Button confirmButton = popupView.findViewById(R.id.confirm_button);
+        Button cancelBtn = popupView.findViewById(R.id.cancel_button);
+
+        titleTextVIew.setText(title);
+        detailTextView.setText(detail);
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelBooking(position);
+            }
+        });
+
+        popupWindow.showAsDropDown(root, 0, 0);
     }
 }
