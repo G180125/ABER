@@ -97,6 +97,7 @@
     <string name="select_an_address">Select An Address</string>
     <string name="booking">Booking</string>
     <string name="or_continue_with">Hoặc </string>
+    <string name="notification" />
 
 
 </resources>

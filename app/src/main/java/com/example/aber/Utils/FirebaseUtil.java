@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import com.example.aber.Models.Booking.Booking;
 import com.example.aber.Models.Booking.BookingResponse;
 import com.example.aber.Models.Message.MyMessage;
+import com.example.aber.Models.Notification.InAppNotification;
 import com.example.aber.Models.Notification.Notification;
 import com.example.aber.Models.Notification.NotificationRequest;
 import com.example.aber.Models.Staff.Driver;
@@ -39,6 +40,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import retrofit2.Retrofit;
@@ -54,6 +56,7 @@ public class FirebaseUtil {
     public final String COLLECTION_ADMINS = "admins";
     public final String COLLECTION_DRIVER = "drivers";
     public final String COLLECTION_SOS_ACTIVE = "SosActive";
+    public final String COLLECTION_NOTIFICATION= "Notifications";
     public final String DOCUMENTID = "documentID";
     public FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
@@ -320,6 +323,40 @@ public class FirebaseUtil {
 
             }
         });
+    }
+
+    public void fetchNotifications(String userID, OnFetchListListener<InAppNotification> listener){
+        List<InAppNotification> notificationList = new ArrayList<>();
+
+        DatabaseReference reference =  this.database.getReference(COLLECTION_NOTIFICATION);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                notificationList.clear();
+                for (DataSnapshot s : snapshot.getChildren()) {
+                    DataSnapshot notificationSnapshot = s.child("notification");
+                    InAppNotification notification = notificationSnapshot.getValue(InAppNotification.class);
+
+                    if (notification != null && notification.getUser().equals(userID)) {
+                        notification.setNotificationID(s.getKey());
+                        notificationList.add(notification);
+                    }
+                }
+                listener.onFetchSuccess(notificationList);
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void updateNotification(InAppNotification notification){
+        DatabaseReference reference = this.database.getReference(COLLECTION_NOTIFICATION).child(notification.getNotificationID());
+
+        reference.child("notification").setValue(notification);
     }
 
     public void updateCurrentLocation(LatLng latLng, String time, String id){

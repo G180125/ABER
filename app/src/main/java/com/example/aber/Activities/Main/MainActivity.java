@@ -155,25 +155,15 @@ public class MainActivity extends AppCompatActivity {
 //        firebaseManager.isSOSActive(userId, new FirebaseUtil.OnCheckingSOSActiveListener() {
 //            @Override
 //            public void OnDataChanged(SOSActiveResponse object) {
-//                SensorService sensorService;
 //                if(object != null){
 //                    // start the service
-//                    if(object.getEmergencyContact() != null) {
-//                        sensorService = new SensorService(object.getEmergencyContact());
-//                    } else {
-//                        sensorService = new SensorService(currentUer.getEmergencyContacts().get(0));
-//                    }
+//                    SensorService sensorService = new SensorService(object.getEmergencyContact());
 //                    Intent intent = new Intent(MainActivity.this, sensorService.getClass());
 //                    if (!isMyServiceRunning(sensorService.getClass())) {
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                            startForegroundService(intent);
-//                        } else {
-//                            startService(intent);
-//                        }
-//
+//                        startService(intent);
 //                    }
 //                } else {
-//                    sensorService = new SensorService(new SOS());
+//                    SensorService sensorService = new SensorService(new SOS());
 //                    Intent intent = new Intent(MainActivity.this, sensorService.getClass());
 //                    if (isMyServiceRunning(sensorService.getClass())) {
 //                        stopService(intent);

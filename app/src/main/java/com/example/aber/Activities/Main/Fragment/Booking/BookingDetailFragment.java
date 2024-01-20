@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.example.aber.Activities.Main.Fragment.Chat.DriverChatActivity;
 import com.example.aber.Activities.Main.Fragment.Profile.HelpActivity;
+import com.example.aber.NotificationListFragment;
 import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.Models.Booking.Booking;
 import com.example.aber.Models.Staff.Driver;
@@ -40,7 +41,7 @@ public class BookingDetailFragment extends Fragment {
     private ProgressDialog progressDialog;
     private User user;
     private Booking booking;
-    private String bookingID;
+    private String bookingID, previous;
     private TextView pickUpTextView, destinationTextView, bookingTimeTextView, statusTextView, brandTextView, vehicleNameTextView, colorTextView, seatTextView, plateTextView, amountTextView, methodTextView, driverNameTextView, driverGenderTextView, licenseNumberTextView, phoneNUmberTextView, realPickUpTimeTextView;
     private CircleImageView avatar;
     private ImageView backButton, imageVIew, vehicleExpand, paymentExpand, driverExpand, resourceExpand;
@@ -58,6 +59,7 @@ public class BookingDetailFragment extends Fragment {
 
         Bundle args = getArguments();
         if (args != null) {
+            previous = args.getString("previous","");
             bookingID = args.getString("bookingID", "");
         }
 
@@ -117,13 +119,23 @@ public class BookingDetailFragment extends Fragment {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                if(previous.equals("notification")){
+                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-                fragmentTransaction.replace(R.id.fragment_main_container, new MainBookingFragment());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                    fragmentTransaction.replace(R.id.fragment_main_container, new NotificationListFragment());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                } else {
+                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                    fragmentTransaction.replace(R.id.fragment_main_container, new MainBookingFragment());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
             }
         });
 
@@ -225,7 +237,7 @@ public class BookingDetailFragment extends Fragment {
             //Color yellow for Pending
             statusTextView.setTextColor(Color.parseColor("#FFC107"));
         } else if(Objects.equals(booking.getStatus(), "Done") || Objects.equals(booking.getStatus(), "Driver Accepted")){
-            statusTextView.setTextColor(Color.parseColor("##4CAF50"));
+            statusTextView.setTextColor(Color.parseColor("#4CAF50"));
         }
 
         pickUpTextView.setText(booking.getPickUp().getAddress());
