@@ -72,7 +72,7 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
     private User user;
     private List<Home> homeList;
     private UserHomeAdapter adapter;
-    private PopupWindow popupWindow1, popupWindow2;
+    private PopupWindow popupWindow1, popupWindow2, confirmPopupWindow;
     private Button addButton;
     private View root;
     private TextView addressTextView,  addressTextView2;
@@ -198,24 +198,48 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
 
     @Override
     public void onDeleteButtonClicked(int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Confirm Delete")
-                .setMessage("Are you sure you want to delete this home?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        homeList.remove(position);
-                        updateList(user, homeList, "Delete Home Successful");
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // User clicked No, do nothing
-                    }
-                })
-                .show();
+        initConfirmPopupWindow("Confirm Delete", "Are you sure you want to delete this home?", position);
     }
 
+    public void initConfirmPopupWindow(String title, String detail, int position) {
+        LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.pop_up_confirm_dialog, null);
 
+        confirmPopupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        confirmPopupWindow.setTouchable(true);
+        // Set the background color with alpha transparency
+        popupView.setBackgroundColor(getResources().getColor(R.color.popup_background, null));
+
+        TextView titleTextVIew = popupView.findViewById(R.id.title);
+        TextView detailTextView = popupView.findViewById(R.id.detail_text_view);
+        Button confirmButton = popupView.findViewById(R.id.confirm_button);
+        Button cancelBtn = popupView.findViewById(R.id.cancel_button);
+
+        titleTextVIew.setText(title);
+        detailTextView.setText(detail);
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmPopupWindow.dismiss();
+            }
+        });
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(position != 0) {
+                    homeList.remove(position);
+                    updateList(user, homeList, "Delete Home Successful");
+                    confirmPopupWindow.dismiss();
+                } else {
+                    showToast( requireContext(),"Your Home cannot be empty");
+                }
+            }
+        });
+
+        confirmPopupWindow.showAsDropDown(root, 0, 0);
+    }
 
     public void initPopupWindow(Home home, String title, int position) {
         LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -345,9 +369,11 @@ public class HomeListFragment extends Fragment implements UserHomeAdapter.Recycl
     private boolean isDataSelected(String address, Bitmap cropped){
         if(address == null || address.isEmpty()){
             showToast(requireContext(), "You haven't select an address");
+            return false;
         }
         if(cropped == null){
             showToast(requireContext(), "You haven't select an image");
+            return  false;
         }
        return true;
     }
