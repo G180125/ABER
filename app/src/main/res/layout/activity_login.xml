@@ -44,34 +44,33 @@
             android:layout_marginTop="20dp"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/email"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:padding="5dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="5dp"/>
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/email"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textStyle="bold"-->
+<!--                android:padding="5dp"-->
+<!--                android:layout_marginHorizontal="20dp"-->
+<!--                android:layout_marginTop="30dp"-->
+<!--                android:layout_marginBottom="5dp"/>-->
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/email_layout_text"
                     android:hint="@string/email"
-                    app:hintEnabled="false"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginBottom="8dp"
+                    style="@style/MyOutlinedTextInputLayout"
+                    android:layout_marginTop="16dp"
                     >
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="top"
-                        android:hint="@string/email"
                         android:drawableLeft="@drawable/baseline_email_24"
-                        android:background="@drawable/edittext_background"
                         android:padding="10dp"
                         android:drawablePadding="5dp"
                         android:textSize="18sp"
@@ -81,15 +80,15 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/password"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:padding="5dp"
-                android:layout_marginHorizontal="19dp"
-                android:layout_marginVertical="5dp"/>
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/password"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textStyle="bold"-->
+<!--                android:padding="5dp"-->
+<!--                android:layout_marginHorizontal="19dp"-->
+<!--                android:layout_marginVertical="5dp"/>-->
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -97,21 +96,17 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/password"
                     android:id="@+id/password_layout_text"
-                    app:hintEnabled="false"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginVertical="16dp"
                     >
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/password_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
-                        android:background="@drawable/edittext_background"
                         android:padding="10dp"
                         android:drawableLeft="@drawable/baseline_lock_24"
                         android:drawablePadding="5dp"
                         android:textSize="18sp"
-                        android:hint="@string/password"
                         android:inputType="textPassword"
                         android:minLines="1"
                         android:textColor="@color/black"
@@ -125,7 +120,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="24dp"
+                android:layout_marginVertical="16dp"
                 android:text="@string/login"
                 app:backgroundTint="@color/secondary_stroke_blue"
                 />

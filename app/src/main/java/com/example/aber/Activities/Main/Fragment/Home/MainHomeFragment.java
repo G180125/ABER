@@ -213,8 +213,6 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                 && ActivityCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-            // Enable the "My Location" button and display the blue dot on the map
-            mMap.setMyLocationEnabled(true);
 
             // Set the "My Location" button to be visible
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
