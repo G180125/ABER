@@ -12,6 +12,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -29,8 +30,26 @@ public class RegisterProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_register_profile, container, false);
+        if (savedInstanceState != null) {
+            nameEditText.setText(savedInstanceState.getString("name"));
+            phoneNumberEditText.setText(savedInstanceState.getString("phoneNumber"));
+
+            String savedGender = savedInstanceState.getString("gender");
+            if (savedGender != null) {
+                switch (savedGender) {
+                    case "MALE":
+                        genderRadioGroup.check(R.id.radioButtonMale);
+                        break;
+                    case "FEMALE":
+                        genderRadioGroup.check(R.id.radioButtonFemale);
+                        break;
+                }
+            }
+        }
         Bundle args = getArguments();
         if (args != null) {
             userID = args.getString("userID", "");
@@ -49,8 +68,6 @@ public class RegisterProfileFragment extends Fragment {
             public void onClick(View v) {
                 String name = nameEditText.getText().toString();
                 String phoneNumber = phoneNumberEditText.getText().toString();
-                Toast.makeText(requireContext(), "Phone Number : " + phoneNumber, Toast.LENGTH_SHORT).show();
-                Log.d("Phone Number " , "Phone Number " + phoneNumber);
                 String selectedGender = getSelectedGender();
 
                 if(validateInputs(name, phoneNumber, selectedGender)){
@@ -67,6 +84,14 @@ public class RegisterProfileFragment extends Fragment {
         });
 
         return root;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("name", nameEditText.getText().toString());
+        outState.putString("phoneNumber", phoneNumberEditText.getText().toString());
+        outState.putString("gender", getSelectedGender());
     }
 
     private String getSelectedGender() {
@@ -110,7 +135,7 @@ public class RegisterProfileFragment extends Fragment {
             return false;
         }
 
-        showToast("Finish Step 2/5");
+        showToast("Finish Step 1/5");
         return true;
     }
 
@@ -121,7 +146,7 @@ public class RegisterProfileFragment extends Fragment {
             if (phoneNumber.matches("\\d{9}")) {
                 return true;
             }
-            if (phoneNumber.matches("84\\d{9}")) {
+            if (phoneNumber.matches("^\\+?84\\d{9}$")) {
                 return true;
             }
         }

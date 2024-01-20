@@ -15,14 +15,23 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:baselineAligned="true">
+            <ImageView
+                android:id="@+id/button_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back_arrow"
+                android:padding="8dp"
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/home"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                android:layout_marginRight="8dp"/>
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,33 +96,48 @@
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginBottom="20dp"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/address_star"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginHorizontal="16dp"
-                    android:padding="5dp"/>
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/address_star"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:layout_marginHorizontal="16dp"-->
+<!--                    android:padding="5dp"/>-->
 
-                <androidx.cardview.widget.CardView
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:cardElevation="4dp"-->
+<!--                    android:layout_marginHorizontal="16dp"-->
+<!--                    android:layout_marginBottom="16dp"-->
+<!--                    app:cardCornerRadius="30dp">-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/address_edit_text"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:hint="@string/address"-->
+<!--                        android:background="@drawable/custom_edit_text"-->
+<!--                        android:padding="10dp"-->
+<!--                        android:drawableLeft="@drawable/ic_home"-->
+<!--                        android:drawablePadding="5dp"-->
+<!--                        android:textSize="18sp"/>-->
+<!--                </androidx.cardview.widget.CardView>-->
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardElevation="4dp"
+                    style="@style/MyOutlinedTextInputLayout"
+                    android:hint="@string/address"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginBottom="16dp"
-                    app:cardCornerRadius="30dp">
-                    <TextView
-                        android:id="@+id/address_edit_text"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/address"
-                        android:background="@drawable/custom_edit_text"
-                        android:padding="10dp"
-                        android:drawableLeft="@drawable/ic_home"
-                        android:drawablePadding="5dp"
-                        android:textSize="18sp"/>
-                </androidx.cardview.widget.CardView>
+                        android:id="@+id/address_edit_text"
+                        android:textColor="@color/black"
+                        android:focusable="false"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -145,6 +169,8 @@
                     android:layout_marginBottom="30dp"
                     android:text="@string/next"
                     app:backgroundTint="@color/secondary_stroke_blue"/>
+
+
 
 
 

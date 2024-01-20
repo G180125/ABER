@@ -184,7 +184,7 @@
                     android:id="@+id/sign_in_with_google"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_google_sign_in"
+                    android:src="@drawable/android_light_rd_ctn"
                     android:padding="5dp"
                     android:paddingBottom="10dp"/>
             </LinearLayout>
