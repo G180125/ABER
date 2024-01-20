@@ -69,14 +69,11 @@
                         android:id="@+id/email_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="top"
                         android:drawableLeft="@drawable/baseline_email_24"
-                        android:padding="10dp"
-                        android:drawablePadding="5dp"
-                        android:textSize="18sp"
+                        android:drawablePadding="8dp"
                         android:textColor="@color/black"
                         android:minLines="1"
-                        android:textCursorDrawable="@color/black" />
+                        />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -103,14 +100,11 @@
                         android:id="@+id/password_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
                         android:drawableLeft="@drawable/baseline_lock_24"
-                        android:drawablePadding="5dp"
-                        android:textSize="18sp"
+                        android:drawablePadding="8dp"
                         android:inputType="textPassword"
                         android:minLines="1"
                         android:textColor="@color/black"
-                        android:textCursorDrawable="@color/black"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
 

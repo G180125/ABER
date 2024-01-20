@@ -23,7 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="visible"
+            >
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="41dp"
@@ -42,23 +43,38 @@
 
             </LinearLayout>
 
+            <RelativeLayout
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end">
+
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/notification_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/baseline_notifications_24"
                 android:backgroundTint="@color/white"
-                android:layout_gravity="center|right"
                 app:fabCustomSize="45dp"
+                android:translationX="3dp"
                 />
-            <TextView
-                android:id="@+id/notification_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:background="@drawable/baseline_circle_24" />
+
+                <TextView
+                    android:id="@+id/notification_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="-34dp"
+                    android:layout_toEndOf="@id/notification_button"
+                    android:background="@drawable/baseline_circle_24"
+                    android:elevation="6dp"
+                    android:gravity="center"
+                    android:text="1"
+                    android:translationY="20dp"
+                    android:translationX="10dp"
+                    android:textColor="@color/white" />
+
+
+            </RelativeLayout>
         </LinearLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

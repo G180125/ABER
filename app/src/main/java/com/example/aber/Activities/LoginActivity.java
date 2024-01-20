@@ -46,6 +46,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -71,6 +72,8 @@ public class LoginActivity extends AppCompatActivity {
     private LinearLayout loginBackground;
     private GoogleSignInClient mGoogleSignInClient;
     private int RC_SIGN_IN =20;
+    private FirebaseAuth auth;
+    private FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
         dialog.setCancelable(false);
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
+
         forgetEmailEditText = dialog.findViewById(R.id.email_forget_edit_text);
         sentButton = dialog.findViewById(R.id.sent_button);
         close = dialog.findViewById(R.id.close);
@@ -171,19 +174,15 @@ public class LoginActivity extends AppCompatActivity {
             passwordEditText.setText(password);
         }
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("513621792867-j2a11qun5tcd27qp8nb43ipml5is7k2d.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        signInWIthGG.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                googleSignIn();
-            }
-        });
+//        signInWIthGG.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent1 = new Intent(LoginActivity.this,GoogleSignInActivity.class);
+//                startActivity(intent1);
+//            }
+//        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -237,6 +236,8 @@ public class LoginActivity extends AppCompatActivity {
     });
     }
 
+
+
     //Set local for language option
     public void setLocal(Activity activity, String langCode){
         Locale locale = new Locale(langCode);
@@ -273,69 +274,5 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    private void googleSignIn(){
-        Intent intent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(intent, RC_SIGN_IN);
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d("GG", "GG");
-        if(requestCode == RC_SIGN_IN){
-            Log.d("GG", "GG1");
-//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-
-//            try{
-//                GoogleSignInAccount account = task.getResult(ApiException.class);
-//                firebaseAuth(account.getIdToken());
-//                Log.d("GG", "account.getIdToken()");
-//            } catch (Exception e){
-//                e.printStackTrace();
-//            }
-
-
-            GoogleSignIn.getSignedInAccountFromIntent(data).addOnCompleteListener(task -> {
-                if (!task.isSuccessful()){
-                    task.getException().printStackTrace();
-                    return;
-                }
-
-                Log.d("GG", "Google Sign-In success");
-                firebaseAuth(task.getResult().getIdToken());
-            });
-        }
-    }
-
-    private void firebaseAuth(String idToken) {
-        Log.d("GG", "GG2");
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        firebaseManager.mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            FirebaseUser firebaseUser = firebaseManager.mAuth.getCurrentUser();
-
-                            User user = new User();
-                            assert firebaseUser != null;
-                            user.setName(firebaseUser.getDisplayName());
-                            user.setEmail(firebaseUser.getEmail());
-                            user.setPhoneNumber(firebaseUser.getPhoneNumber());
-
-                            firebaseManager.addUser(firebaseUser.getUid(), user, new FirebaseUtil.OnTaskCompleteListener() {
-                                @Override
-                                public void onTaskSuccess(String message) {
-
-                                }
-
-                                @Override
-                                public void onTaskFailure(String message) {
-
-                                }
-                            });
-                        }
-                    }
-                });
-    }
 }
