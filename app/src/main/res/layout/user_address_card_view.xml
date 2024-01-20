@@ -2,7 +2,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:strokeColor="@color/black"
+    app:strokeColor="@color/light_black"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/white"
     android:id="@+id/address_list_container"
@@ -28,7 +28,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
-                app:strokeColor="@color/black"
+                app:strokeColor="@color/light_black"
                 app:cardCornerRadius="20dp"
 
                >

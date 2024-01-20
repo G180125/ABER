@@ -41,6 +41,7 @@ public class SensorService extends Service {
     private ShakeDetector mShakeDetector;
     private SOS emergencyContact;
 
+    public SensorService(){}
     public SensorService(SOS emergencyContact) {
         this.emergencyContact = emergencyContact;
     }
@@ -58,93 +59,56 @@ public class SensorService extends Service {
         return START_STICKY;
     }
 
-    @SuppressLint("ForegroundServiceType")
     @Override
     public void onCreate() {
-
         super.onCreate();
 
-        // start the foreground service
+        // Start the foreground service in a separate thread
+        new Thread(this::startForegroundService).start();
+
+        // Initialize sensors in a separate thread
+        new Thread(this::initializeSensors).start();
+    }
+
+    @SuppressLint("ForegroundServiceType")
+    private void startForegroundService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startMyOwnForeground();
         } else {
             startForeground(1, new Notification());
         }
 
-        // ShakeDetector initialization
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            try {
+                Thread.sleep(200); // Adjust the sleep time as needed
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Method to initialize sensors
+    private void initializeSensors() {
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mShakeDetector = new ShakeDetector();
-        mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
-
-            @SuppressLint("MissingPermission")
-            @Override
-            public void onShake(int count) {
-                // check if the user has shacked
-                // the phone for 3 time in a row
-                if (count == 3) {
-
-                    // vibrate the phone
-                    vibrate();
-
-                    // create FusedLocationProviderClient to get the user location
-                    FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
-
-                    // use the PRIORITY_BALANCED_POWER_ACCURACY
-                    // so that the service doesn't use unnecessary power via GPS
-                    // it will only use GPS at this very moment
-                    fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, new CancellationToken() {
-                        @Override
-                        public boolean isCancellationRequested() {
-                            return false;
-                        }
-
-                        @NonNull
-                        @Override
-                        public CancellationToken onCanceledRequested(@NonNull OnTokenCanceledListener onTokenCanceledListener) {
-                            return null;
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // check if location is null
-                            // for both the cases we will
-                            // create different messages
-                            if (location != null) {
-
-                                // get the SMSManager
-                                SmsManager smsManager = SmsManager.getDefault();
-
-                                String phone = emergencyContact.getPhoneNumber();
-                                String name = emergencyContact.getName();
-
-                                String message = "Hey, " + name + "I am in DANGER, i need help. Please urgently reach me out. Here are my coordinates.\n " + "http://maps.google.com/?q=" + location.getLatitude() + "," + location.getLongitude();
-                                smsManager.sendTextMessage(emergencyContact.getPhoneNumber(), null, message, null, null);
-                            } else {
-                                String message = "I am in DANGER, i need help. Please urgently reach me out.\n" + "GPS was turned off.Couldn't find location. Call your nearest Police Station.";
-
-                                SmsManager smsManager = SmsManager.getDefault();
-                                smsManager.sendTextMessage(emergencyContact.getPhoneNumber(), null, message, null, null);
-                            }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("Check: ", "OnFailure");
-                            String message = "I am in DANGER, i need help. Please urgently reach me out.\n" + "GPS was turned off.Couldn't find location. Call your nearest Police Station.";
-
-                            SmsManager smsManager = SmsManager.getDefault();
-                            smsManager.sendTextMessage(emergencyContact.getPhoneNumber(), null, message, null, null);
-                        }
-                    });
-
-                }
+        mShakeDetector.setOnShakeListener(count -> {
+            if (count == 3) {
+                handleShakeEvent();
             }
         });
 
-        // register the listener
+        // Register the listener
         mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
     }
+
+    // Method to handle shake event
+    private void handleShakeEvent() {
+        vibrate();
+
+        // Add the rest of your shake event handling code here...
+    }
+
 
     // method to vibrate the phone
     public void vibrate() {
@@ -160,8 +124,6 @@ public class SensorService extends Service {
         } else {
             vibrator.vibrate(500);
         }
-
-
     }
 
     // For Build versions higher than Android Oreo, we launch
@@ -183,11 +145,9 @@ public class SensorService extends Service {
         Notification notification = notificationBuilder.setOngoing(true)
                 .setContentTitle("You are protected.")
                 .setContentText("We are there for you")
-
                 // this is important, otherwise the notification will show the way
                 // you want i.e. it will show some default notification
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-
                 .setPriority(NotificationManager.IMPORTANCE_MIN)
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .build();

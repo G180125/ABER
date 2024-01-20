@@ -69,6 +69,7 @@ public class RegisterVehicleFragment extends Fragment {
         if (result.isSuccessful()) {
             cropped = BitmapFactory.decodeFile(result.getUriFilePath(requireContext(), true));
             uploadImage();
+            updateVehicleImage(cropped);
         }
     });
 
@@ -161,6 +162,12 @@ public class RegisterVehicleFragment extends Fragment {
         int spinnerPostion = seatCapacitySpinner.getSelectedItemPosition();
         outState.putInt("spinner_position", spinnerPostion);
         outState.putString("numberplate",vehiclePlateEditText.getText().toString());
+    }
+
+    public void updateVehicleImage(Bitmap cropped){
+        if(cropped != null){
+            vehicleImageView.setImageBitmap(cropped);
+        }
     }
     private void launchImageCropper(Uri uri) {
         CropImageOptions cropImageOptions = new CropImageOptions();
