@@ -69,7 +69,6 @@
                     android:elevation="6dp"
                     android:gravity="center"
                     android:text="1"
-                    android:translationY="20dp"
                     android:translationX="10dp"
                     android:textColor="@color/white" />
 

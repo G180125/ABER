@@ -187,6 +187,7 @@ public class LoginActivity extends AppCompatActivity {
         signInWIthGG.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                signOut();
                 createSignInIntent();
             }
         });
@@ -333,6 +334,18 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     // [END auth_fui_result]
+
+    public void signOut() {
+        // [START auth_fui_signout]
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+                    }
+                });
+        // [END auth_fui_signout]
+    }
 
 
 }

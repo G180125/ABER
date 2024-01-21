@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.aber.Activities.Main.Fragment.Home.ConfirmBookingFragment;
 import com.example.aber.Adapters.UserSOSAdapter;
@@ -213,6 +214,8 @@ public class SOSListFragment extends Fragment implements UserSOSAdapter.Recycler
         Button submitButton = popupView.findViewById(R.id.submitNewSOSBtn);
         ImageView cancelBtn = popupView.findViewById(R.id.cancelBtn);
 
+
+
         titleTextView.setText(title);
         //Initialize seat capacity spinner
         if (sos != null) {
@@ -230,6 +233,7 @@ public class SOSListFragment extends Fragment implements UserSOSAdapter.Recycler
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean update = false;
                 AndroidUtil.showLoadingDialog(progressBar);
 
                 String phone = phoneEditText.getText().toString();
@@ -237,21 +241,35 @@ public class SOSListFragment extends Fragment implements UserSOSAdapter.Recycler
 
                 if (title.equals("Edit SOS")) {
                     // Update existing SOS
-                    if (sos != null) {
-                        sos.setName(name);
-                        sos.setPhoneNumber(phone);
+                    if (!name.isEmpty() && !(phone.length() < 10)) {
+                        if (sos != null) {
+                            sos.setName(name);
+                            sos.setPhoneNumber(phone);
+                            update = true;
+                        }
+                    } else {
+                        phoneEditText.setError("Phone number is invalid");
+                        nameEditText.setError("Name is invalid");
+                        AndroidUtil.hideLoadingDialog(progressBar);
                     }
                 } else {
-                    SOS newSOS = new SOS(name, phone);
-
-                    sosList.add(0, newSOS);
+                    if (!name.isEmpty() && !(phone.length() < 10)) {
+                        SOS newSOS = new SOS(name, phone);
+                        update = true;
+                        sosList.add(0, newSOS);
+                    } else {
+                        phoneEditText.setError("Phone number is invalid");
+                        nameEditText.setError("Name is invalid");
+                        AndroidUtil.hideLoadingDialog(progressBar);
+                    }
                 }
 
+                if (update) {
+                    updateList(user, sosList, "Update Successful");
 
-                updateList(user, sosList, "Update Successful");
-
-                // Dismiss the PopupWindow after updating
-                popupWindow.dismiss();
+                    // Dismiss the PopupWindow after updating
+                    popupWindow.dismiss();
+                }
             }
         });
 
@@ -278,4 +296,6 @@ public class SOSListFragment extends Fragment implements UserSOSAdapter.Recycler
 
     public void newVehicle(View view) {
     }
+
+
 }

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.aber.R;
 
@@ -71,12 +72,70 @@ public class RegisterSOSFragment extends Fragment {
                 String sosName = sosNameEditText.getText().toString();
                 String sosPhone = sosPhoneNumberEditText.getText().toString();
 
-                showToast(requireContext(),"Finish Step 4/5");
-                toRegisterAccountFragment(sosName, sosPhone);
+                if(validateInputs(sosName, sosPhone)) {
+                    toRegisterAccountFragment(sosName, sosPhone);
+                }
             }
         });
 
         return root;
+    }
+
+    private boolean validateInputs(String name, String phoneNumber) {
+        StringBuilder errorMessage = new StringBuilder();
+
+        if (name.isEmpty()) {
+            errorMessage.append("Name cannot be empty\n");
+        }
+
+        if (!validatePhoneNumber(phoneNumber)) {
+            errorMessage.append("Invalid phone number\n");
+        }
+
+        if (gender == null) {
+            errorMessage.append("Please select your gender\n");
+        }
+
+        // Display error messages for each field
+        if (errorMessage.length() > 0) {
+            showToast(errorMessage.toString().trim()); // Trim to remove trailing newline
+            if (name.isEmpty()) {
+                sosNameEditText.setError("Name cannot be empty");
+            }
+            if (!validatePhoneNumber(phoneNumber)) {
+                sosPhoneNumberEditText.setError("Invalid phone number");
+            }
+
+            return false;
+        }
+        showToast("Finish Step 4/5");
+        return true;
+    }
+
+
+    private boolean validatePhoneNumber(String phoneNumber) {
+        phoneNumber = phoneNumber.replaceAll("\\s", "");
+        if (phoneNumber !=null){
+            if (phoneNumber.matches("\\d{9}")) {
+                return true;
+            }
+            if (phoneNumber.matches("^\\+?84\\d{9}$")) {
+                return true;
+            }
+        }
+
+//        if (phoneNumber.matches("\\d{9}")) {
+//            return true;
+//        }
+//
+////        if (phoneNumber.matches("84\\d{9}")) {
+////            return true;
+////        }
+//        if (phoneNumber.matches("^\\+?84\\d{9}$")) {
+//            return true;
+//        }
+
+        return false;
     }
 
     @Override
@@ -119,5 +178,9 @@ public class RegisterSOSFragment extends Fragment {
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    private void showToast(String message){
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
