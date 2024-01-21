@@ -15,7 +15,16 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:baselineAligned="true">
+            <ImageView
+                android:id="@+id/button_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back_arrow"
+                android:padding="8dp"
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -83,60 +92,90 @@
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginBottom="20dp"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:padding="5dp"
-                    android:text="@string/name_star"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginHorizontal="16dp"-->
+<!--                    android:padding="5dp"-->
+<!--                    android:text="@string/name_star"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textStyle="bold" />-->
 
-                <androidx.cardview.widget.CardView
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:cardElevation="4dp"-->
+<!--                    android:layout_marginHorizontal="16dp"-->
+<!--                    android:layout_marginBottom="16dp"-->
+<!--                    app:cardCornerRadius="30dp">-->
+<!--                    <EditText-->
+<!--                        android:id="@+id/name_sos_editText"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:hint="@string/name"-->
+<!--                        android:background="@drawable/custom_edit_text"-->
+<!--                        android:padding="10dp"-->
+<!--                        android:drawablePadding="5dp"-->
+<!--                        android:textSize="18sp"/>-->
+<!--                </androidx.cardview.widget.CardView>-->
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardElevation="4dp"
+                    style="@style/MyOutlinedTextInputLayout"
+                    android:hint="@string/name"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginBottom="16dp"
-                    app:cardCornerRadius="30dp">
-                    <EditText
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/name_sos_editText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/name"
-                        android:background="@drawable/custom_edit_text"
-                        android:padding="10dp"
-                        android:drawablePadding="5dp"
-                        android:textSize="18sp"/>
-                </androidx.cardview.widget.CardView>
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/phone_number_star"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:layout_marginHorizontal="16dp"-->
+<!--                    android:padding="5dp"/>-->
+
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:cardElevation="4dp"-->
+<!--                    android:layout_marginHorizontal="16dp"-->
+<!--                    app:cardCornerRadius="30dp">-->
+<!--                    <EditText-->
+<!--                        android:id="@+id/sos_phone_number"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:hint="@string/phone_number"-->
+<!--                        android:background="@drawable/custom_edit_text"-->
+<!--                        android:padding="10dp"-->
+<!--                        android:drawableStart="@drawable/baseline_local_phone_24"-->
+<!--                        android:drawablePadding="5dp"-->
+<!--                        android:textSize="18sp"-->
+<!--                        android:inputType="number"/>-->
+<!--                </androidx.cardview.widget.CardView>-->
+
+                <com.fredporciuncula.phonemoji.PhonemojiTextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/phone_number_star"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
+                    style="@style/MyOutlinedTextInputLayout"
+                    android:hint="@string/phone_number"
                     android:layout_marginHorizontal="16dp"
-                    android:padding="5dp"/>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardElevation="4dp"
-                    android:layout_marginHorizontal="16dp"
-                    app:cardCornerRadius="30dp">
-                    <EditText
-                        android:id="@+id/sos_phone_number"
+                    android:layout_marginVertical="20dp"
+                    >
+                    <com.fredporciuncula.phonemoji.PhonemojiTextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/phone_number"
-                        android:background="@drawable/custom_edit_text"
-                        android:padding="10dp"
-                        android:drawableStart="@drawable/baseline_local_phone_24"
-                        android:drawablePadding="5dp"
-                        android:textSize="18sp"
-                        android:inputType="number"/>
-                </androidx.cardview.widget.CardView>
+                        android:id="@+id/sos_phone_number"
+                        android:textColor="@color/black"/>
+                </com.fredporciuncula.phonemoji.PhonemojiTextInputLayout>
 
                 <Button
                     android:layout_marginTop="50dp"

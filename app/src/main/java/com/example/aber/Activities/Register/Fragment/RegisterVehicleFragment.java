@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -47,7 +48,7 @@ public class RegisterVehicleFragment extends Fragment {
     private String userID, email, password, name, phoneNumber, gender, address, homeImage;
     private EditText vehicleBrandEditText, vehicleNameEditText, vehicleColorEditText, vehiclePlateEditText;
     private Spinner seatCapacitySpinner;
-    private ImageView vehicleImageView;
+    private ImageView vehicleImageView,buttonBack;
     private LinearLayout imageUploadSuccessLayout;
     private Bitmap cropped;
     private FirebaseUtil firebaseManager;
@@ -68,6 +69,7 @@ public class RegisterVehicleFragment extends Fragment {
         if (result.isSuccessful()) {
             cropped = BitmapFactory.decodeFile(result.getUriFilePath(requireContext(), true));
             uploadImage();
+            updateVehicleImage(cropped);
         }
     });
 
@@ -77,6 +79,16 @@ public class RegisterVehicleFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_register_vehicle, container, false);
         firebaseManager = new FirebaseUtil();
+
+        if (savedInstanceState != null) {
+            vehicleBrandEditText.setText(savedInstanceState.getString("brand"));
+            vehicleNameEditText.setText(savedInstanceState.getString("name"));
+            vehicleColorEditText.setText(savedInstanceState.getString("color"));
+            vehiclePlateEditText.setText(savedInstanceState.getString("numberplate"));
+            int spinnerPosition = savedInstanceState.getInt("spinner_position", 0);
+            seatCapacitySpinner.setSelection(spinnerPosition);
+
+        }
 
         Bundle args = getArguments();
         if (args != null) {
@@ -97,6 +109,7 @@ public class RegisterVehicleFragment extends Fragment {
         vehicleColorEditText = root.findViewById(R.id.vehicle_color_edit_text);
         vehiclePlateEditText = root.findViewById(R.id.vehicle_number_plate_edit_text);
         imageUploadSuccessLayout = root.findViewById(R.id.img_upload_success);
+        buttonBack = root.findViewById(R.id.button_back);
 
         seatCapacitySpinner = root.findViewById(R.id.seat_capacity_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -112,6 +125,13 @@ public class RegisterVehicleFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 selectImage();
+            }
+        });
+
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
             }
         });
 
@@ -133,7 +153,22 @@ public class RegisterVehicleFragment extends Fragment {
 
         return root;
     }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("brand", vehicleBrandEditText.getText().toString());
+        outState.putString("name", vehicleNameEditText.getText().toString());
+        outState.putString("color", vehicleColorEditText.getText().toString());
+        int spinnerPostion = seatCapacitySpinner.getSelectedItemPosition();
+        outState.putInt("spinner_position", spinnerPostion);
+        outState.putString("numberplate",vehiclePlateEditText.getText().toString());
+    }
 
+    public void updateVehicleImage(Bitmap cropped){
+        if(cropped != null){
+            vehicleImageView.setImageBitmap(cropped);
+        }
+    }
     private void launchImageCropper(Uri uri) {
         CropImageOptions cropImageOptions = new CropImageOptions();
         cropImageOptions.imageSourceIncludeGallery = false;

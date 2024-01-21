@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.aber.Activities.LoginActivity;
 import com.example.aber.Models.User.Gender;
@@ -29,6 +30,8 @@ import com.example.aber.R;
 import com.example.aber.Services.StripeConnect.StripeClient;
 import com.example.aber.Services.StripeConnect.StripeServices;
 import com.example.aber.Utils.FirebaseUtil;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,14 +55,24 @@ public class RegisterAccountFragment extends Fragment {
     private String name, phoneNumber, gender, address, homeImage, brand, vehicleName, color, seat, plate, vehicleImage, sosName, sosPhone, stripeCusID;
     private StripeServices stripeServices;
     private CompositeDisposable compositeDisposable;
+    private ImageView buttonBack;
     private double latitude, longitude;
+    private FirebaseUser currentUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         progressDialog = new ProgressDialog(requireContext());
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_register_account, container, false);
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        View root;
+        if (currentUser == null) {
+            root = inflater.inflate(R.layout.fragment_register_account, container, false);
+            passwordEditText = root.findViewById(R.id.password_edit_text);
+            confirmPasswordEditText = root.findViewById(R.id.confirm_password_edit_text);
+        } else {
+            root = inflater.inflate(R.layout.fragment_register_account_gg, container, false);
+        }
         firebaseManager = new FirebaseUtil()
         ;
         stripeServices = StripeClient.getRetrofit().create(StripeServices.class);
@@ -86,33 +99,45 @@ public class RegisterAccountFragment extends Fragment {
 
         doneButton = root.findViewById(R.id.done_button);
         emailEditText = root.findViewById(R.id.email_edit_text);
-        passwordEditText = root.findViewById(R.id.password_edit_text);
-        confirmPasswordEditText = root.findViewById(R.id.confirm_password_edit_text);
-
+        if (currentUser != null) {
+            emailEditText.setText(currentUser.getEmail());
+        }
+        buttonBack = root.findViewById(R.id.button_back);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showLoadingDialog(progressDialog);
                 String email = emailEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
-                String confirmPassword = confirmPasswordEditText.getText().toString();
 
-                if(validateInputs(email, password, confirmPassword)){
-                    firebaseManager.register(email, password, new FirebaseUtil.OnTaskCompleteListener() {
-                        @Override
-                        public void onTaskSuccess(String message) {
-                            String userID = message;
-                            addUserToFirebase(userID);
-                        }
+                if (currentUser == null) {
+                    String password = passwordEditText.getText().toString();
+                    String confirmPassword = confirmPasswordEditText.getText().toString();
 
-                        @Override
-                        public void onTaskFailure(String message) {
-                            hideLoadingDialog(progressDialog);
-                            showToast(requireContext(),message);
-                        }
-                    });
+                    if (validateInputs(email, password, confirmPassword)) {
+                        firebaseManager.register(email, password, new FirebaseUtil.OnTaskCompleteListener() {
+                            @Override
+                            public void onTaskSuccess(String message) {
+                                String userID = message;
+                                addUserToFirebase(userID);
+                            }
+
+                            @Override
+                            public void onTaskFailure(String message) {
+                                hideLoadingDialog(progressDialog);
+                                showToast(requireContext(), message);
+                            }
+                        });
+                    } else {
+                        hideLoadingDialog(progressDialog);
+                    }
                 } else {
-                    hideLoadingDialog(progressDialog);
+                    addUserToFirebase(currentUser.getUid());
                 }
             }
         });
@@ -179,7 +204,6 @@ public class RegisterAccountFragment extends Fragment {
 
         Gender userGender = Gender.valueOf(gender);
         String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
 
         compositeDisposable.add(stripeServices.createCustomer(
                         email)
@@ -198,7 +222,12 @@ public class RegisterAccountFragment extends Fragment {
                             public void onTaskSuccess(String message) {
                                 hideLoadingDialog(progressDialog);
                                 showToast(requireContext(),message);
-                                startActivity(new Intent(requireContext(), LoginActivity.class).putExtra("email", email).putExtra("password", password));
+                                if (currentUser == null) {
+                                    String password = passwordEditText.getText().toString();
+                                    startActivity(new Intent(requireContext(), LoginActivity.class).putExtra("email", email).putExtra("password", password));
+                                } else {
+                                    startActivity(new Intent(requireContext(), LoginActivity.class).putExtra("email", "").putExtra("password", ""));
+                                }
                                 requireActivity().finish();
                             }
 

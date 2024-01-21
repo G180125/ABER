@@ -91,7 +91,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
                 //Color yellow for Pending
                 statusTextView.setTextColor(Color.parseColor("#FFC107"));
             } else if(Objects.equals(booking.getStatus(), "Done") || Objects.equals(booking.getStatus(), "Driver Accepted")){
-                statusTextView.setTextColor(Color.parseColor("##4CAF50"));
+                statusTextView.setTextColor(Color.parseColor("#4CAF50"));
             }
 
             statusTextView.setText(booking.getStatus());

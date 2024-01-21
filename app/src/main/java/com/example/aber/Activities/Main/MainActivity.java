@@ -152,25 +152,25 @@ public class MainActivity extends AppCompatActivity {
             askIgnoreOptimization();
         }
 
-        firebaseManager.isSOSActive(userId, new FirebaseUtil.OnCheckingSOSActiveListener() {
-            @Override
-            public void OnDataChanged(SOSActiveResponse object) {
-                if(object != null){
-                    // start the service
-                    SensorService sensorService = new SensorService(object.getEmergencyContact());
-                    Intent intent = new Intent(MainActivity.this, sensorService.getClass());
-                    if (!isMyServiceRunning(sensorService.getClass())) {
-                        startService(intent);
-                    }
-                } else {
-                    SensorService sensorService = new SensorService(new SOS());
-                    Intent intent = new Intent(MainActivity.this, sensorService.getClass());
-                    if (isMyServiceRunning(sensorService.getClass())) {
-                        stopService(intent);
-                    }
-                }
-            }
-        });
+//        firebaseManager.isSOSActive(userId, new FirebaseUtil.OnCheckingSOSActiveListener() {
+//            @Override
+//            public void OnDataChanged(SOSActiveResponse object) {
+//                if(object != null){
+//                    // start the service
+//                    SensorService sensorService = new SensorService(object.getEmergencyContact());
+//                    Intent intent = new Intent(MainActivity.this, sensorService.getClass());
+//                    if (!isMyServiceRunning(sensorService.getClass())) {
+//                        startService(intent);
+//                    }
+//                } else {
+//                    SensorService sensorService = new SensorService(new SOS());
+//                    Intent intent = new Intent(MainActivity.this, sensorService.getClass());
+//                    if (isMyServiceRunning(sensorService.getClass())) {
+//                        stopService(intent);
+//                    }
+//                }
+//            }
+//        });
     }
 
     private void replaceFragment(Fragment fragment, FragmentManager fragmentManager, FragmentTransaction fragmentTransaction) {

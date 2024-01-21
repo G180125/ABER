@@ -4,6 +4,7 @@ import static com.example.aber.Utils.AndroidUtil.showToast;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.aber.R;
 
@@ -20,6 +23,7 @@ public class RegisterSOSFragment extends Fragment {
     private String name, phoneNumber, gender, address, homeImage, brand, vehicleName, color, seat, plate, vehicleImage;
     private Button doneButton;
     private EditText sosNameEditText, sosPhoneNumberEditText;
+    private ImageView buttonBack;
     private double latitude, longitude;
 
     @Override
@@ -27,6 +31,12 @@ public class RegisterSOSFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_register_sos, container, false);
+
+        if (savedInstanceState != null) {
+            sosNameEditText.setText(savedInstanceState.getString("name"));
+            sosPhoneNumberEditText.setText(savedInstanceState.getString("phone"));
+
+        }
 
         Bundle args = getArguments();
         if (args != null) {
@@ -47,7 +57,13 @@ public class RegisterSOSFragment extends Fragment {
 
         sosNameEditText = root.findViewById(R.id.name_sos_editText);
         sosPhoneNumberEditText = root.findViewById(R.id.sos_phone_number);
-
+        buttonBack = root.findViewById(R.id.button_back);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
 
         doneButton = root.findViewById(R.id.done_button);
         doneButton.setOnClickListener(new View.OnClickListener() {
@@ -56,12 +72,78 @@ public class RegisterSOSFragment extends Fragment {
                 String sosName = sosNameEditText.getText().toString();
                 String sosPhone = sosPhoneNumberEditText.getText().toString();
 
-                showToast(requireContext(),"Finish Step 4/5");
-                toRegisterAccountFragment(sosName, sosPhone);
+                if(validateInputs(sosName, sosPhone)) {
+                    toRegisterAccountFragment(sosName, sosPhone);
+                }
             }
         });
 
         return root;
+    }
+
+    private boolean validateInputs(String name, String phoneNumber) {
+        StringBuilder errorMessage = new StringBuilder();
+
+        if (name.isEmpty()) {
+            errorMessage.append("Name cannot be empty\n");
+        }
+
+        if (!validatePhoneNumber(phoneNumber)) {
+            errorMessage.append("Invalid phone number\n");
+        }
+
+        if (gender == null) {
+            errorMessage.append("Please select your gender\n");
+        }
+
+        // Display error messages for each field
+        if (errorMessage.length() > 0) {
+            showToast(errorMessage.toString().trim()); // Trim to remove trailing newline
+            if (name.isEmpty()) {
+                sosNameEditText.setError("Name cannot be empty");
+            }
+            if (!validatePhoneNumber(phoneNumber)) {
+                sosPhoneNumberEditText.setError("Invalid phone number");
+            }
+
+            return false;
+        }
+        showToast("Finish Step 4/5");
+        return true;
+    }
+
+
+    private boolean validatePhoneNumber(String phoneNumber) {
+        phoneNumber = phoneNumber.replaceAll("\\s", "");
+        if (phoneNumber !=null){
+            if (phoneNumber.matches("\\d{9}")) {
+                return true;
+            }
+            if (phoneNumber.matches("^\\+?84\\d{9}$")) {
+                return true;
+            }
+        }
+
+//        if (phoneNumber.matches("\\d{9}")) {
+//            return true;
+//        }
+//
+////        if (phoneNumber.matches("84\\d{9}")) {
+////            return true;
+////        }
+//        if (phoneNumber.matches("^\\+?84\\d{9}$")) {
+//            return true;
+//        }
+
+        return false;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("name", sosNameEditText.getText().toString());
+        outState.putString("phone", sosPhoneNumberEditText.getText().toString());
+
     }
 
     private void toRegisterAccountFragment(String sosName, String sosPhone){
@@ -96,5 +178,9 @@ public class RegisterSOSFragment extends Fragment {
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    private void showToast(String message){
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

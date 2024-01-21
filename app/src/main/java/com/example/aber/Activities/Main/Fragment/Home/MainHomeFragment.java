@@ -37,9 +37,12 @@ import android.Manifest;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.PopupMenu;
 
+import com.example.aber.Models.Notification.InAppNotification;
+import com.example.aber.NotificationListFragment;
 import com.example.aber.R;
 import com.example.aber.Utils.AndroidUtil;
 import com.example.aber.Utils.FirebaseUtil;
@@ -68,6 +71,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -87,8 +91,9 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
     private Place searchedPlace;
     private LocationRequest mLocationRequest;
     private String address;
-
-    private FloatingActionButton mapTypeButton, currentLocationButton;
+    private int count;
+    private TextView notificationCountTextView;
+    private FloatingActionButton mapTypeButton, currentLocationButton, notificationButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,6 +103,8 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_main_home, container, false);
         firebaseManager = new FirebaseUtil();
+
+        String id = Objects.requireNonNull(firebaseManager.mAuth.getCurrentUser()).getUid();
 
         // Initialize the SDK
         if (!Places.isInitialized()) {
@@ -110,6 +117,25 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 focusOnLocation(currentLocation);
+            }
+        });
+
+        notificationCountTextView = root.findViewById(R.id.notification_count);
+        firebaseManager.fetchNotifications(id, new FirebaseUtil.OnFetchListListener<InAppNotification>() {
+            @Override
+            public void onFetchSuccess(List<InAppNotification> object) {
+                count = 0;
+                for(InAppNotification inAppNotification : object){
+                    if(!inAppNotification.getIsRead()){
+                        count++;
+                    }
+                }
+                updateUI(count);
+            }
+
+            @Override
+            public void onFetchFailure(String message) {
+
             }
         });
 
@@ -138,6 +164,16 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                     return false;
                 });
                 popupMenu.show();
+            }
+        });
+
+        notificationButton = root.findViewById(R.id.notification_button);
+        notificationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                AndroidUtil.replaceFragment(new NotificationListFragment(), fragmentManager, fragmentTransaction, R.id.fragment_main_container);
             }
         });
 
@@ -192,6 +228,10 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
         return root;
     }
 
+    public void updateUI(int count){
+        notificationCountTextView.setText(String.valueOf(count));
+    }
+
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
@@ -202,8 +242,6 @@ public class MainHomeFragment extends Fragment implements OnMapReadyCallback {
                 && ActivityCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-            // Enable the "My Location" button and display the blue dot on the map
-            mMap.setMyLocationEnabled(true);
 
             // Set the "My Location" button to be visible
             mMap.getUiSettings().setMyLocationButtonEnabled(true);

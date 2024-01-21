@@ -24,7 +24,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/profile"
-                android:fontFamily="@font/queensidesmedium"
                 android:textSize="32sp"
                 android:textStyle="bold"
                 />
@@ -44,7 +43,7 @@
                 android:id="@+id/avatar"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:src="@drawable/ic_profile_avatar" />
+                android:src="@drawable/ic_avatar160" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/upload_button"
@@ -60,7 +59,8 @@
                 android:layout_marginVertical="8dp"
                 android:text="@string/personal_details"
                 android:textSize="26sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/instagramsansregular"/>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -85,8 +85,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/name_header"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            />
 
                         <EditText
                             android:id="@+id/name"
@@ -94,9 +95,10 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_weight="1"
-                            android:background="@drawable/custom_edit_text"
+                            android:background="@null"
                             android:padding="10dp"
-                            android:text="@string/name" />
+                            android:text="@string/name"
+                            android:textSize="20sp"/>
 
                     </LinearLayout>
 
@@ -109,7 +111,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/email_header"
-                            android:textSize="16sp"
+                            android:textSize="20sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -118,7 +120,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_weight="1"
-                            android:textSize="18sp"
+                            android:textSize="20sp"
                             android:padding="10dp"
                             android:text="Email">
 
@@ -136,14 +138,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/gender_header"
-                            android:textSize="16sp"
+                            android:textSize="20sp"
                             android:textStyle="bold" />
 
                         <RadioGroup
                             android:id="@+id/radioGroupGender"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="16dp"
+                            android:layout_marginHorizontal="25dp"
                             android:orientation="horizontal">
 
                             <RadioButton
@@ -151,7 +153,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/male"
-                                android:textSize="16sp" />
+                                android:textSize="20sp" />
 
                             <RadioButton
                                 android:id="@+id/radioButtonFemale"
@@ -159,7 +161,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:text="@string/female"
-                                android:textSize="16sp" />
+                                android:textSize="20sp" />
                         </RadioGroup>
 
                     </LinearLayout>
@@ -183,7 +185,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_weight="1"
-                            android:background="@drawable/custom_edit_text"
+                            android:background="@null"
                             android:padding="10dp"
                             android:text="@string/phone_number">
 
@@ -206,6 +208,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp"
                 android:text="@string/home"
                 android:textSize="26sp"
                 android:textStyle="bold" />
@@ -228,13 +231,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/address_header"
-                        android:textSize="16sp"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -243,9 +247,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
-                        android:textSize="15sp"
+                        android:textSize="20sp"
                         android:padding="10dp"
-                        android:text="@string/default_address">
+                        android:text="@string/default_address"
+                        android:background="@null"
+                        >
 
                     </TextView>
 
@@ -266,7 +272,8 @@
                 android:layout_marginTop="24dp"
                 android:text="@string/vehicle"
                 android:textSize="26sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/defaultVehicleCardView"
                 android:layout_width="match_parent"
@@ -292,7 +299,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/plate_header"
-                        android:textSize="16sp"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -301,9 +308,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
-                        android:textSize="15sp"
+                        android:textSize="20sp"
                         android:padding="10dp"
-                        android:text="@string/default_vehicle">
+                        android:text="@string/default_vehicle"
+                        android:background="@null">
 
                     </TextView>
 
@@ -325,7 +333,8 @@
                     android:layout_marginTop="24dp"
                     android:text="@string/sos"
                     android:textSize="26sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/defaultSOSCardView"
@@ -350,7 +359,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/name_header"
-                                android:textSize="16sp"
+                                android:textSize="20sp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -360,7 +369,9 @@
                                 android:text="@string/name"
                                 android:padding="10dp"
                                 android:layout_marginLeft="5dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:textSize="20dp"
+                                android:background="@null">
                             </TextView>
 
                             <ImageView

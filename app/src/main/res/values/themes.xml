@@ -6,7 +6,7 @@
         <item name="colorPrimaryVariant">@color/purple</item>
         <!-- Secondary Brand Color -->
         <item name="android:colorBackground">@color/white</item>
-        <item name="colorOnSurface">@color/white</item>
+        <item name="colorOnSurface">@color/black</item>
         <!-- Status Bar Color -->
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
@@ -42,6 +42,13 @@
         <item name="itemTextColor">@color/pale_blue</item>
     </style>
 
+    <style name="MyOutlinedTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
+
+        <item
+
+            name="boxStrokeColor">@drawable/text_input_box_stroke_color</item>
+
+    </style>
 
 </resources>

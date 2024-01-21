@@ -2,6 +2,7 @@ package com.example.aber.Services.SOS;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.IBinder;
@@ -40,6 +41,8 @@ public class SensorService extends Service {
     private Sensor mAccelerometer;
     private ShakeDetector mShakeDetector;
     private SOS emergencyContact;
+
+    public SensorService() {}
 
     public SensorService(SOS emergencyContact) {
         this.emergencyContact = emergencyContact;
@@ -191,8 +194,13 @@ public class SensorService extends Service {
                 .setPriority(NotificationManager.IMPORTANCE_MIN)
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .build();
-        startForeground(2, notification);
+
+        // Specify the service type when starting foreground
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(2, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION);
+        }
     }
+
 
     @Override
     public void onDestroy() {

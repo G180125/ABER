@@ -39,65 +39,36 @@
             </LinearLayout>
 
         </androidx.appcompat.widget.Toolbar>
-        <ScrollView
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:background="@drawable/search_bar_background"
+                android:layout_marginBottom="30dp"
+                android:layout_marginHorizontal="10dp"
                 >
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/search_bar_background"
-                    android:layout_marginBottom="30dp"
-                    android:layout_marginHorizontal="10dp"
-                    >
-                <SearchView
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/search_view"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    />
-                </LinearLayout>
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:outlineProvider="none"
-                    >
-                    <TextView
-                        android:id="@+id/setting_language"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/Language"
-                        android:drawablePadding="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginBottom="30dp"
-                        app:drawableStartCompat="@drawable/ic_language24"
-                        app:drawableEndCompat="@drawable/ic_chevron_right" />
-                </androidx.cardview.widget.CardView>
+                    app:iconifiedByDefault="false"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/shadow_background"
-                    android:layout_marginBottom="20dp"/>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:outlineProvider="none">
-                    <TextView
-                        android:id="@+id/setting_dark"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/theme"
-                        android:drawablePadding="10dp"
-                        android:layout_marginStart="10dp"
-                        app:drawableStartCompat="@drawable/ic_dark_mode24"
-                        app:drawableEndCompat="@drawable/ic_chevron_right" />
-                </androidx.cardview.widget.CardView>
             </LinearLayout>
-        </ScrollView>
+
+            <ListView
+                android:id="@+id/settings_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"/>
+
+
+
+        </LinearLayout>
     </LinearLayout>
 
 
