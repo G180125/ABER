@@ -69,6 +69,8 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.fredporciuncula:phonemoji:1.5.2")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation ("com.firebaseui:firebase-ui-auth:7.2.0")
+    implementation("com.google.gms:google-services:4.3.10");
 
 
     //Dot progress bar

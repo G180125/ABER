@@ -1,5 +1,7 @@
 package com.example.aber.Activities;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +30,10 @@ import com.example.aber.Activities.Register.RegisterActivity;
 import com.example.aber.Models.User.User;
 import com.example.aber.Utils.FirebaseUtil;
 import com.example.aber.R;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
+import com.firebase.ui.auth.IdpResponse;
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -48,7 +54,9 @@ import com.google.firebase.auth.GoogleAuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -176,13 +184,12 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-//        signInWIthGG.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent1 = new Intent(LoginActivity.this,GoogleSignInActivity.class);
-//                startActivity(intent1);
-//            }
-//        });
+        signInWIthGG.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createSignInIntent();
+            }
+        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,6 +280,59 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
         finish();
     }
+
+    private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
+            new FirebaseAuthUIActivityResultContract(),
+            new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
+                @Override
+                public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
+                    onSignInResult(result);
+                }
+            }
+    );
+
+    public void createSignInIntent() {
+        // [START auth_fui_create_intent]
+        // Choose authentication providers
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.GoogleBuilder().build());
+        Log.d("Google signin", "1");
+
+        // Create and launch sign-in intent
+        Intent signInIntent = AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .build();
+        Log.d("Google signin", "2");
+        signInLauncher.launch(signInIntent);
+        // [END auth_fui_create_intent]
+    }
+
+    // [START auth_fui_result]
+    private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
+        IdpResponse response = result.getIdpResponse();
+        if (result.getResultCode() == RESULT_OK) {
+            // Successfully signed in
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            // Check if the user is signing in for the first time
+            if (response != null && response.isNewUser()) {
+                // User is signing in for the first time
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                // Perform additional actions for first-time login if needed
+            } else {
+                // Existing user
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            }
+            // ...
+        } else {
+            // Sign in failed. If response is null the user canceled the
+            // sign-in flow using the back button. Otherwise check
+            // response.getError().getErrorCode() and handle the error.
+            // ...
+        }
+    }
+    // [END auth_fui_result]
 
 
 }

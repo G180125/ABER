@@ -60,6 +60,7 @@
     <string name="account">Account</string>
     <string name="email_star">Email (*)</string>
     <string name="Account_heading">Please enter an unique Email and enter a password to create a new account.</string>
+    <string name="Account_heading_gg">Next time you log in, please use the following google account to log in.</string>
     <string name="password_star">Password (*)</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="confirm_password_star">Confirm Password (*)</string>

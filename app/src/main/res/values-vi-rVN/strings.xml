@@ -69,6 +69,7 @@
     <string name="vehicle_heading">Xin vui lòng nhập thông tin phương tiện . \nBạn có thể chỉnh sửa những thông tin này sau trong ứng dụng.</string>
     <string name="Sos_heading">Xin vui lòng nhập thông tin liên lạc khẩn cấp. \nBạn có thể chia sẻ vị trí trực tiếp và thông tin tài xế khi kích hoạt tính năng SOS. \nBạn có thể bỏ qua bước này và chỉnh sửa trong ứng dụng sau.</string>
     <string name="Account_heading">Please enter an unique Email and enter a password to create a new account.</string>
+    <string name="Account_heading_gg">Lần sau khi bạn đăng nhập, hãy sử dụng tài khoản google bên dưới.</string>
     <string name="settings">Cài Đặt</string>
 
     <!-- Profile Settings    -->
